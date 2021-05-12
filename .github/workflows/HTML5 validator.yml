@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # Requried will all actions
       - name: Check HTML5 format
-      - uses: Cyb3r-Jak3/html5validator-action@v0.6
-      - with:
+        uses: Cyb3r-Jak3/html5validator-action@v0.6
+        with:
           root: /
