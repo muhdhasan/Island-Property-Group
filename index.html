@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Using AI to predict Singapore Housing Prices">
-    <meta name="author" content="">
+    <meta name="author" content="Muhammad Hasan Bin Suwandi, Owen Ngo, Bryan Chin">
     <meta name="theme-color" content="#ffffff">
     <!-- Favicon -->
     <link rel="icon" href="images/house.svg">
@@ -95,7 +95,7 @@
                 <h1>House Price Prediction</h1>
                 <p>Enter all the necessary fields below to get a price prediction for your house.</p>
                 <div class="col-6 col-md-4">
-                    <form onsubmit="return prediceHousePrice()">
+                    <form id="housePredictionForm">
                         <div class="mb-3">
                             <label for="housingEstateSelect" class="form-label">Housing Estate</label>
                             <select class="form-select mb-3" id="housingEstateSelect" required>
@@ -121,14 +121,15 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="leaseDateStart" class="form-label">Lease Start Date</label>
-                            <input type="date" class="form-control" id="leaseDateStart" required>
+                            <label for="leaseDateStart" class="form-label">Lease Start Date (DD MM YYYY)</label>
+                            <input type="date" class="form-control" id="leaseDateStart" min="1952-01-01" required>
+                            <div id="leaseErrorMsg"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="submitBtn" class="btn btn-primary" onclick="return prediceHousePrice();">Submit</button>
                     </form>
                 </div>
-                <div class="col-6 col-md-4">
-                    <span class="align-middle">Your house price</span>
+                <div class="col-6 col-md-4 text-center">
+                    <h2 class="align-middle">Your House Price</h2>
                     <h4 id="predictedHousePrice"></h4>
                 </div>
             </div>
