@@ -108,7 +108,27 @@
                             <div id="flatModelErrorMsg"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="leaseDateStart" class="form-label">Retnal Start Date (DD MM YYYY)</label>
+                            <label for="Pets" class="form-label">Pets</label>
+                            <select class="form-select mb-3" id="Pets" required>
+                                <option selected value="">Pets allowed</option>
+                                <option value="1">Yes</option>
+                                <option value="2">No</option>
+                                
+                            </select>
+                            <div id="PetsErrorMsg"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="parking" class="form-label">Parking</label>
+                            <select class="form-select mb-3" id="parking" required>
+                                <option selected value="">Parking allowed?</option>
+                                <option value="1">Yes</option>
+                                <option value="2">No</option>
+                                
+                            </select>
+                            <div id="parkingErrorMsg"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="leaseDateStart" class="form-label">Rental Start Date (DD MM YYYY)</label>
                             <input type="date" class="form-control" id="leaseDateStart" min="1952-01-01" required>
                             <div id="leaseErrorMsg"></div>
                         </div>
