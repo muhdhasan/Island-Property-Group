@@ -115,8 +115,8 @@ function prediceRentalPrice() {
 var calculatePrice = (housingEstate, housingType, floorSizeSqm, flatType, pets , parking) => {
 
     var finalPrice = housingEstate * housingType * floorSizeSqm * flatType * 1000;
-    finalPrice = finalPrice * 1.2;
-    finalPrice = finalPrice * 1.5;
+    finalPrice = finalPrice * 1.2; //pets allowed (Yes)
+    finalPrice = finalPrice * 1.5; //parking given (Yes)
   
     return (document.getElementById("predictedHousePrice").innerHTML = `S$${finalPrice}`);
   }
