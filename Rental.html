@@ -22,9 +22,13 @@
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+        crossorigin="anonymous"></script>
+    <script src="rental.js"></script>
     <div class="col-lg-8 mx-auto p-3 py-md-5">
         <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-            <a href="index.html" class="d-flex align-items-center text-dark text-decoration-none">
+            <a href="Rental.html" class="d-flex align-items-center text-dark text-decoration-none">
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94"
                     role="img">
                     <title>Bootstrap</title>
@@ -41,7 +45,7 @@
                 </svg>
                 <span class="fs-4">SG Housing Price Prediction</span>
             </a>
-            <a class="mx-2 btn btn-dark" href="Rental.html">Rental</a>
+            <a class="mx-2 btn btn-dark" href="index.html">Home</a>
             <a class="mx-2 btn btn-dark" href="#">Chatbot</a>
         </header>
 
@@ -64,11 +68,11 @@
                             <label for="housingEstateSelect" class="form-label">Housing Estate</label>
                             <select class="form-select mb-3" id="housingEstateSelect" required>
                                 <option selected value="">Select your Housing Estate</option>
-                                <option value="1">Toa Payoh</option>
-                                <option value="2">Ang Mo Kio</option>
-                                <option value="3">Bishan</option>
-                                <option value="4">Pasir Ris</option>
-                                <option value="5">Sengkang</option>
+                                <option value="Toa Payoh">Toa Payoh</option>
+                                <option value="Ang Mo Kio">Ang Mo Kio</option>
+                                <option value="Bishan">Bishan</option>
+                                <option value="Pasir Ris">Pasir Ris</option>
+                                <option value="Sengkang">Sengkang</option>
                             </select>
                             <div id="housingEstateErrorMsg"></div>
                         </div>
@@ -104,26 +108,31 @@
                             <div id="flatModelErrorMsg"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="leaseDateStart" class="form-label">Lease Start Date (DD MM YYYY)</label>
+                            <label for="leaseDateStart" class="form-label">Retnal Start Date (DD MM YYYY)</label>
                             <input type="date" class="form-control" id="leaseDateStart" min="1952-01-01" required>
                             <div id="leaseErrorMsg"></div>
                         </div>
+                        <!--
                         <div class="mb-3">
                             <label for="resaleDate" class="form-label">Resale Date (DD MM YYYY)</label>
                             <input type="date" class="form-control" id="resaleDate" min="1952-01-01" required>
                             <div id="resaleDateErrorMsg"></div>
                         </div>
+                        -->
                         <div class="mb-3 d-flex justify-content-end">
                             <input type="reset" class="btn btn-danger mx-2">
                             <!-- <input type="button" id="submitBtn" class="btn btn-primary" onclick="return prediceHousePrice();"> -->
                             <button type="button" id="submitBtn" class="btn btn-primary"
-                                onclick="return prediceHousePrice();">Submit</button>
+                                onclick="return prediceRentalPrice();">Submit</button>
                         </div>
                     </form>
                 </div>
                 <div class="col-6 col-md-4 text-center">
-                    <h2 class="align-middle">Your House Price</h2>
+                    <h2 class="align-middle">Your Rental Price</h2>
                     <h4 id="predictedHousePrice"></h4>
+                    <h4 id="predictedHousePrice1"></h4>
+                    <h4 id="predictedHousePrice2"></h4>
+                    <h4 id="predictedHousePrice3"></h4>
                 </div>
             </div>
             <hr class="col-3 col-md-2 mx-auto my-5">
@@ -147,10 +156,7 @@
             </div>
         </footer>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
-        crossorigin="anonymous"></script>
-    <script src="main.js"></script>
+    
 </body>
 
 </html>
