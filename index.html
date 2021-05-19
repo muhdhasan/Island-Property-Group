@@ -99,7 +99,7 @@
                         <div class="mb-3">
                             <label for="leaseDateStart" class="form-label">Lease Start Date (DD MM YYYY)</label>
                             <input type="date" class="form-control" id="leaseDateStart" min="1952-01-01" required>
-                            <div id="leaseErrorMsg"></div>
+                            <div id="leaseErrorMsg" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="resaleDate" class="form-label">Resale Date (DD MM YYYY)</label>
@@ -110,7 +110,7 @@
                             <input type="reset" class="btn btn-danger mx-2">
                             <!-- <input type="button" id="submitBtn" class="btn btn-primary" onclick="return prediceHousePrice();"> -->
                             <button type="button" id="submitBtn" class="btn btn-primary"
-                                onclick="return prediceHousePrice();">Submit</button>
+                                onclick="predictHousePrice();">Submit</button>
                         </div>
                     </form>
                 </div>
