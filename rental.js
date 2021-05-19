@@ -1,7 +1,7 @@
 "use strict";
 
 // Validating user inputs
-var validateInput = (housingEstate, housingType, floorSizeSqm, flatType) => {
+var validateInput = (housingEstate, housingType, floorSizeSqm, flatType, pets, parking) => {
   if (typeof housingEstate === undefined || housingEstate.length <= 0 || housingEstate === null) {
     console.log("Undefined input for housing estate field.");
     return false;
@@ -18,6 +18,14 @@ var validateInput = (housingEstate, housingType, floorSizeSqm, flatType) => {
     console.log("Invalid Flat Type");
     return false;
   }
+  else if(typeof pets === undefined || pets.length <= 0 || pets === null){
+    console.log("Invalid Pets Type");
+    return false;
+  }
+  else if(typeof parking === undefined || parking.length <= 0 || parking === null){
+    console.log("Invalid Parking Type");
+    return false;
+  }
   else{
     console.log("All fields are valid.")
     return true;
@@ -31,12 +39,14 @@ function prediceRentalPrice() {
   var housingType = document.getElementById("housingTypeSelect").value;
   var floorSizeSqm = document.getElementById("floorArea").value;
   var flatType = document.getElementById("flatModel").value;
+  var pets = document.getElementById("Pets").value;
+  var parking = document.getElementById("parking").value;
   var leaseStart = document.getElementById("leaseDateStart").value;
   var resaleDate = 0;
 
   console.log(housingEstate)
 
-  var validateInputResult = validateInput(housingEstate, housingType, floorSizeSqm, flatType);
+  var validateInputResult = validateInput(housingEstate, housingType, floorSizeSqm, flatType, pets, parking);
   console.log("Valid Input: " + validateInputResult);
 
 
@@ -100,4 +110,13 @@ function prediceRentalPrice() {
       }
     
   }
+  
 }
+var calculatePrice = (housingEstate, housingType, floorSizeSqm, flatType, pets , parking) => {
+
+    var finalPrice = housingEstate * housingType * floorSizeSqm * flatType * 1000;
+    finalPrice = finalPrice * 1.2; //pets allowed (Yes)
+    finalPrice = finalPrice * 1.5; //parking given (Yes)
+  
+    return (document.getElementById("predictedHousePrice").innerHTML = `S$${finalPrice}`);
+  }
