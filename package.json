@@ -1,0 +1,23 @@
+{
+  "name": "ai-application-project-2021",
+  "version": "1.0.0",
+  "description": "We will be predicting Singapore housing resale and rental prices using a variety of machine learning techniques. Our project will also consist of a chatbot that is able to recognise user's input regarding housing prices and such.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lmao5/AI-Application-Project-2021.git"
+  },
+  "keywords": [],
+  "author": "Muhammad Hasan Bin Suwandi, Bryan Chin, Owen Ngo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lmao5/AI-Application-Project-2021/issues"
+  },
+  "homepage": "https://github.com/Lmao5/AI-Application-Project-2021#readme",
+  "dependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

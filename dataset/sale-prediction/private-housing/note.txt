@@ -1,0 +1,6 @@
+Legend
+
+AC refers to Apartments and Condominiums
+EC refers to Executive Condominiums
+LP refers to Landed Properties
+SL refers to Strata-Landed
