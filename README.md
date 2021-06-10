@@ -1,4 +1,3 @@
 # AI-Application-Project-2021
-[![Netlify Status](https://api.netlify.com/api/v1/badges/a2e744df-2fd4-4df2-86e6-3eb8a17f7248/deploy-status)](https://app.netlify.com/sites/upbeat-feynman-97a360/deploys)
 
-We will be predicting Singapore housing prices using a variety of machine learning techniques.
+We will be predicting Singapore housing resale and rental prices using a variety of machine learning techniques. Our project will also consist of a chatbot that is able to recognise user's input regarding housing prices and such.
