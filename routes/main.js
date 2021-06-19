@@ -6,4 +6,14 @@ router.get('/', (req, res) => {
   res.render('index', { title: title })
 })
 
+router.get('/about', (req, res) => {
+  const title = 'About Us'
+  res.render('about', { title: title })
+})
+
+router.get('/contact', (req, res) => {
+  const title = 'Contact Us'
+  res.render('contact', { title: title })
+})
+
 module.exports = router

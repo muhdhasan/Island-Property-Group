@@ -12,8 +12,6 @@ app.set('view engine', 'handlebars')
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-console.log(path)
-
 const mainRoute = require('./routes/main')
 
 app.use('/', mainRoute)
