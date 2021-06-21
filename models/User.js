@@ -10,6 +10,8 @@ const User = db.define('user', {
     name: { type: Sequelize.STRING },
     email: { type: Sequelize.STRING },
     password: { type: Sequelize.STRING },
+    isAgent: { type: Sequelize.BOOLEAN },
+    isAdmin: { type: Sequelize.BOOLEAN }
     // confirmed: { type: Sequelize.BOOLEAN },
     // isadmin: { type: Sequelize.BOOLEAN },
     // facebookId: { type: Sequelize.STRING },
