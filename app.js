@@ -1,14 +1,27 @@
-const http = require('http');
+const express = require('express')
+const exphbs = require('express-handlebars')
+const path = require('path')
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const app = express()
+require('dotenv').config()
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main' // Specify default template views/layout/main.handlebar
+}))
+app.set('view engine', 'handlebars')
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.use(express.static(path.join(__dirname, 'public')))
+
+const mainRoute = require('./routes/main')
+const userRoute = require('./routes/user')
+const propertyRoute = require('./routes/property')
+
+app.use('/', mainRoute)
+app.use('/user', userRoute)
+app.use('/property', propertyRoute)
+
+const port = process.env.port || 5000
+
+app.listen(port, () => {
+  console.log(`Server started ad ${port}`)
+})

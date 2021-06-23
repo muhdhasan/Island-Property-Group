@@ -1,98 +1,211 @@
-"use strict";
+/**
+* Template Name: EstateAgency - v4.3.0
+* Template URL: https://bootstrapmade.com/real-estate-agency-bootstrap-template/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+(function () {
+  'use strict'
 
-// Validating user inputs
-var validateInput = (housingEstate, housingType, floorSizeSqm, flatType, leaseStart, resaleDate) => {
-  if (typeof housingEstate === undefined || housingEstate.length <= 0 || housingEstate === null) {
-    console.log("Undefined input for housing estate field.");
-    document.getElementById("housingEstateErrorMsg").innerHTML = "Please choose your housing estate";
-    document.getElementById("housingEstateErrorMsg").classList.add("invalid-feedback");
-    return false;
+  /**
+   * Easy selector helper function
+   */
+  const select = (el, all = false) => {
+    el = el.trim()
+    if (all) {
+      return [...document.querySelectorAll(el)]
+    } else {
+      return document.querySelector(el)
+    }
   }
-  else if(typeof housingType === undefined || housingType.length <= 0 || housingType === null){
-    console.log("Undefined input for HDB type field.");
-    return false;
+
+  /**
+   * Easy event listener function
+   */
+  const on = (type, el, listener, all = false) => {
+    const selectEl = select(el, all)
+    if (selectEl) {
+      if (all) {
+        selectEl.forEach(e => e.addEventListener(type, listener))
+      } else {
+        selectEl.addEventListener(type, listener)
+      }
+    }
   }
-  else if(typeof floorSizeSqm === undefined || floorSizeSqm.length <= 0 || floorSizeSqm === null){
-    console.log("Invalid HDB Floor Size");
-    return false;
+
+  /**
+   * Easy on scroll event listener
+   */
+  const onscroll = (el, listener) => {
+    el.addEventListener('scroll', listener)
   }
-  else if(typeof flatType === undefined || flatType.length <= 0 || flatType === null){
-    console.log("Invalid Flat Type");
-    return false;
+
+  /**
+   * Toggle .navbar-reduce
+   */
+  const selectHNavbar = select('.navbar-default')
+  if (selectHNavbar) {
+    onscroll(document, () => {
+      if (window.scrollY > 100) {
+        selectHNavbar.classList.add('navbar-reduce')
+        selectHNavbar.classList.remove('navbar-trans')
+      } else {
+        selectHNavbar.classList.remove('navbar-reduce')
+        selectHNavbar.classList.add('navbar-trans')
+      }
+    })
   }
-  else if(typeof leaseStart === undefined || leaseStart.length <= 0 || leaseStart === null){
-    console.log("Invalid Lease Date");
-    return false;
+
+  /**
+   * Back to top button
+   */
+  const backtotop = select('.back-to-top')
+  if (backtotop) {
+    const toggleBacktotop = () => {
+      if (window.scrollY > 100) {
+        backtotop.classList.add('active')
+      } else {
+        backtotop.classList.remove('active')
+      }
+    }
+    window.addEventListener('load', toggleBacktotop)
+    onscroll(document, toggleBacktotop)
   }
-  else if(typeof resaleDate === undefined || resaleDate.length <= 0 || resaleDate === null){
-    console.log("Invalid Resale Date");
-    return false;
+
+  /**
+   * Preloader
+   */
+  const preloader = select('#preloader')
+  if (preloader) {
+    window.addEventListener('load', () => {
+      preloader.remove()
+    })
   }
-  // else if(dateDiff <= 0){
-  //   console.log("Lease date cannot start after resale date");
-  //   document.getElementById("leaseErrorMsg").innerHTML = "Lease date cannot be after resale date";
-  //   document.getElementById("leaseErrorMsg").classList.add("invalid-feedback");
-  //   return false;
-  // }
-  else{
-    console.log("All fields are valid.")
-    return true;
-  }
-};
 
-function predictHousePrice() {
+  /**
+   * Search window open/close
+   */
+  const body = select('body')
+  on('click', '.navbar-toggle-box', function (e) {
+    e.preventDefault()
+    body.classList.add('box-collapse-open')
+    body.classList.remove('box-collapse-closed')
+  })
 
-  // Retrieving values from user input
-  var housingEstate = document.getElementById("housingEstateSelect").value;
-  var housingType = document.getElementById("housingTypeSelect").value;
-  var floorSizeSqm = document.getElementById("floorArea").value;
-  var flatType = document.getElementById("flatModel").value;
-  var resaleDateInput = document.getElementById("resaleDate").value;
-  var leaseDateInput = document.getElementById("leaseDateStart").value;
+  on('click', '.close-box-collapse', function (e) {
+    e.preventDefault()
+    body.classList.remove('box-collapse-open')
+    body.classList.add('box-collapse-closed')
+  })
 
-  var currentdate = new Date();
-  console.log(currentdate);
+  /**
+   * Intro Carousel
+   */
+  new Swiper('.intro-carousel', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'bullets',
+      clickable: true
+    }
+  })
 
-  var leaseDate = new Date(leaseDateInput);
-  console.log("Lease Date: " + leaseDate);
-  var resaleDate = new Date(resaleDateInput);
-  console.log("Resale Date: " + leaseDate);
-  var dateDiff = resaleDate - leaseDate;
-  console.log("Date Diff: " + dateDiff);
+  /**
+   * Property carousel
+   */
+  new Swiper('#property-carousel', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.propery-carousel-pagination',
+      type: 'bullets',
+      clickable: true
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20
+      },
 
-  var validateInputResult = validateInput(housingEstate, housingType, floorSizeSqm, flatType, leaseDateInput, resaleDateInput);
-  
-  // Logging input result
-  console.log("Valid Input: " + validateInputResult);
+      1200: {
+        slidesPerView: 3,
+        spaceBetween: 20
+      }
+    }
+  })
 
-  // document
-  //   .getElementById("submitBtn")
-  //   .addEventListener("click", function (event) {
-  //     event.preventDefault();
-  //   });
+  /**
+   * News carousel
+   */
+  new Swiper('#news-carousel', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.news-carousel-pagination',
+      type: 'bullets',
+      clickable: true
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20
+      },
 
-  // Conditions
-  if (validateInputResult === false) {
-    console.log("Validation Failed");
-    return;
-  } else if (validateInputResult === undefined) {
-    console.log("Validation Failed");
-    return;
-  }
-  else if(dateDiff <= 0){
-    console.log("Lease date cannot start after resale date");
-    // document.getElementById("leaseErrorMsg").innerHTML = "Lease date cannot be after resale date";
-    return;
-  } else {
-    calculatePrice(housingEstate, housingType, floorSizeSqm, flatType);
-  }
-}
+      1200: {
+        slidesPerView: 3,
+        spaceBetween: 20
+      }
+    }
+  })
 
-// Price calculation
-// Might actually add a machine learning model here
-var calculatePrice = (housingEstate, housingType, floorSizeSqm, flatType) => {
+  /**
+   * Testimonial carousel
+   */
+  new Swiper('#testimonial-carousel', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.testimonial-carousel-pagination',
+      type: 'bullets',
+      clickable: true
+    }
+  })
 
-  var finalPrice = housingEstate * housingType * floorSizeSqm * flatType * 1000;
-
-  return (document.getElementById("predictedHousePrice").innerHTML = `S$${finalPrice}`);
-}
+  /**
+   * Property Single carousel
+   */
+  new Swiper('#property-single-carousel', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    pagination: {
+      el: '.property-single-carousel-pagination',
+      type: 'bullets',
+      clickable: true
+    }
+  })
+})()
