@@ -1,4 +1,4 @@
-Labels ,Text
+Label,Text
 greeting,Hello 
 greeting,Hi there
 greeting,Hola
@@ -12,96 +12,227 @@ greeting,Good evening
 greeting,Nice to meet you
 greeting,Hello how are you
 greeting,Hi how are you
-greeting,Hope you are doing well
+greeting,Its a pleasure to meet you
+greeting,Pleased to meet you
+greeting,Whats up
+greeting,How are you
+greeting,Nice to meet you
+greeting,Greetings
+greeting,Pleasure to meet you
 house_area,How big is the house
 house_area,How big is the estate
 house_area,How big is the property
-house_area,What are the dimensions of the estate 
+house_area,house size
+house_area,flat dimensions
+house_area,flat size
+house_area,what is the size of this hdb flat
+house_area,what is the size of this house
+house_area,what is the size of the flat
+house_area,What are the dimensions of the estate
+house_area,What are the dimensions of the flat
 house_area,What are the dimensions of the house
 house_area,What are the dimensions of the property
 house_area,What is the square footage of the house
 house_area,What is the square footage of the estate
+house_area,What is the square footage of the flat
 house_area,What is the square footage of the property
-house_area,How many square feet is the estate 
+house_area,How many square feet is the estate
 house_area,How many square feet is the property
+house_area,How many square feet is the flat
 house_area,How many square feet is the house 
 house_area,Can i inquire about the area of the house
 house_area,Can I inquire about the area of the property
 house_area,Can i inquire about the area of the estate
+house_area,Can i inquire about the area of the flat
+house_area,How big is the place
+house_area,square foot of the place
+house_area,area of the flat
+house_area,total area of the house
+house_area,amount of avaliable space 
+house_area,how much space is there
+house_area,whats the amount of space avaliable in the property
 sale_reason,Why is the seller selling the property
 sale_reason,Why is the seller selling the estate
 sale_reason,Why is the seller selling the place
+sale_reason,Why is the seller selling the flat
 sale_reason,Is there a reason the seller is selling the estate
+sale_reason,Is there a reason the seller is selling the flat
 sale_reason,Is there a reason the seller is selling the property
 sale_reason,Is there a reason the seller is selling the house
 sale_reason,Why is the estate being sold
 sale_reason,Why is the property being sold
 sale_reason,Why is the house being sold
-sale_reason,Why is the seller leaving 
+sale_reason,Why is the flat being sold
+sale_reason,Why is the seller leaving
+sale_reason,Is the seller downsizing his house
+sale_reason,Is the seller upsizing his home
+sale_reason,Is the owner selling the house due to a bad financial situation
+sale_reason,Does the owner have a reason for selling the property
+sale_reason,Are there reasons why the owner is selling the house
+sale_reason,sale reason
+sale_reason,reason why owner is selling
+sale_reason,Why is the house on sale
+sale_reason,any reasons why the owner is selling the property
+sale_reason,Can i know why the owner is selling the house
+sale_reason,how come seller is selling the flat
+sale_reason,can i know why the seller is selling
+sale_reason,is there a reason for the sale
 sale_period,How long has the property been on the market
 sale_period,How long has the estate been on the market
 sale_period,How long has the house been on the market
+sale_period,How long has the flat been on the market
 sale_period,How long has the estate been listed
 sale_period,How long has the house been listed
 sale_period,How long has the property been listed
-sale_period,What is the length of time the property has been on sale for 
+sale_period,How long has the flat been listed
+sale_period,What is the length of time the property has been on sale for
+sale_period,What is the length of time the flat has been on sale for
 sale_period,What is the length of time the estate has been on sale for
 sale_period,What is the length of time the house has been on sale for 
 sale_period,What is the list data of the house
 sale_period,What is the list date of the estate
 sale_period,What is the list date of the property
+sale_period,What is the list date of the flat
 sale_period,What date was the estate listed on
 sale_period,What date was the property listed on
 sale_period,What date was the house listed on
+sale_period,What date was the flat listed on
+sale_period,list date
+sale_period,duration of listing
+sale_period,whats the duration of the listing
+sale_period,how long has the listing been up
+sale_period,when was the listing first made
+sale_period,what is the date of the listing when it was first made
+sale_period,how long has this house been on sale
+sale_period,date it was listed
+sale_period,duration that the listing has been up for
 house_age,When was the estate built
+house_age,when was it built
+house_age,When was the flat built
 house_age,When was the property built
 house_age,When was the house built
-house_age,When was the place contructed 
+house_age,When was the place contructed
+house_age,When was the flat contructed
 house_age,When was the property contructed
 house_age,What year was the house contructed
 house_age,What year was the estate contructed 
 house_age,What year was the property contructed
+house_age,What year was the flat contructed
 house_age,How old is the property
 house_age,How old is the estate
 house_age,How old is the house
+house_age,How old is the flat
 house_age,What is the age of the property
-notable_features,What are the notable feature of the house
-notable_features,What are the notable features of the property 
-notable_features,Is there any features about the property I should know about
-notable_features,Is there any features about the house I should know about
-notable_features,Are there any interesting things that I should know about the place
-notable_features,Are there any interesting things that I should know about the property
-viewing,I am interested in taking a look at the place
+house_age,How is the condition of the house
+description,What are the notable feature of the house
+description,What are the notable features of the property
+description,What are the notable features of the flat
+description,Is there any features about the property I should know about
+description,Is there any features about the house I should know about the house
+description,Are there any interesting things that I should know about the place
+description,Are there any interesting things that I should know about the property
+description,Are there any interesting things that I should know about the flat
+description,Any noteworthy features that the property has
+description,Any noteworthy features that the flat has
+description,what does this house has
+description,Anything of note i should know about the flat
+description,Anything remarkable about the house
+description,Are there any distinguishing features of this property
+description,What does this place have that makes it stand out from the rest
+description,Notable features
+description,does the flat have any remarkable features
+description,Anything special that seperates this property from others
+description,Any remarkable features 
+description,Anything of the house u should take note of
+description,anything significant things to note about the property
+description,does the house have any well thought of features 
+description,What makes this house unique from the rest
+description,I am interested in taking a look at the place
+description,are there any schools in the area
+description,Is there any school nearby
+description,Schools near this house
+description,How many schools are there
+description,what are the schools in a 1 km distance from the property
+description,what are the schools in a 1 km distance from the place
+description,are there any education institutes nearby 
+description,is there any school that my son can attend to nearby
+description,is there any school that my child can attend to nearby
+description,how are is the nearest school from the house
+description,school in 1 km proximity
+description,any schools close by
+description,schools nearby
+description,any place for my child to attend nearby 
+description,schools within walking distance
+description,are there any schools in walking distance from the house
+description,schools
 viewing,I am interested in taking a look at the property
 viewing,Can I have a viewing to look at the place
 viewing,I would like to book a viewing
 viewing,Is it possible to have an in person look at the house
+viewing,Is it possible to have an in person look at the flat
 viewing,Is it possible to have an in person look at the property
 viewing,Is it possible to have an in person look at the place
 viewing,I want to take a look at the property in person
 viewing,I want to take a look at the place in person
 viewing,I want to take a look at the house in person
-school_proximity,are there any schools in the area
-school_proximity,what are the schools in a 1 km distance from the property
-school_proximity,what are the schools in a 1 km distance from the place
-school_proximity,are there any education institutes nearby 
-school_proximity,is there any school that my son can attend to nearby
-school_proximity,is there any school that my child can attend to nearby
+viewing,I am interest in this place
+viewing,Can i meet the owner of this house
+viewing,can i arrange a meeting with the owner
+viewing,Can i visit the house
+viewing,Can i view the flat in person
+viewing,may i go and take a look at the house
+viewing,what is a possible time i can visit the property
+viewing,when can i tour the property
+viewing,viewing times
+viewing,viewing house
+viewing,when is the owner free for a tour of the house
+viewing,when is a good time to go and take a look at the place
+viewing,visiting hours to view the house
+viewing,what is a good time to view the house
+viewing,avaliable viewing times
+viewing,timeslot avaliable to view the property
 goodbye,Bye
 goodbye,Adios
 goodbye,See you later
 goodbye,Goodbye
 goodbye,Thanks bye
 goodbye,Thanks for the help goodbye
-goodbye,"Thank you, bye"
-goodbye,"Thank you, goodbye"
+goodbye,Thank you bye
+goodbye,Thank you goodbye
 goodbye,Thanks goodbye
 goodbye,Thanks good bye
+goodbye,I'll see you later
+goodbye,Ok Thanks
+goodbye,That was helpful
+goodbye,That's helpful
+goodbye,Ok thank you
+goodbye,Alright Thanks
+goodbye,Alright Thank you
+goodbye,i am off
+goodbye,thank you for the info
+goodbye,thank you for the infomation
+goodbye,Have a nice day
+goodbye,Until next time
+goodbye,Take care
+goodbye,later
+goodbye,Catch you later
+goodbye,i gotta go
+goodbye,talk to you later
+goodbye,thank you for your time
 price,what is the price of the property
 price,what is the price of the house
 price,what is the price of the estate
+price,what is the price of this apartment
 price,how much is the asking price of the property
 price,how much is the asking price of the house
 price,how much is the asking price of the place
 price,what is the listed price of the property
 price,what is the listed price of the place
+price,what is the resale price of this house
+price,price of this flat
+price,how much does this flat cost
+price,what's the pricing of this house
+price,how much does this house cost
+price,price of this hdb flat
+price,give me the price of the house
+price,price
