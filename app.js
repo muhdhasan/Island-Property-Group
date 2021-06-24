@@ -20,6 +20,7 @@ app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)
 
+// Port number defaults to 5000 if env file is not available
 const port = process.env.port || 5000
 
 app.listen(port, () => {

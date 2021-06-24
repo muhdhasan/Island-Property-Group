@@ -23,7 +23,7 @@ router.get('/testRoute', (req, res) => {
     a: 10,
     b: 5
   }
-  fetch('http://127.0.0.1:5000/test', {
+  fetch('http://localhost:8000/test', {
     method: 'post',
     body: JSON.stringify(body),
     headers: { 'Content-Type': 'application/json' }
