@@ -11,4 +11,13 @@ router.get('/propertylist', (req, res) => {
   res.render('property/property-grid', { title: title })
 })
 
+// router.get('/createPropertyResaleListing', (req, res) => {
+//   const title = 'List of Properties'
+//   res.render('property/property-grid', { title: title })
+// })
+
+// router.post('/createProperty', (req, res) => {
+//   res.redirect('')
+// })
+
 module.exports = router
