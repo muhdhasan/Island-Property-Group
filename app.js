@@ -1,14 +1,36 @@
-const http = require('http');
+const express = require('express')
+const exphbs = require('express-handlebars')
+const path = require('path')
+const fs = require('fs')
+const https = require('https')
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const app = express()
+require('dotenv').config()
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main' // Specify default template views/layout/main.handlebar
+}))
+app.set('view engine', 'handlebars')
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.use(express.static(path.join(__dirname, 'public')))
+
+const mainRoute = require('./routes/main')
+const userRoute = require('./routes/user')
+const propertyRoute = require('./routes/property')
+
+app.use('/', mainRoute)
+app.use('/user', userRoute)
+app.use('/property', propertyRoute)
+
+// Port number defaults to 5000 if env file is not available
+const port = process.env.port || 5000
+
+// Create HTTP Server
+https.createServer({
+     key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+   },
+   app
+).listen(port, () => {
+  console.log(`Server started ad ${port}`)
+})
