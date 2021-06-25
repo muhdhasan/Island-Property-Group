@@ -18,6 +18,7 @@ const mainRoute = require('./routes/main')
 const userRoute = require('./routes/user')
 const propertyRoute = require('./routes/property')
 
+// Routes
 app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)

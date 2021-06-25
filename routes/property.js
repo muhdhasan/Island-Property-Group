@@ -20,4 +20,20 @@ router.get('/propertylist', (req, res) => {
 //   res.redirect('')
 // })
 
+// Test api call here
+// router.get('/testRoute', (req, res) => {
+//   const body = {
+//     a: 10,
+//     b: 5
+//   }
+//   fetch('http://localhost:8000/api/test', {
+//     method: 'post',
+//     body: JSON.stringify(body),
+//     headers: { 'Content-Type': 'application/json' }
+//   })
+//     .then(res => res.json())
+//     .then(json =>
+//       res.send(json))
+// })
+
 module.exports = router
