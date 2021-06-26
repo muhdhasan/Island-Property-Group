@@ -23,6 +23,10 @@ app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)
 
+// Library to use MySQL to store session objects
+const MySQLStore = require('express-mysql-session')
+const db = require('./config/db')
+
 // Error Codes
 app.use((req, res) => {
   if (res.status(400)) {
