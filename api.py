@@ -3,6 +3,7 @@ from flask import request
 from flask import jsonify
 
 import traceback
+import pickle
 # import numpy as np
 # import pandas as pd
 
@@ -49,7 +50,21 @@ def test():
 # Predict public & private resale price route
 @app.route("/api/predictResale", methods=["POST"])
 def predictHouseResale():
-    return "Resale Result"
+    # Get json response
+    input = request.get_json()
+
+    # Conditions to predict public or private housing
+    if input["type"] == "public":
+        resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+        # resalePublicModel.predict()
+        return "Resale Result"
+    elif input["type"] == "private":
+        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+        # resalePrivateModel.predict()
+        return "Resale Result"
+    else:
+        # raise APIAuthError("Please ensure that you have all the correct parameters.")
+        return jsonify({"Results" : "Error"}) , 200
 
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
@@ -61,5 +76,6 @@ def predictHouseRent():
 def chatbot():
     return "Chatbot Response"
 
+# Start at localhost:8000
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=False)
