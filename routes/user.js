@@ -19,4 +19,8 @@ const router = express.Router()
 //     res.redirect('')
 //   })
 
+// router.get('/forgetpassword', (req, res) => {
+//     res.redirect('')
+//   })
+
 module.exports = router
