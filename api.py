@@ -4,8 +4,8 @@ from flask import jsonify
 
 import traceback
 import pickle
-# import numpy as np
-# import pandas as pd
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -50,21 +50,48 @@ def test():
 # Predict public & private resale price route
 @app.route("/api/predictResale", methods=["POST"])
 def predictHouseResale():
+    
     # Get json response
     input = request.get_json()
 
     # Conditions to predict public or private housing
     if input["type"] == "public":
-        resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+        # resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+
+        resaleDate = input["resale_date"]
+        floorAreaSqm = input["floor_area_sqm"]
+        leaseCommenceDate = input["lease_commence_date"]
+        town = input["town"]
+        flatType = input["flat_type"]
+        flatModel = input["flat_model"]
         # resalePublicModel.predict()
         return "Resale Result"
     elif input["type"] == "private":
-        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+        # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+
+        resaleDate = input["resale_date"]
+        floorAreaSqm = input["floor_area_sqm"]
+        leaseCommenceDate = input["lease_commence_date"]
+        postalDistrict = input["postal_district"]
         # resalePrivateModel.predict()
         return "Resale Result"
     else:
         # raise APIAuthError("Please ensure that you have all the correct parameters.")
-        return jsonify({"Results" : "Error"}) , 200
+        # return jsonify({"Results" : "Error"}) , 200
+        
+        # resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+        # df = pd.read_csv('dataset/sale-prediction/private-housing/AC1-5.csv')
+
+        # X contains features
+        # X = df.drop(['resale_price'], axis=1)
+
+        # # y contains target to be predicted
+        # y = df['resale_price']
+
+        # model = pd.read_pickle('training/xgb_public_resale.pickle')
+        # print(model.columns)
+        # print(X)
+        return "testing" #str(model.columns)
 
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
