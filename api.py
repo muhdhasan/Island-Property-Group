@@ -50,13 +50,38 @@ def test():
 # Predict public & private resale price route
 @app.route("/api/predictResale", methods=["POST"])
 def predictHouseResale():
-    
+
     # Get json response
     input = request.get_json()
 
     # Conditions to predict public or private housing
     if input["type"] == "public":
         # resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+
+        df = pd.read_csv('dataset/sale-prediction/finalPublicHousing.csv')
+
+        # # Create a categorical boolean mask
+        # categorical_feature_mask = df.dtypes == object
+
+        # # Filter out the categorical columns into a list for easy reference later on in case you have more than a couple categorical columns
+        # categorical_cols = df.columns[categorical_feature_mask].tolist()
+
+        # # Instantiate the OneHotEncoder Object
+        # from sklearn.preprocessing import OneHotEncoder
+        # ohe = OneHotEncoder(handle_unknown='ignore', sparse = False)
+        # # Apply ohe on data
+        # ohe.fit(df[categorical_cols])
+
+        # # The following code is for your newdf after training and testing on original df
+        # # Apply ohe on newdf
+        # cat_ohe_new = ohe.transform(newdf[categorical_cols])
+        # #Create a Pandas DataFrame of the hot encoded column
+        # ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+        # #concat with original data and drop original columns
+        # df_ohe_new = pd.concat([newdf, ohe_df_new], axis=1).drop(columns = categorical_cols, axis=1)
+
+        # # predict on df_ohe_new
+        # predict = model.predict(df_ohe_new)
 
         resaleDate = input["resale_date"]
         floorAreaSqm = input["floor_area_sqm"]
