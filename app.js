@@ -4,14 +4,22 @@ const path = require('path')
 const fs = require('fs')
 const https = require('https')
 
+// Create Express Server
 const app = express()
+
 require('dotenv').config()
 
+// Handlebar mMiddleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main' // Specify default template views/layout/main.handlebar
 }))
 app.set('view engine', 'handlebars')
 
+// Body parser middleware to parse HTTP body to read post data
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
+// Creates static folder for publicly accessible HTML, CSS and Javascript files
 app.use(express.static(path.join(__dirname, 'public')))
 
 const mainRoute = require('./routes/main')
@@ -60,6 +68,7 @@ app.use((req, res) => {
 // Port number defaults to 5000 if env file is not available
 const port = process.env.port || 5000
 
+// Retrieve Certs for HTTPS server
 const options = {
   key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
   cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
