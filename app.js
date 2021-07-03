@@ -35,6 +35,13 @@ app.use('/property', propertyRoute)
 const MySQLStore = require('express-mysql-session')
 const db = require('./config/db')
 
+// Bring in database connection
+const realEstateDB = require('./config/DBConnection')
+
+// Connects to MySQL database
+// To set up database with new tables set (true)
+realEstateDB.setUpDB(true)
+
 // Error Codes
 app.use((req, res) => {
   if (res.status(400)) {
