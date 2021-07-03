@@ -32,8 +32,8 @@ app.use('/user', userRoute)
 app.use('/property', propertyRoute)
 
 // Library to use MySQL to store session objects
-const MySQLStore = require('express-mysql-session')
-const db = require('./config/db')
+// const MySQLStore = require('express-mysql-session')
+// const db = require('./config/db.js')
 
 // Bring in database connection
 const realEstateDB = require('./config/DBConnection')
