@@ -11,12 +11,9 @@ const User = db.define('user', {
   email: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
   isAgent: { type: Sequelize.BOOLEAN },
-  isAdmin: { type: Sequelize.BOOLEAN }
+  isAdmin: { type: Sequelize.BOOLEAN },
   // confirmed: { type: Sequelize.BOOLEAN },
-  // isadmin: { type: Sequelize.BOOLEAN },
-  // facebookId: { type: Sequelize.STRING },
-  // facebookToken: { type: Sequelize.STRING },
-  // PhoneNo: { type: Sequelize.STRING },
+  phoneNo: { type: Sequelize.STRING }
   // address: { type: Sequelize.STRING },
   // address1: { type: Sequelize.STRING },
   // city: { type: Sequelize.STRING },

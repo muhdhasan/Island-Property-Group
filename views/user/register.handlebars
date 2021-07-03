@@ -31,7 +31,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <form action="#" method="POST" role="form" class="form">
+          <form action="/user/register" method="POST" role="form" class="form">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Email</label>
               <input
@@ -48,6 +48,7 @@
               <label for="fullName" class="form-label">Full Name</label>
               <input
                 type="text"
+                name="fullName"
                 class="form-control form-control-lg form-control-a"
                 id="fullName"
                 placeholder="John Smith"
@@ -58,6 +59,7 @@
               <label for="firstPassword" class="form-label">Password</label>
               <input
                 type="password"
+                name="firstPassword"
                 class="form-control form-control-lg form-control-a"
                 id="firstPassword"
                 required
@@ -67,6 +69,7 @@
               <label for="secondPassword" class="form-label">Re-enter Password</label>
               <input
                 type="password"
+                name="secondPassword"
                 class="form-control form-control-lg form-control-a"
                 id="secondPassword"
                 required

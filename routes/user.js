@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const user = require('../models/User')
 // const bcrypt = require('bcrypt');
 
 router.get('/register', (req, res) => {
@@ -12,10 +13,34 @@ router.get('/login', (req, res) => {
   res.render('user/login', { title: title })
 })
 
-// router.post('/register', (req, res) => {
-//    const email = req.body.email.toLowerCase().replace(/\s+/g, '')
-//    res.redirect('')
-//   })
+router.post('/register', (req, res) => {
+  // Inputs
+  const email = req.body.email.toLowerCase().replace(/\s+/g, '')
+  const fullName = req.body.fullName
+  const firstPassword = req.body.firstPassword
+  const secondPassword = req.body.secondPassword
+  // Name Regex
+  const nameRegex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  // Email Regex
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+  // Input Validation
+
+  // Remember to add error messages later
+  if (emailRegex.test(email) === false) {
+    return console.log('It email regex failed')
+  }
+  if (nameRegex.test(fullName) === false) {
+    return console.log('It name regex failed')
+  }
+  if (firstPassword.length < 8) {
+    return console.log('It password length is less than 8 charaters')
+  }
+  if (firstPassword !== secondPassword) {
+    return console.log('Password are not the same')
+  }
+  res.redirect('#')
+})
 
 // Logs in user
 router.post('/login', (req, res) => {
@@ -43,8 +68,8 @@ router.post('/login', (req, res) => {
 //   })
 
 router.get('/userProfile', (req, res) => {
-  const title = "User Profile"
-  res.render('user/userProfile', {title: title})
+  const title = 'User Profile'
+  res.render('user/userProfile', { title: title })
 })
 
 // Logout Route

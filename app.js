@@ -40,7 +40,7 @@ const realEstateDB = require('./config/DBConnection')
 
 // Connects to MySQL database
 // To set up database with new tables set (true)
-realEstateDB.setUpDB(true)
+realEstateDB.setUpDB(false)
 
 // Error Codes
 app.use((req, res) => {
