@@ -15,6 +15,16 @@ class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
 
+# Call this function if you want to convert datetime to ordinal type
+def convertToOrdinal(df):
+    df['month'] = pd.to_datetime(df['month'],format='%Y-%m', errors='coerce')
+    # Convert month to ordinal type so we can use the data for training our model
+    df['month'] = df['month'].map(dt.datetime.toordinal)
+
+    df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
+    # Convert month to ordinal type so we can use the data for training our model
+    df['lease_commence_date'] = df['lease_commence_date'].map(dt.datetime.toordinal)
+
 # 'Catch all error handling'
 @app.errorhandler(500)
 def handle_exception(err):
@@ -65,6 +75,7 @@ def predictHouseResale():
         with open('training/publicResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
 
+        # Read JSON response
         resaleDate = input["resale_date"]
         town = input["town"]
         flatType = input["flat_type"]
@@ -76,17 +87,10 @@ def predictHouseResale():
 
         # Convert json data into dataframe format
         newDf = pd.DataFrame(data, columns=['month','town','flat_type','storey_range','floor_area_sqm','flat_model','lease_commence_date'])
-        
-        # TODO Simplify convert month to ordinal type into a function
-        newDf['month'] = pd.to_datetime(newDf['month'],format='%Y-%m', errors='coerce')
-        # Convert month to ordinal type so we can use the data for training our model
-        newDf['month'] = newDf['month'].map(dt.datetime.toordinal)
 
-        newDf['lease_commence_date'] = pd.to_datetime(newDf['lease_commence_date'],format='%Y', errors='coerce')
-        # Convert month to ordinal type so we can use the data for training our model
-        newDf['lease_commence_date'] = newDf['lease_commence_date'].map(dt.datetime.toordinal)
+        convertToOrdinal(newDf)
 
-        # Apply ohe on newdf
+        # Apply one hot encoding on newdf for prediction
         cat_ohe_new = ohe.transform(newDf[categorical_cols])
         #Create a Pandas DataFrame of the hot encoded column
         ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
@@ -98,34 +102,34 @@ def predictHouseResale():
 
         # Load model
         resalePublicModel = pickle.load(open('training/xgb_public_resale.pickle', 'rb'))
-        predict = resalePublicModel.predict(df_ohe_new)
 
-        return str(predict)
+        # Predict Model
+        predictionResult = resalePublicModel.predict(df_ohe_new)
+
+        return str(predictionResult)
     elif input["type"] == "private":
-        # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+        # Categorical columns List
+        categorical_cols = ['Type', 'Postal District', 'Type of Area', 'Floor Level']
 
+        # Read JSON response
         resaleDate = input["resale_date"]
         floorAreaSqm = input["floor_area_sqm"]
         leaseCommenceDate = input["lease_commence_date"]
         postalDistrict = input["postal_district"]
-        # resalePrivateModel.predict()
-        return "Resale Result"
+
+        # convertToOrdinal(newDf)
+        
+        # Load Model
+        # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+
+        # Predict Model
+        # predictionResult = resalePrivateModel.predict()
+        predictionResult = "Nothing"
+        return str(predictionResult)
     else:
         # raise APIAuthError("Please ensure that you have all the correct parameters.")
         # return jsonify({"Results" : "Error"}) , 200
-        
-        # resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
-        # df = pd.read_csv('dataset/sale-prediction/private-housing/AC1-5.csv')
-
-        # X contains features
-        # X = df.drop(['resale_price'], axis=1)
-
-        # # y contains target to be predicted
-        # y = df['resale_price']
-
-        # model = pd.read_pickle('training/xgb_public_resale.pickle')
-        # print(X)
-        return "testing" #str(model.columns)
+        return "testing"
 
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])

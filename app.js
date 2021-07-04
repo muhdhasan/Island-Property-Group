@@ -9,9 +9,15 @@ const app = express()
 
 require('dotenv').config()
 
+// Bring in Handlebars helpers
+const { formatDate } = require('./helpers/hbs')
+
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
-  defaultLayout: 'main' // Specify default template views/layout/main.handlebar
+  defaultLayout: 'main', // Specify default template views/layout/main.handlebar
+  helpers: {
+    formatDate: formatDate
+  }
 }))
 app.set('view engine', 'handlebars')
 

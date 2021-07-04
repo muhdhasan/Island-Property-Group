@@ -24,8 +24,17 @@ router.get('/propertylist', (req, res) => {
 // Fixed data for testing
 router.post('/createPublicResaleListing', (req, res) => {
 
-  //let 
-
+  // let 
+  // let address = req.body.address
+  // let description = req.body.description
+  // let resalePrice = // Call predict function here
+  // let town = req.body.town
+  // let flatType = req.body.flatType
+  // let flatModel = req.body.flatModel
+  // let flatLevel = req.body.flatLevel // Call function to choose storey range according to user input
+  // let floorSqm = req.body.floorSqm
+  // let leaseStartDate = moment(req.body.leaseCommenceDate,'DD/MM/YYYY')
+  // let dateOfSale = moment(req.body.resaleDate,'DD/MM/YYYY')
 
 
   hdbResale.create({
@@ -38,7 +47,7 @@ router.post('/createPublicResaleListing', (req, res) => {
     flatModel: "IMPROVED",
     flatLevel: "5",
     floorSqm: 90,
-    // Issue with datess
+    // Issue with dates
     leaseCommenceDate: 25/06/2000,
     resaleDate: 25/06/2020
   }) .then((hdbResale) => {
