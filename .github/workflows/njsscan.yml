@@ -3,9 +3,9 @@
 name: njsscan
 on:
   push:
-    branches: [ main ]
+    branches: [ main, selling-price-prediction  ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, selling-price-prediction  ]
 jobs:
   njsscan:
     runs-on: ubuntu-latest
