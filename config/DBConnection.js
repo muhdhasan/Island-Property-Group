@@ -1,6 +1,6 @@
 const mySQLDB = require('./DBConfig')
 const user = require('../models/User')
-const hdbResale = require('../models/HDB_Resale')
+const hdbResale = require('../models/hdbResale')
 const privateResale = require('../models/PrivateResale')
 const privateRental = require('../models/PrivateRental')
 
