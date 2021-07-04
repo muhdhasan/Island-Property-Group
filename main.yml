@@ -1,0 +1,20 @@
+# njsscan finds insecure code patterns in your node.js applications
+
+name: njsscan
+on:
+  push:
+    branches: [ main, sale-prediction ]
+  pull_request:
+    branches: [ main, sale-prediction ]
+jobs:
+  njsscan:
+    runs-on: ubuntu-latest
+    name: njsscan check
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    - name: nodejsscan scan
+      id: njsscan
+      uses: ajinabraham/njsscan-action@master
+      with:
+        args: '.'
