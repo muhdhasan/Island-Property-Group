@@ -1,11 +1,13 @@
 from flask import Flask, json
 from flask import request
 from flask import jsonify
+from sklearn.preprocessing import OneHotEncoder
 
 import traceback
 import pickle
 import numpy as np
 import pandas as pd
+import datetime as dt
 
 app = Flask(__name__)
 
@@ -56,41 +58,49 @@ def predictHouseResale():
 
     # Conditions to predict public or private housing
     if input["type"] == "public":
-        # resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
+        # Categorical columns List
+        categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
 
-        df = pd.read_csv('dataset/sale-prediction/finalPublicHousing.csv')
-
-        # # Create a categorical boolean mask
-        # categorical_feature_mask = df.dtypes == object
-
-        # # Filter out the categorical columns into a list for easy reference later on in case you have more than a couple categorical columns
-        # categorical_cols = df.columns[categorical_feature_mask].tolist()
-
-        # # Instantiate the OneHotEncoder Object
-        # from sklearn.preprocessing import OneHotEncoder
-        # ohe = OneHotEncoder(handle_unknown='ignore', sparse = False)
-        # # Apply ohe on data
-        # ohe.fit(df[categorical_cols])
-
-        # # The following code is for your newdf after training and testing on original df
-        # # Apply ohe on newdf
-        # cat_ohe_new = ohe.transform(newdf[categorical_cols])
-        # #Create a Pandas DataFrame of the hot encoded column
-        # ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
-        # #concat with original data and drop original columns
-        # df_ohe_new = pd.concat([newdf, ohe_df_new], axis=1).drop(columns = categorical_cols, axis=1)
-
-        # # predict on df_ohe_new
-        # predict = model.predict(df_ohe_new)
+        # Load encoder
+        with open('training/publicResaleEncoder.pickle', 'rb') as f:
+            ohe = pickle.load(f)
 
         resaleDate = input["resale_date"]
-        floorAreaSqm = input["floor_area_sqm"]
-        leaseCommenceDate = input["lease_commence_date"]
         town = input["town"]
         flatType = input["flat_type"]
+        storeyRange = input["storey_range"]
+        floorAreaSqm = input["floor_area_sqm"]
         flatModel = input["flat_model"]
-        # resalePublicModel.predict()
-        return "Resale Result"
+        leaseCommenceDate = input["lease_commence_date"]
+        data = [[resaleDate, town, flatType, storeyRange, floorAreaSqm, flatModel, leaseCommenceDate]]
+
+        # Convert json data into dataframe format
+        newDf = pd.DataFrame(data, columns=['month','town','flat_type','storey_range','floor_area_sqm','flat_model','lease_commence_date'])
+        
+        # TODO Simplify convert month to ordinal type into a function
+        newDf['month'] = pd.to_datetime(newDf['month'],format='%Y-%m', errors='coerce')
+        # Convert month to ordinal type so we can use the data for training our model
+        newDf['month'] = newDf['month'].map(dt.datetime.toordinal)
+
+        newDf['lease_commence_date'] = pd.to_datetime(newDf['lease_commence_date'],format='%Y', errors='coerce')
+        # Convert month to ordinal type so we can use the data for training our model
+        newDf['lease_commence_date'] = newDf['lease_commence_date'].map(dt.datetime.toordinal)
+
+        # Apply ohe on newdf
+        cat_ohe_new = ohe.transform(newDf[categorical_cols])
+        #Create a Pandas DataFrame of the hot encoded column
+        ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+        #concat with original data and drop original columns
+        df_ohe_new = pd.concat([newDf, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+
+        # Convert into numpy cos XGBoost hates pandas
+        df_ohe_new = df_ohe_new.values
+
+        # Load model
+        resalePublicModel = pickle.load(open('training/xgb_public_resale.pickle', 'rb'))
+        predict = resalePublicModel.predict(df_ohe_new)
+
+        return str(predict)
     elif input["type"] == "private":
         # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
 
@@ -114,7 +124,6 @@ def predictHouseResale():
         # y = df['resale_price']
 
         # model = pd.read_pickle('training/xgb_public_resale.pickle')
-        # print(model.columns)
         # print(X)
         return "testing" #str(model.columns)
 
