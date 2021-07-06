@@ -1,4 +1,4 @@
-# AI-Application-Project-2021
+# Island Property Group
 
 We will be applying AI for our real estate Node.js web application. MySQL is used as its database.
 
