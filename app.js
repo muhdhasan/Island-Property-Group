@@ -41,6 +41,14 @@ app.use('/property', propertyRoute)
 // const MySQLStore = require('express-mysql-session')
 // const db = require('./config/db.js')
 
+// Messaging libraries
+const flash = require('connect-flash')
+const FlashMessenger = require('flash-messenger')
+
+// Two flash messenging libraries - Flash (connect-flash) and Flash Messenger
+app.use(flash())
+app.use(FlashMessenger.middleware)
+
 // Bring in database connection
 const realEstateDB = require('./config/DBConnection')
 

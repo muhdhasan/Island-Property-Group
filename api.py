@@ -2,6 +2,7 @@ from flask import Flask, json
 from flask import request
 from flask import jsonify
 from sklearn.preprocessing import OneHotEncoder
+from flask_cors import CORS
 
 import traceback
 import pickle
@@ -9,13 +10,18 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
+# Start Flask Server
 app = Flask(__name__)
+
+# Expose api in the 'api' route and allow connection to localhost 8080
+CORS(app, resources=r'/api/*', origin=["https://localhost:8080", "https://localhost:5000"])
 
 class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
 
 # Call this function if you want to convert datetime to ordinal type
+# Prob gonna simply this code in this function cos abit too long
 def convertToOrdinal(df):
     df['month'] = pd.to_datetime(df['month'],format='%Y-%m', errors='coerce')
     # Convert month to ordinal type so we can use the data for training our model

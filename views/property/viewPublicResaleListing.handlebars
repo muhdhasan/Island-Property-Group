@@ -1,12 +1,11 @@
 <main id="main">
-
   <!-- ======= Intro Single ======= -->
   <section class="intro-single">
     <div class="container">
       <div class="row">
         <div class="col-md-12 col-lg-8">
           <div class="title-single-box">
-            <h1 class="title-single">304 Blaster Up</h1>
+            <h1 class="title-single">{{secondaryTitle}}</h1>
             <span class="color-text-a">Chicago, IL 606543</span>
           </div>
         </div>
@@ -20,10 +19,10 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="property-grid.html">Properties</a>
+                <a href="#">HDB Resale Listings</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                304 Blaster Up
+                {{secondaryTitle}}
               </li>
             </ol>
           </nav>
@@ -40,10 +39,10 @@
           <div id="property-single-carousel" class="swiper-container">
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/slide-1.jpg" alt="" />
+                <img src="/img/hdbFlat1.jpg" alt="" height="1000px" width="1000px"/>
               </div>
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/slide-2.jpg" alt="" />
+                <img src="/img/hdbFlat2.jpg" alt="" height="1000px" width="1000px"/>
               </div>
             </div>
           </div>
@@ -64,7 +63,7 @@
                     <span class="bi bi-cash">$</span>
                   </div>
                   <div class="card-title-c align-self-center">
-                    <h5 class="title-c">15000</h5>
+                    <h5 class="title-c">{{resalePrice}}</h5>
                   </div>
                 </div>
               </div>
@@ -87,16 +86,20 @@
                       <span>Chicago, IL 606543</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Property Type:</strong>
-                      <span>House</span>
+                      <strong>Town:</strong>
+                      <span>{{town}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Flat Type:</strong>
+                      <span>{{flatType}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Status:</strong>
-                      <span>Sale</span>
+                      <span>Resale</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Area:</strong>
-                      <span>340m
+                      <strong>Area (sqm):</strong>
+                      <span>{{floorSqm}}m
                         <sup>2</sup>
                       </span>
                     </li>
@@ -126,18 +129,10 @@
               </div>
               <div class="property-description">
                 <p class="description color-text-a">
-                  Vestibulum ante ipsum primis in faucibus orci luctus et
-                  ultrices posuere cubilia Curae; Donec velit neque, auctor sit
-                  amet aliquam vel, ullamcorper sit amet ligula. Cras ultricies
-                  ligula sed magna dictum porta. Curabitur aliquet quam id dui
-                  posuere blandit. Mauris blandit aliquet elit, eget tincidunt
-                  nibh pulvinar quam id dui posuere blandit.
+                  {{description}}
                 </p>
                 <p class="description color-text-a no-margin">
-                  Curabitur arcu erat, accumsan id imperdiet et, porttitor at
-                  sem. Donec rutrum congue leo eget malesuada. Quisque velit
-                  nisi, pretium ut lacinia in, elementum id enim. Donec
-                  sollicitudin molestie malesuada.
+                  {{description}}
                 </p>
               </div>
               <div class="row section-t3">
@@ -360,5 +355,4 @@
       </div>
     </div>
   </section><!-- End Property Single-->
-
-</main><!-- End #main -->
+</main>
