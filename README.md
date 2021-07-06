@@ -8,7 +8,8 @@ We will be predicting Singapore housing resale and rental prices using a variety
 
 ## Requirements
 - Node.js Version 16 and above
-- Visual Studio Code 19
+- NPM Version 7 onwards
+- Visual Studio Code
 
 ## Setup
 

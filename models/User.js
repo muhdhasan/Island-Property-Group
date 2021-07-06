@@ -12,14 +12,7 @@ const User = db.define('user', {
   password: { type: Sequelize.STRING },
   isAgent: { type: Sequelize.BOOLEAN },
   isAdmin: { type: Sequelize.BOOLEAN },
-  // confirmed: { type: Sequelize.BOOLEAN },
-  phoneNo: { type: Sequelize.STRING }
-  // address: { type: Sequelize.STRING },
-  // address1: { type: Sequelize.STRING },
-  // city: { type: Sequelize.STRING },
-  // country: { type: Sequelize.STRING },
-  // postalCode: { type: Sequelize.STRING },
-  // stripeID: { type: Sequelize.STRING }
+  phoneNo: { type: Sequelize.STRING, allowNull: true }
 })
 
 module.exports = User

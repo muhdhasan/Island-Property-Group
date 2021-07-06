@@ -54,7 +54,8 @@ const realEstateDB = require('./config/DBConnection')
 
 // Connects to MySQL database
 // To set up database with new tables set (true)
-realEstateDB.setUpDB(false)
+const restartDB = false
+realEstateDB.setUpDB(restartDB)
 
 // Error Codes
 app.use((req, res) => {
@@ -95,10 +96,18 @@ const options = {
   cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
 }
 
+// This function shall not be disabled at all cost since this function automatically adds a admin user
+// should we intend to reset the database whenever we want
+const checkDefaultData = require('./config/defaultDataInfo')
+checkDefaultData.check().catch((err) => {
+  // log error
+  console.log(err)
+})
+
 // Create HTTP Server
 https.createServer(
   options,
   app
 ).listen(port, () => {
-  console.log(`Server started ad ${port}`)
+  console.log(`HTTPS Web Server started at ${port}`)
 })
