@@ -1,17 +1,35 @@
 from flask import Flask, json
 from flask import request
 from flask import jsonify
+from sklearn.preprocessing import OneHotEncoder
+from flask_cors import CORS
 
 import traceback
 import pickle
-# import numpy as np
-# import pandas as pd
+import numpy as np
+import pandas as pd
+import datetime as dt
 
+# Start Flask Server
 app = Flask(__name__)
+
+# Expose api in the 'api' route and allow connection to localhost 8080
+CORS(app, resources=r'/api/*', origin=["https://localhost:8080", "https://localhost:5000"])
 
 class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
+
+# Call this function if you want to convert datetime to ordinal type
+# Prob gonna simply this code in this function cos abit too long
+def convertToOrdinal(df):
+    df['month'] = pd.to_datetime(df['month'],format='%Y-%m', errors='coerce')
+    # Convert month to ordinal type so we can use the data for training our model
+    df['month'] = df['month'].map(dt.datetime.toordinal)
+
+    df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
+    # Convert month to ordinal type so we can use the data for training our model
+    df['lease_commence_date'] = df['lease_commence_date'].map(dt.datetime.toordinal)
 
 # 'Catch all error handling'
 @app.errorhandler(500)
@@ -50,21 +68,74 @@ def test():
 # Predict public & private resale price route
 @app.route("/api/predictResale", methods=["POST"])
 def predictHouseResale():
+
     # Get json response
     input = request.get_json()
 
     # Conditions to predict public or private housing
     if input["type"] == "public":
-        resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
-        # resalePublicModel.predict()
-        return "Resale Result"
+        # Categorical columns List
+        categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
+
+        # Load encoder
+        with open('training/publicResaleEncoder.pickle', 'rb') as f:
+            ohe = pickle.load(f)
+
+        # Read JSON response
+        resaleDate = input["resale_date"]
+        town = input["town"]
+        flatType = input["flat_type"]
+        storeyRange = input["storey_range"]
+        floorAreaSqm = input["floor_area_sqm"]
+        flatModel = input["flat_model"]
+        leaseCommenceDate = input["lease_commence_date"]
+        data = [[resaleDate, town, flatType, storeyRange, floorAreaSqm, flatModel, leaseCommenceDate]]
+
+        # Convert json data into dataframe format
+        newDf = pd.DataFrame(data, columns=['month','town','flat_type','storey_range','floor_area_sqm','flat_model','lease_commence_date'])
+
+        convertToOrdinal(newDf)
+
+        # Apply one hot encoding on newdf for prediction
+        cat_ohe_new = ohe.transform(newDf[categorical_cols])
+        #Create a Pandas DataFrame of the hot encoded column
+        ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+        #concat with original data and drop original columns
+        df_ohe_new = pd.concat([newDf, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+
+        # Convert into numpy cos XGBoost hates pandas
+        df_ohe_new = df_ohe_new.values
+
+        # Load model
+        resalePublicModel = pickle.load(open('training/xgb_public_resale.pickle', 'rb'))
+
+        # Predict Model
+        predictionResult = resalePublicModel.predict(df_ohe_new)
+
+        return str(predictionResult)
     elif input["type"] == "private":
-        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
-        # resalePrivateModel.predict()
-        return "Resale Result"
+        # Categorical columns List
+        categorical_cols = ['Type', 'Postal District', 'Type of Area', 'Floor Level']
+
+        # Read JSON response
+        resaleDate = input["resale_date"]
+        floorAreaSqm = input["floor_area_sqm"]
+        leaseCommenceDate = input["lease_commence_date"]
+        postalDistrict = input["postal_district"]
+
+        # convertToOrdinal(newDf)
+        
+        # Load Model
+        # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+
+        # Predict Model
+        # predictionResult = resalePrivateModel.predict()
+        predictionResult = "Nothing"
+        return str(predictionResult)
     else:
         # raise APIAuthError("Please ensure that you have all the correct parameters.")
-        return jsonify({"Results" : "Error"}) , 200
+        # return jsonify({"Results" : "Error"}) , 200
+        return "testing"
 
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])

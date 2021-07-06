@@ -1,6 +1,8 @@
+// Environment Variables for for database connection
 module.exports = {
-  host: 'localhost',
-  database: 'real_estate',
-  username: 'getReal123',
-  password: 'getReal123'
+  host: process.env.dbHost,
+  database: process.env.dbName,
+  username: process.env.dbUsername,
+  password: process.env.dbPassword,
+  port: process.env.dbPort
 }

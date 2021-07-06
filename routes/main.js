@@ -14,7 +14,7 @@ router.get('/about', (req, res) => {
 
 router.get('/contact', (req, res) => {
   const title = 'Contact Us'
-  res.render('contact', { title: title })
+  res.render('contact', { title: title, success_msg: 'Testing' })
 })
 
 // Test api call here
@@ -28,9 +28,8 @@ router.get('/testRoute', (req, res) => {
     body: JSON.stringify(body),
     headers: { 'Content-Type': 'application/json' }
   })
-    .then(res => res.json())
-    .then(json =>
-      res.send(json))
+    .then((res) => res.json())
+    .then((json) => res.send(json))
 })
 
 module.exports = router
