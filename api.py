@@ -6,7 +6,9 @@ from flask_cors import CORS
 
 import traceback
 import pickle
+import torch 
 import numpy as np
+from transformers import AlbertTokenizerFast
 import pandas as pd
 import datetime as dt
 
@@ -20,6 +22,19 @@ class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
 
+#intent classification tokenizer, model load and function
+tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
+intent_model = torch.load("../training/intentclassification.model")
+def infer_intent(text):
+    input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
+    output = intent_model(**input, return_dict=True)
+    output = output.logits[0].to("cpu").detach().numpy()
+    label_index = np.argmax(output)
+    del input
+    del output
+    torch.cuda.empty_cache()
+    return label_index
+
 # Call this function if you want to convert datetime to ordinal type
 # Prob gonna simply this code in this function cos abit too long
 def convertToOrdinal(df):
@@ -30,6 +45,7 @@ def convertToOrdinal(df):
     df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
     # Convert month to ordinal type so we can use the data for training our model
     df['lease_commence_date'] = df['lease_commence_date'].map(dt.datetime.toordinal)
+
 
 # 'Catch all error handling'
 @app.errorhandler(500)
@@ -145,8 +161,18 @@ def predictHouseRent():
 # Chatbot route
 @app.route("/api/chatbot", methods=["POST"])
 def chatbot():
-    return "Chatbot Response"
-
+    text = request.get_json()
+    sentence_labels = ["goodbye",
+                   "greeting",
+                   "house_age",
+                   "house_area",
+                   "description",
+                   "price",
+                   "sale_period",
+                   "sale_reason",
+                   "viewing"]
+    return sentence_labels[infer_intent(text)]
+    
 # Start at localhost:8000
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=False)
