@@ -2035,7 +2035,7 @@ a:hover {
   border-color: #2eca6a;
 }
 
-.php-email-form .error-message {
+.form .error-message {
   display: none;
   color: #fff;
   background: #ed3c0d;
@@ -2044,7 +2044,7 @@ a:hover {
   font-weight: 600;
 }
 
-.php-email-form .sent-message {
+.form .sent-message {
   display: none;
   color: #fff;
   background: #18d26e;
@@ -2053,14 +2053,14 @@ a:hover {
   font-weight: 600;
 }
 
-.php-email-form .loading {
+.form .loading {
   display: none;
   background: #fff;
   text-align: center;
   padding: 15px;
 }
 
-.php-email-form .loading:before {
+.form .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -2073,26 +2073,26 @@ a:hover {
   animation: animate-loading 1s linear infinite;
 }
 
-.php-email-form label {
+.form label {
   color: #000000;
   position: relative;
 }
 
-.php-email-form select.form-control-lg:not([size]):not([multiple]) {
+.form select.form-control-lg:not([size]):not([multiple]) {
   height: 3.5rem;
 }
 
-.php-email-form .form-control {
+.form .form-control {
   border-radius: 0;
   font-size: 1.1rem;
   font-weight: 300;
 }
 
-.php-email-form .form-control.form-control-a {
+.form .form-control.form-control-a {
   height: 3.5rem;
 }
 
-.php-email-form .form-control:focus {
+.form .form-control:focus {
   box-shadow: none;
   border-color: #2eca6a;
 }
