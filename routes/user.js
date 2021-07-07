@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-const request = require('request')
 const user = require('../models/User')
+const nodemailer = require('nodemailer')
 // const bcrypt = require('bcrypt');
 
 router.get('/register', (req, res) => {
@@ -27,7 +27,7 @@ router.post('/register', (req, res) => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   // Input Validation
-
+  
   // Remember to add error messages later
   if (emailRegex.test(email) === false) {
     return console.log('It email regex failed')

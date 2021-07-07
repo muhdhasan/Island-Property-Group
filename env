@@ -1,6 +1,0 @@
-port=8080
-dbHost=realestatedb.cjrty5osbjql.ap-southeast-1.rds.amazonaws.com
-dbName=Real_Estate
-dbUsername=admin
-dbPassword=Getreallol5000!
-dbPort=3306
