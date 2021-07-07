@@ -6,7 +6,7 @@
 (function () {
   'use strict'
 
-  const forms = document.querySelectorAll('.php-email-form')
+  const forms = document.querySelectorAll('.form')
 
   forms.forEach(function (e) {
     e.addEventListener('submit', function (event) {
@@ -64,7 +64,7 @@
       })
       .then(data => {
         thisForm.querySelector('.loading').classList.remove('d-block')
-        if (data.trim() == 'OK') {
+        if (data.trim() === 'OK') {
           thisForm.querySelector('.sent-message').classList.add('d-block')
           thisForm.reset()
         } else {

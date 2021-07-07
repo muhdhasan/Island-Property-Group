@@ -1,6 +1,6 @@
 // Bring in Sequelize
-const Sequelize = require('sequelize')
 // Bring in db.js which contains database name, username and password
+const Sequelize = require('sequelize')
 const db = require('./db')
 
 // Instantiates Sequelize with database parameters
