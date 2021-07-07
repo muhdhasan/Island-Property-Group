@@ -69,6 +69,7 @@ def predictHouseResale():
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
 def predictHouseRent():
+    RentalModel = pickle.load(open('rental.pickle', 'rb'))
     return "Rental Result"
 
 # Chatbot route
