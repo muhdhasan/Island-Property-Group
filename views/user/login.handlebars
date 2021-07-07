@@ -1,0 +1,68 @@
+<main id="main">
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">Login</h1>
+            <p class="color-text-a">Looking to register?
+              <a href="/user/register">Click Here!</a></p>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="/">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Login
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <form action="/user/login" method="POST" role="form" class="form">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control form-control-lg form-control-a"
+                placeholder="someone@example.com"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control form-control-lg form-control-a"
+                id="password"
+                required
+              />
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="my-auto me-2"><a href="#" class="btn-a">Forget Password</a></p>
+              <button type="submit" class="btn btn-a">Login</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

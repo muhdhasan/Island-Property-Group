@@ -1,0 +1,206 @@
+<main id="main">
+
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">{{title}}</h1>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                {{title}}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <form
+        action="/property/createPublicResaleListing"
+        class="form"
+        method="POST"
+        role="form"
+      >
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="address1" class="form-label">Address Line 1</label>
+            <input
+              type="text"
+              name="address1"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="address2" class="form-label">Address Line 2</label>
+            <input
+              type="text"
+              name="address2"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="town" class="form-label">Town</label>
+            <select
+              id="town"
+              name="town"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="ANG MO KIO" selected>Ang Mo Kio</option>
+              <option value="BEDOK">Bedok</option>
+              <option value="BISHAN">Bishan</option>
+              <option value="BUKIT BATOK">Bukit Batok</option>
+              <option value="BUKIT MERAH">Bukit Merah</option>
+              <option value="BUKIT PANJANG">Bukit Panjang</option>
+              <option value="BUKIT TIMAH">Bukit Timah</option>
+              <option value="CENTRAL AREA">Central Area</option>
+              <option value="CHOA CHU KANG">Choa Chu Kang</option>
+              <option value="CLEMENTI">Clementi</option>
+              <option value="GEYLANG">Geylang</option>
+              <option value="HOUGANG">Hougang</option>
+              <option value="JURONG EAST">Jurong East</option>
+              <option value="JURONG WEST">Jurong West</option>
+              <option value="KALLANG/WHAMPOA">Kallang/Whampoa</option>
+              <option value="MARINE PARADE">Marine Parade</option>
+              <option value="PASIR RIS">Pasir Ris</option>
+              <option value="PUNGGOL">Punggol</option>
+              <option value="QUEENSTOWN">Queenstown</option>
+              <option value="SEMBAWANG">Sembawang</option>
+              <option value="SENGKANG">Sengkang</option>
+              <option value="SERANGOON">Serangoon</option>
+              <option value="TAMPINES">Tampines</option>
+              <option value="TOA PAYOH">Toa Payoh</option>
+              <option value="WOODLANDS">Woodlands</option>
+              <option value="YISHUN">Yishun</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="flatType" class="form-label">Flat Type</label>
+            <select
+              id="flatType"
+              name="flatType"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="1 ROOM" selected>1-ROOM</option>
+              <option value="2 ROOM">2-ROOM</option>
+              <option value="3 ROOM">3-ROOM</option>
+              <option value="4 ROOM">4-ROOM</option>
+              <option value="5 ROOM">5-ROOM</option>
+              <option value="EXECUTIVE">5-ROOM</option>
+              <option value="MULTI GENERATION">MULTI-GENERATION</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="flatModel" class="form-label">Flat Model</label>
+            <select
+              id="flatModel"
+              name="flatModel"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="IMPROVED" selected>Improved</option>
+              <option value="NEW GENERATION">New Generation</option>
+              <option value="DBSS">DBSS</option>
+              <option value="STANDARD">Standard</option>
+              <option value="MODEL A">Model A</option>
+              <option value="MODEL A2">Model A2</option>
+              <option value="APARTMENT">Apartment</option>
+              <option value="SIMPLIFIED">Simplified</option>
+              <option value="PREMIUM APARTMENT">Premium Apartment</option>
+              <option value="ADJOINED FLAT">Adjoined Flat</option>
+              <option value="MODEL A-MAISONETTE">Model A-Maisonette</option>
+              <option value="MAISONETTE">Maisonette</option>
+              <option value="MULTI GENERATION">Multi-Generation</option>
+              <option value="TYPE S1">Type S1</option>
+              <option value="TYPE S2">Type S2</option>
+              <option value="TERRACE">Terrace</option>
+              <option value="2-ROOM">2-Room</option>
+              <option value="PREMIUM MAISONETTE">Premium Maisonette</option>
+              <option value="IMPROVED-MAISONETTE">Improved Maisonette</option>
+              <option value="PREMIUM APARTMENT LOFT">Premium Apartment Loft</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="flatLevel" class="form-label">Flat Level</label>
+            <input
+              id="flatLevel"
+              type="number"
+              name="flatLevel"
+              class="form-control form-control-lg form-control-a"
+              min="1"
+              max="51"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="floorSqm" class="form-label">Floor Area (sqm)</label>
+            <input
+              id="floorSqm"
+              type="text"
+              name="floorSqm"
+              class="form-control form-control-lg form-control-a"
+              min="25"
+              max="400"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
+            <input
+              id="leaseCommenceDate"
+              type="date"
+              name="leaseCommenceDate"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="dateOfSale" class="form-label">Resale Date</label>
+            <input
+              id="dateOfSale"
+              type="date"
+              name="dateOfSale"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-a">Add Listing</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="text/javascript">
+// Input Validation
+console.log("Testing JS Client File")
+</script>

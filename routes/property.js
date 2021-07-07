@@ -1,24 +1,94 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const hdbResale = require("../models/hdbResale");
+const privateResale = require("../models/PrivateResale");
+const privateRental = require("../models/PrivateRental");
+const uuid = require("uuid");
+const moment = require("moment");
 
-router.get('/propertysingle', (req, res) => {
-  const title = 'Property Single'
-  res.render('property/property-single', { title: title })
-})
+router.get("/propertysingle", (req, res) => {
+  const title = "Property Single";
+  res.render("property/property-single", { title: title });
+});
 
-router.get('/propertylist', (req, res) => {
-  const title = 'List of Properties'
-  res.render('property/property-grid', { title: title })
-})
+router.get("/propertylist", (req, res) => {
+  const title = "List of Properties";
+  res.render("property/property-grid", { title: title });
+});
 
-// router.get('/createPropertyResaleListing', (req, res) => {
-//   const title = 'List of Properties'
-//   res.render('property/property-grid', { title: title })
-// })
+// View individual HDB Resale Page
+router.get("/viewPublicResaleListing", (req, res) => {
+  const title = "HDB Resale Listing";
+  const secondaryTitle = "304 Blaster Up";
 
-// router.post('/createProperty', (req, res) => {
-//   res.redirect('')
-// })
+  // Hard Code property ID
+  hdbResale
+    .findOne({
+      where: {
+        id: "b5887725-5f94-4b9c-a599-6b66df5e98eb",
+      },
+    })
+    .then((hdbResaleDetail) => {
+      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const town = hdbResaleDetail.town
+      const flatType = hdbResaleDetail.flatType
+      const floorSqm = hdbResaleDetail.floorSqm
+      const description = hdbResaleDetail.description
+      res.render("property/viewPublicResaleListing", {
+        title,
+        secondaryTitle,
+        resalePrice,
+        town,
+        flatType,
+        floorSqm,
+        description
+      });
+    });
+});
+
+// Show create HDB Resale Page
+router.get("/createPublicResaleListing", (req, res) => {
+  const title = "Create HDB Resale Listing";
+  res.render("property/createPublicResale", { title: title });
+});
+
+// Fixed data for testing
+router.post("/createPublicResaleListing", (req, res) => {
+  // Inputs
+  // let
+  // let address = req.body.address
+  // let description = req.body.description
+  // let resalePrice = // Call predict function here
+  let town = req.body.town;
+  let flatType = req.body.flatType;
+  let flatModel = req.body.flatModel;
+  // let flatLevel = req.body.flatLevel // Call function to choose storey range according to user input
+  // let floorSqm = req.body.floorSqm
+  // let leaseStartDate = moment(req.body.leaseCommenceDate,'DD/MM/YYYY')
+  // let dateOfSale = moment(req.body.resaleDate,'DD/MM/YYYY')
+
+  // Will add input validation here later
+
+  hdbResale
+    .create({
+      id: uuid.v4(),
+      address: "Sample Address",
+      description: "Sample Description",
+      resalePrice: 500000,
+      town: town,
+      flatType: flatType,
+      flatModel: flatModel,
+      flatLevel: "5",
+      floorSqm: 90,
+      // Issue with dates
+      leaseCommenceDate: 25 / 06 / 2000,
+      resaleDate: 25 / 06 / 2020,
+    })
+    .then((hdbResale) => {
+      res.send("Created a listing");
+    })
+    .catch((err) => console.log("Error: " + err));
+});
 
 // Test api call here
 // router.get('/testRoute', (req, res) => {
@@ -36,4 +106,4 @@ router.get('/propertylist', (req, res) => {
 //       res.send(json))
 // })
 
-module.exports = router
+module.exports = router;

@@ -1,0 +1,87 @@
+<main id="main">
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">Register</h1>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="/">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Register
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <form action="/user/register" method="POST" role="form" class="form">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control form-control-lg form-control-a"
+                placeholder="someone@example.com"
+                required
+              />
+              <div id="emailHelp" class="form-text">We'll never share your email
+                with anyone else.</div>
+            </div>
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input
+                type="text"
+                name="fullName"
+                class="form-control form-control-lg form-control-a"
+                id="fullName"
+                placeholder="John Smith"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="firstPassword" class="form-label">Password</label>
+              <input
+                type="password"
+                name="firstPassword"
+                class="form-control form-control-lg form-control-a"
+                id="firstPassword"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="secondPassword" class="form-label">Re-enter Password</label>
+              <input
+                type="password"
+                name="secondPassword"
+                class="form-control form-control-lg form-control-a"
+                id="secondPassword"
+                required
+              />
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-a">Register</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6"></div>
+      </div>
+    </div>
+  </section>
+</main>
