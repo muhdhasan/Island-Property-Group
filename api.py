@@ -10,7 +10,7 @@ import torch
 import numpy as np
 from transformers import AlbertTokenizerFast
 import pandas as pd
-import datetime as dt
+from datetime import datetime
 
 # Start Flask Server
 app = Flask(__name__)
@@ -22,30 +22,51 @@ class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
 
+# Check if cuda is available
+isCudaAvailable = torch.cuda.is_available()
+
 #intent classification tokenizer, model load and function
 tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
-intent_model = torch.load("../training/intentclassification.model")
-def infer_intent(text):
-    input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
-    output = intent_model(**input, return_dict=True)
-    output = output.logits[0].to("cpu").detach().numpy()
-    label_index = np.argmax(output)
-    del input
-    del output
-    torch.cuda.empty_cache()
-    return label_index
+def infer_intent(text, isCudaAvailable):
+    if isCudaAvailable == True:
+        intent_model = torch.load("./training/intentclassification.model")
+        input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
+        output = intent_model(**input, return_dict=True)
+        output = output.logits[0].to("cpu").detach().numpy()
+        label_index = np.argmax(output)
+        del input
+        del output
+        torch.cuda.empty_cache()
+        return label_index
+    else:
+        intent_model = torch.load("./training/intentclassification.model",map_location ='cpu')
+        input = tokenizer(text, truncation=True, padding=True, return_tensors="pt")#.to("cuda")
+        output = intent_model(**input, return_dict=True)
+        output = output.logits[0].to("cpu").detach().numpy()
+        label_index = np.argmax(output)
+        del input
+        del output
+        torch.cuda.empty_cache()
+        return label_index
 
 # Call this function if you want to convert datetime to ordinal type
-# Prob gonna simply this code in this function cos abit too long
-def convertToOrdinal(df):
-    df['month'] = pd.to_datetime(df['month'],format='%Y-%m', errors='coerce')
-    # Convert month to ordinal type so we can use the data for training our model
-    df['month'] = df['month'].map(dt.datetime.toordinal)
+def convertToOrdinal(df, houseType):
+    if houseType == "public":
+        df['month'] = pd.to_datetime(df['month'],format='%Y-%m', errors='coerce')
+        # Convert month to ordinal type so we can use the data for training our model
+        df['month'] = df['month'].map(datetime.toordinal)
 
-    df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
-    # Convert month to ordinal type so we can use the data for training our model
-    df['lease_commence_date'] = df['lease_commence_date'].map(dt.datetime.toordinal)
+        df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
+        # Convert lease_commence_date to ordinal type so we can use the data for training our model
+        df['lease_commence_date'] = df['lease_commence_date'].map(datetime.toordinal)
+    else:
+        df['Date of Sale'] = pd.to_datetime(df['Date of Sale'],format='%b-%Y', errors='coerce')
+        # Convert Date of Sale to ordinal type so we can use the data for training our model
+        df['Date of Sale'] = df['Date of Sale'].map(datetime.toordinal)
 
+        df['Start Lease Date'] = pd.to_datetime(df['Start Lease Date'],format='%Y', errors='coerce')
+        # Convert month to ordinal type so we can use the data for training our model
+        df['Start Lease Date'] = df['Start Lease Date'].map(datetime.toordinal)
 
 # 'Catch all error handling'
 @app.errorhandler(500)
@@ -108,9 +129,10 @@ def predictHouseResale():
         data = [[resaleDate, town, flatType, storeyRange, floorAreaSqm, flatModel, leaseCommenceDate]]
 
         # Convert json data into dataframe format
-        newDf = pd.DataFrame(data, columns=['month','town','flat_type','storey_range','floor_area_sqm','flat_model','lease_commence_date'])
+        newDf = pd.DataFrame(data, columns=['month','town','flat_type',
+        'storey_range','floor_area_sqm','flat_model','lease_commence_date'])
 
-        convertToOrdinal(newDf)
+        convertToOrdinal(newDf, input["type"])
 
         # Apply one hot encoding on newdf for prediction
         cat_ohe_new = ohe.transform(newDf[categorical_cols])
@@ -131,27 +153,53 @@ def predictHouseResale():
         return str(predictionResult)
     elif input["type"] == "private":
         # Categorical columns List
-        categorical_cols = ['Type', 'Postal District', 'Type of Area', 'Floor Level']
+        categorical_cols = ['Type', 'Postal District', 'Market Segment', 'Type of Area', 'Floor Level']
 
+        # Load encoder
+        with open('training/privateResaleEncoder.pickle', 'rb') as f:
+            ohe = pickle.load(f)
+        
         # Read JSON response
+        houseType = input["house_type"]
+        postalDistrict = input["postal_district"]
+        marketSegment = input["market_segment"]
+        typeOfArea = input["type_of_area"]
+        floorLevel = input["floor_level"]
         resaleDate = input["resale_date"]
         floorAreaSqm = input["floor_area_sqm"]
+        isFreehold = input["is_freehold"]
+        leaseDuration = input["lease_duration"]
         leaseCommenceDate = input["lease_commence_date"]
-        postalDistrict = input["postal_district"]
+        data = [[houseType, postalDistrict, marketSegment, typeOfArea, floorLevel, resaleDate,
+         floorAreaSqm, isFreehold, leaseDuration, leaseCommenceDate]]
 
-        # convertToOrdinal(newDf)
+        # Convert json data into dataframe format
+        newDf = pd.DataFrame(data, columns=['Type','Postal District','Market Segment',
+        'Type of Area','Floor Level','Date of Sale','Area Per Unit (sqm/unit)','Freehold',
+        'Tenure Duration (Years)','Start Lease Date'])
+
+        convertToOrdinal(newDf, input["type"])
         
+        # Apply one hot encoding on newdf for prediction
+        cat_ohe_new = ohe.transform(newDf[categorical_cols])
+        #Create a Pandas DataFrame of the hot encoded column
+        ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+        #concat with original data and drop original columns
+        df_ohe_new = pd.concat([newDf, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+
+        # Convert into numpy cos XGBoost hates pandas
+        df_ohe_new = df_ohe_new.values
+
         # Load Model
-        # resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+        resalePrivateModel = pickle.load(open('training/xgb_private_resale.pickle', 'rb'))
 
         # Predict Model
-        # predictionResult = resalePrivateModel.predict()
-        predictionResult = "Nothing"
+        predictionResult = resalePrivateModel.predict(df_ohe_new)
+
         return str(predictionResult)
     else:
-        # raise APIAuthError("Please ensure that you have all the correct parameters.")
-        # return jsonify({"Results" : "Error"}) , 200
-        return "testing"
+        # Raise Error if input does not specify to predict resale value of public or private houses
+        raise APIAuthError("Please state what type of housing (public/private) do you want to predict.")
 
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
@@ -171,7 +219,9 @@ def chatbot():
                    "sale_period",
                    "sale_reason",
                    "viewing"]
-    return sentence_labels[infer_intent(text)]
+    # Get value from 'userInput' key
+    userResponse = text["userInput"]
+    return sentence_labels[infer_intent(userResponse, isCudaAvailable)]
     
 # Start at localhost:8000
 if __name__ == '__main__':
