@@ -2,25 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 const request = require('request')
-
-// router.get('/register', (req, res) => {
-//     const title = 'Register'
-//     res.render('register', { title: title })
-//   })
-
-// router.get('/login', (req, res) => {
-//     const title = 'Login'
-//     res.render('login', { title: title })
-//   })
-
-// router.post('/register', (req, res) => {
-//     res.redirect('')
-//   })
-
-// router.post('/login', (req, res) => {
-//     res.redirect('')
-//   })
-
+const 
 // router.get('/forgetpassword', (req, res) => {
 //     res.redirect('')
 //   })
@@ -33,6 +15,7 @@ const transporter = nodemailer.createTransport({
       pass: 'Passw0rdyes' // generated ethereal password
     }
 })
+
 router.get('/register', (req, res) => {
     const title = 'Register'
     res.render('user/register', {
@@ -124,5 +107,30 @@ router.get('/confirmation/:token', async (req, res) => {
     })
     alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
     res.redirect('https://localhost:5000/user/login')
+})
+
+router.get('/login', (req, res) => {
+  const title = 'Login'
+  res.render('user/login', {
+    title
   })
+})
+
+router.post('/login', function (req, res, next) {
+  passport.authenticate('local', function (err, user, info) {
+    if (err) {
+      return next(err)
+    }
+    if (!user) {
+      return res.redirect('/login')
+    }
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err)
+      } 
+      return res.redirect('/')
+    })
+  })(req, res, next)
+})
+
 module.exports = router
