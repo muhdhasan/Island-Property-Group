@@ -156,6 +156,12 @@ def predictHouseResale():
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
 def predictHouseRent():
+    #getting input from website
+    input = request.get_json()
+
+    # Categorical columns List
+    categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
+
     RentalModel = pickle.load(open('rental.pickle', 'rb'))
     return "Rental Result"
 
