@@ -48,7 +48,9 @@ router.post('/register', (req, res) => {
 // Logs in user
 router.post('/login', (req, res) => {
   // Inputs
+  console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
+  console.log(email)// .toString().toLowerCase().replace(/\s+/g, '')
   const password = req.body.password
 
   // Email Regex
@@ -57,7 +59,7 @@ router.post('/login', (req, res) => {
   // Input Validation
   if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
 
-  res.redirect('#')
+  res.send('It works')
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -69,20 +71,22 @@ router.post('/login', (req, res) => {
 //   const title = "Confirm Password"
 //     res.redirect('')
 //   })
+
 const transporter = nodemailer.createTransport({
-    host: 'smtp.googlemail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-      user: 'superlegitemail100percent@gmail.com', // generated ethereal user
-      pass: 'Passw0rdyes' // generated ethereal password
-    }
+  host: 'smtp.googlemail.com',
+  port: 465,
+  secure: true, // true for 465, false for other ports
+  auth: {
+    user: 'superlegitemail100percent@gmail.com', // generated ethereal user
+    pass: 'Passw0rdyes' // generated ethereal password
+  }
 })
+
 router.get('/register', (req, res) => {
-    const title = 'Register'
-    res.render('user/register', {
-      title
-    })
+  const title = 'Register'
+  res.render('user/register', {
+    title
+  })
 })
 
 // router.post('/register', (req, res) => {

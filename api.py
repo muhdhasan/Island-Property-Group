@@ -16,7 +16,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Expose api in the 'api' route and allow connection to localhost 8080
-CORS(app, resources=r'/api/*', origin=["https://localhost:8080", "https://localhost:5000"])
+CORS(app, resources=r'/api/*', origin=["https://localhost:8080/", "https://localhost:5000/"])
 
 class APIAuthError(Exception):
   code = 403
