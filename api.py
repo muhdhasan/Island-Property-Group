@@ -12,6 +12,8 @@ from transformers import AlbertTokenizerFast
 import pandas as pd
 import datetime as dt
 
+from transformers.utils.dummy_pt_objects import default_data_collator
+
 # Start Flask Server
 app = Flask(__name__)
 
@@ -45,6 +47,15 @@ def convertToOrdinal(df):
     df['lease_commence_date'] = pd.to_datetime(df['lease_commence_date'],format='%Y', errors='coerce')
     # Convert month to ordinal type so we can use the data for training our model
     df['lease_commence_date'] = df['lease_commence_date'].map(dt.datetime.toordinal)
+
+#Calling this function to convert datetime to number of days
+def convertToDays(df):
+    #gets the current datetime
+    now = pd.to_datetime("now")
+
+    # Convert month column to 'month' type
+    df['Lease_Commencement_Date'] = pd.to_datetime(df['Lease_Commencement_Date'])
+    df['Lease_Commencement_Date'] = (now - df['Lease_Commencement_Date']).dt.days
 
 
 # 'Catch all error handling'
@@ -160,10 +171,42 @@ def predictHouseRent():
     input = request.get_json()
 
     # Categorical columns List
-    categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
+    categorical_cols = ['Type', 'Postal District']
 
+    # Load encoder
+    with open('training/publicResaleEncoder.pickle', 'rb') as f:
+        ohe = pickle.load(f)
+
+    # Read JSON response
+    postal_district = input["Postal_District"]
+    type = input["Type"]
+    bedrooms = input["No_Bedroom"]
+    rent = input["Monthly_Rent"]
+    floorAreaSqf = input["Floor_Area"]
+    leaseCommenceDate = input["Lease_Commencement_Date"]
+    data = [[postal_district, type, bedrooms, rent, floorAreaSqf, leaseCommenceDate]]
+    
+    # Convert json data into dataframe format
+    df = pd.DataFrame(data, columns=['Postal_District', 'Type', 'No_Bedroom', 'Monthly_Rent', 'Floor_Area', 'Lease_Commencement_Date'])
+
+    convertToDays(df)
+
+    # Apply one hot encoding on newdf for prediction
+    cat_ohe_new = ohe.transform(df[categorical_cols])
+    #Create a Pandas DataFrame of the hot encoded column
+    ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+    #concat with original data and drop original columns
+    df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+
+    # Convert into numpy cos XGBoost hates pandas
+    df_ohe_new = df_ohe_new.values
     RentalModel = pickle.load(open('rental.pickle', 'rb'))
-    return "Rental Result"
+    
+    # Predict Model
+    predictionResult = RentalModel.predict(df_ohe_new)
+
+    return str(predictionResult)
+    
 
 # Chatbot route
 @app.route("/api/chatbot", methods=["POST"])
