@@ -18,24 +18,24 @@ from transformers.utils.dummy_pt_objects import default_data_collator
 app = Flask(__name__)
 
 # Expose api in the 'api' route and allow connection to localhost 8080
-CORS(app, resources=r'/api/*', origin=["https://localhost:8080", "https://localhost:5000"])
+CORS(app, resources=r'/api/*', origin=["https://localhost:8080/", "https://localhost:5000/"])
 
 class APIAuthError(Exception):
   code = 403
   description = "Authentication Error"
 
 #intent classification tokenizer, model load and function
-tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
-intent_model = torch.load("../training/intentclassification.model")
-def infer_intent(text):
-    input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
-    output = intent_model(**input, return_dict=True)
-    output = output.logits[0].to("cpu").detach().numpy()
-    label_index = np.argmax(output)
-    del input
-    del output
-    torch.cuda.empty_cache()
-    return label_index
+# tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
+# intent_model = torch.load("./training/intentclassification.model")
+# def infer_intent(text):
+#     input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
+#     output = intent_model(**input, return_dict=True)
+#     output = output.logits[0].to("cpu").detach().numpy()
+#     label_index = np.argmax(output)
+#     del input
+#     del output
+#     torch.cuda.empty_cache()
+#     return label_index
 
 # Call this function if you want to convert datetime to ordinal type
 # Prob gonna simply this code in this function cos abit too long
@@ -171,23 +171,22 @@ def predictHouseRent():
     input = request.get_json()
 
     # Categorical columns List
-    categorical_cols = ['Type', 'Postal District']
+    categorical_cols = ['Postal_District','Type']
 
     # Load encoder
-    with open('training/publicResaleEncoder.pickle', 'rb') as f:
+    with open('training/RentalEncoder.pickle', 'rb') as f:
         ohe = pickle.load(f)
 
     # Read JSON response
     postal_district = input["Postal_District"]
     type = input["Type"]
     bedrooms = input["No_Bedroom"]
-    rent = input["Monthly_Rent"]
     floorAreaSqf = input["Floor_Area"]
     leaseCommenceDate = input["Lease_Commencement_Date"]
-    data = [[postal_district, type, bedrooms, rent, floorAreaSqf, leaseCommenceDate]]
+    data = [[postal_district, type, bedrooms, floorAreaSqf, leaseCommenceDate]]
     
     # Convert json data into dataframe format
-    df = pd.DataFrame(data, columns=['Postal_District', 'Type', 'No_Bedroom', 'Monthly_Rent', 'Floor_Area', 'Lease_Commencement_Date'])
+    df = pd.DataFrame(data, columns=['Postal_District', 'Type', 'No_Bedroom', 'Floor_Area', 'Lease_Commencement_Date'])
 
     convertToDays(df)
 
@@ -197,12 +196,10 @@ def predictHouseRent():
     ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
     #concat with original data and drop original columns
     df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+    print(df_ohe_new.info())
 
-    # Convert into numpy cos XGBoost hates pandas
-    df_ohe_new = df_ohe_new.values
-    RentalModel = pickle.load(open('rental.pickle', 'rb'))
+    RentalModel = pickle.load(open('training/rental.pickle', 'rb'))
     
-    # Predict Model
     predictionResult = RentalModel.predict(df_ohe_new)
 
     return str(predictionResult)
