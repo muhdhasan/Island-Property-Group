@@ -1,13 +1,32 @@
-<main id="main" style="height: 65vh;">
-    <section class="section-services section-t8">
-        <div class="container mb-3 ">
-            <div class="text-center">
-                <h1 class="mt-5 mb-3">{{errorCode}}</h1>
-                <h3>{{errorMessage}}</h3>
-            </div>
+<main id="main">
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">{{errorCode}} Error</h1>
+            <span class="color-text-a">{{errorMessage}} Return to <a href="/">home</a> here!</span>
+          </div>
         </div>
-        <div class="mt-5 d-flex justify-content-center mb-3">
-            <a class="btn btn-lg btn-b-n" href="/">Home</a>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="/">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Error
+                {{errorCode}}
+              </li>
+            </ol>
+          </nav>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
 </main>

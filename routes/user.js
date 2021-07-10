@@ -50,7 +50,7 @@ router.post('/login', (req, res) => {
   // Inputs
   console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
-  console.log(email)// .toString().toLowerCase().replace(/\s+/g, '')
+  console.log(email)
   const password = req.body.password
 
   // Email Regex

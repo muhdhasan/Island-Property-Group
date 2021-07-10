@@ -103,11 +103,11 @@ const options = {
 
 // This function shall not be disabled at all cost since this function automatically adds a admin user
 // should we intend to reset the database whenever we want
-// const checkDefaultData = require('./config/defaultDataInfo')
-// checkDefaultData.check().catch((err) => {
-//   // log error
-//   console.log(err)
-// })
+const checkDefaultData = require('./config/defaultDataInfo')
+checkDefaultData.check().catch((err) => {
+  // log error
+  console.log(err)
+})
 
 // Create HTTP Server
 https.createServer(

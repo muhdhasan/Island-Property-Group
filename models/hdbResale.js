@@ -14,7 +14,9 @@ const HDBResale = db.define('hdb_resale', {
   floorSqm: { type: Sequelize.DECIMAL(10, 2) },
   leaseCommenceDate: { type: Sequelize.DATEONLY },
   resaleDate: { type: Sequelize.DATEONLY }
-  // houseImage: { type: Sequelize.BLOB }
+  // houseImageOne: { type: Sequelize.BLOB },
+  // houseImageTwo: { type: Sequelize.BLOB },
+  // houseImageThree: { type: Sequelize.BLOB },
   // postalCode: { type: Sequelize.STRING },
 })
 
