@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-const User = require('../models/User')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const sanitize = require('sanitize')()
@@ -18,6 +17,8 @@ const transporter = nodemailer.createTransport({
     pass: 'Passw0rdyes' // generated ethereal password
   }
 })
+const user = require('../models/User')
+// const bcrypt = require('bcrypt');
 
 router.get('/register', (req, res) => {
   const title = 'Register'
