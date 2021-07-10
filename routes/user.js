@@ -4,7 +4,7 @@ const passport = require('passport')
 const User = require('../models/User')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
-const sanitize = require('sanitize')();
+const sanitize = require('sanitize')()
 const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const secret = process.env.secret
@@ -44,46 +44,51 @@ router.post('/register', (req, res) => {
   error = []
   // Remember to add error messages later
   if (emailRegex.test(email) === false) {
-    error.push({'text':'Email fail'})
+    error.push({ text: 'Email fail' })
     return console.log('It email regex failed')
   }
-  if (nameRegex.test(fullName) === false) {
-    error.push({'text':'Name fail'})
-    return console.log('It name regex failed')
-  }
+  // if (nameRegex.test(fullName) === false) {
+  //  console.log(nameRegex.test(fullName))
+  //   console.log(fullName)
+  //   error.push({ text: 'Name fail' })
+  //   console.log('It name regex failed')
+  // }
   if (firstPassword.length < 8) {
-    error.push({'text':'password length fail'})
-    return console.log('It password length is less than 8 charaters')
+    error.push({ text: 'password length fail' })
+    console.log('It password length is less than 8 charaters')
   }
   if (firstPassword !== secondPassword) {
-    error.push({'text':'password not same fail'})
-    return console.log('Password are not the same')
+    error.push({ text: 'password not same fail' })
+    console.log('Password are not the same')
   }
-  if (error.length > 0){
-    //reject register 
-    res.render('/user/register')
-  }else{
-    bcrypt.genSalt(10,function(err,salt){
-      bcrypt.hash(firstPassword,salt,function(err,hash){
+  if (error.length > 0) {
+    // reject register
+    res.render('user/register')
+    // res.redirect('/user/register')
+  } else {
+    bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(firstPassword, salt, function (err, hash) {
         password = hash
         userid = uuidv1()
-        User.create({id:userid,fullName,email,password,isAgent:false,isAdmin:false}).then((user)=>
-        {
-          jwt.sign({user:userid},secret,{expiresIn:'1d'},
-          (err,emailToken)=>{
-            const url = `https://localhost:8080/user/confirmation/${emailToken}`
-            console.log(url)
-            transporter.sendMail({
-            to: req.body.email,
-            subject: 'Confirm Email',
-            html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+        User.create({ id: userid, fullName, email, password, isAgent: false, isAdmin: false }).then((user) => {
+          jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
+            (err, emailToken) => {
+              const url = `https://localhost:8080/user/confirmation/${emailToken}`
+              console.log(url)
+              transporter.sendMail({
+                to: req.body.email,
+                subject: 'Confirm Email',
+                html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+              })
+              .catch((err) => {
+                console.log(err)
+              })
             })
-          })
         })
       })
     })
-  }   
-  res.redirect('#')
+    res.redirect('/user/login')
+  }
 })
 
 router.get('/confirmation/:token', async (req, res) => {
@@ -92,6 +97,7 @@ router.get('/confirmation/:token', async (req, res) => {
     user.update({ confirmed: true })
     console.log('email verified')
   })
+  // This function below is not defined
   alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
   res.redirect('https://localhost:8080/user/login')
 })
@@ -122,10 +128,10 @@ router.post('/login', (req, res) => {
 //   })
 
 router.get('/register', (req, res) => {
-    const title = 'Register'
-    res.render('user/register', {
-      title
-    })
+  const title = 'Register'
+  res.render('user/register', {
+    title
+  })
 })
 
 router.get('/userProfile', (req, res) => {
