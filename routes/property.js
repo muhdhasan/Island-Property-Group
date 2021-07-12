@@ -8,6 +8,7 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
+const { UUIDV4 } = require('sequelize/types')
 
 // Call predict resale API
 async function predictPublicResale (dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartDate) {
@@ -23,7 +24,7 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
       flat_model: flatModel,
       lease_commence_date: leaseStartDate
     }
-    fetch(baseAPIUrl+ 'predictResale', {
+    fetch(baseAPIUrl + 'predictResale', {
       method: 'post',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
@@ -34,7 +35,7 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
         result(json)
       })
       .catch((err) => {
-        console.log("Error:", err)
+        console.log('Error:', err)
       })
   // })
   })
@@ -54,7 +55,7 @@ router.get('/propertylist', (req, res) => {
 router.get('/viewPublicResaleListing', (req, res) => {
   const title = 'HDB Resale Listing'
   const secondaryTitle = '304 Blaster Up'
-  const resalePublicID = "4b533aa4-3ee9-4312-ab10-80990d1b78e7"
+  const resalePublicID = '4b533aa4-3ee9-4312-ab10-80990d1b78e7' // req.params.id
   // Hard Code property ID
   hdbResale
     .findOne({
@@ -97,29 +98,32 @@ router.post('/createPublicResaleListing', (req, res) => {
   // let
   const address = req.body.address1
   const description = req.body.description
-  // let resalePrice = // Call predict function here
   // Will add input validation here later
   const town = req.body.town
   const flatType = req.body.flatType
   const flatModel = req.body.flatModel
   const flatLevel = req.body.flatLevel
+
+  // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.flatLevel)
   const floorSqm = req.body.floorSqm
+
+  // Date related inputs
   const leaseStartDate = new Date(req.body.leaseCommenceDate)
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
   // Input Validation
-  if (filterSpecialRegex.test(address) === false){
+  if (filterSpecialRegex.test(address) === false) {
     return console.log('Address contains special characters')
   }
-  if (filterSpecialRegex.test(description) === false){
+  if (filterSpecialRegex.test(description) === false) {
     return console.log('Description contains special characters')
   }
-  if (filterSpecialRegex.test(address) === false){
+  if (filterSpecialRegex.test(address) === false) {
     return console.log('Address contains special characters')
   }
-  if (filterSpecialRegex.test(address) === false){
+  if (filterSpecialRegex.test(address) === false) {
     return console.log('Address contains special characters')
   }
 
@@ -129,8 +133,6 @@ router.post('/createPublicResaleListing', (req, res) => {
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
     console.log('Resale Value', response)
-    // console.log(req.body.leaseCommenceDate)
-    // console.log(req.body.dateOfSale.getFullYear())
     console.log(leaseStartDate)
     console.log(dateOfSale)
     console.log('Resale Value', resaleValue)
@@ -158,9 +160,63 @@ router.post('/createPublicResaleListing', (req, res) => {
   })
 })
 
+// Basic Delete Function
+// Delete hdb resale listing
+router.get('/deletePublicResaleListing/:id', (req, res) => {
+  const publicResaleId = req.params.id
+  // hdbResale.findOne({
+  //   where: { id: hdbResaleId }
+  // }).then((result) => {
+  // })
+  hdbResale.destroy({
+    where: { id: publicResaleId }
+  }).then((result) => {
+    console.log(result)
+    res.send('Deleted Public Resale Listing')
+  }).catch((err) => { console.log('Error: ', err) })
+})
+
 // View individual HDB Resale Page
 // router.get('/viewPrivateResaleListing', (req, res) => {
+//   const resalePrivateID = req.params.id
 // })
+
+// Display create resale listing page
+router.get('/createPrivateResaleListing', (req, res) => {
+  const title = 'Create Private Resale Listing'
+  res.send('Created private resale listing')
+})
+
+// Create listing for private resale property
+router.post('/createPrivateResaleListing', (req, res) => {
+  // const address = req.body.address
+  // const description = "Sample Description"
+
+  // Date related inputs
+  // const leaseStartDate = new Date(req.body.leaseCommenceDate)
+  // const leaseStartYear = leaseStartDate.getFullYear()
+  // const dateOfSale = new Date(req.body.dateOfSale)
+  // privateResale.create({
+  //   id: uuid.V4(),
+  //   address: address,
+  //   description: description,
+  // }).then((result) => {
+  //   res.send("Created private resale listing")
+  // }).catch((err) => { console.log('Error: ', err) })
+  res.send('Created private resale listing')
+})
+
+// Basic Delete Function
+// Delete private resale listing
+router.get('/deletePrivateResaleListing/:id', (req, res) => {
+  const privateResaleId = req.params.id
+  privateResale.destroy({
+    where: { id: privateResaleId }
+  }).then((result) => {
+    console.log(result)
+    res.send('Deleted Private Resale Listing')
+  }).catch((err) => { console.log('Error: ', err) })
+})
 
 // Test api call here
 router.get('/testRoute', (req, res) => {
@@ -176,6 +232,7 @@ router.get('/testRoute', (req, res) => {
     .then(res => res.json())
     .then(json =>
       res.send(json))
+    .catch((err) => { console.log('Error: ', err) })
 })
 
 module.exports = router
