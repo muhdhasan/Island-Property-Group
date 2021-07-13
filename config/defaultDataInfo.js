@@ -16,11 +16,22 @@ const AdminUserSchema = {
 
 // Agent User Schema
 const AgentUserSchema = {
-  id: 00000000-0000-0000-0000-000000000001,
+  id: '00000000-0000-0000-0000-000000000001',
   name: 'Agent',
   email: 'agent@islandgroup.co',
   password: 'password',
   isAgent: true,
+  isAdmin: false,
+  phoneNo: '12345678'
+}
+
+// Agent User Schema
+const NormalUserSchema = {
+  id: '00000000-0000-0000-0000-000000000002',
+  name: 'Customer',
+  email: 'customer@islandgroup.co',
+  password: 'password',
+  isAgent: false,
   isAdmin: false,
   phoneNo: '12345678'
 }

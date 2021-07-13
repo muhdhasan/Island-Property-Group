@@ -40,6 +40,13 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
   })
 }
 
+// Predict resale value for private housing
+async function predictPrivateResale (){
+  return new Promise((result, err) => {
+
+  })
+}
+
 router.get('/propertysingle', (req, res) => {
   const title = 'Property Single'
   res.render('property/property-single', { title: title })
@@ -54,7 +61,7 @@ router.get('/propertylist', (req, res) => {
 router.get('/viewPublicResaleListing', (req, res) => {
   const title = 'HDB Resale Listing'
   const secondaryTitle = '304 Blaster Up'
-  const resalePublicID = '4b533aa4-3ee9-4312-ab10-80990d1b78e7' // req.params.id
+  const resalePublicID = '32a1d7fd-bf2e-4f9d-b481-1f8c0404d71b' // req.params.id
   // Hard Code property ID
   hdbResale
     .findOne({
@@ -65,11 +72,13 @@ router.get('/viewPublicResaleListing', (req, res) => {
     // Will display more information regarding this property later
     .then((hdbResaleDetail) => {
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const address = hdbResaleDetail.address
       const town = hdbResaleDetail.town
       const flatType = hdbResaleDetail.flatType
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       res.render('property/viewPublicResaleListing', {
+        address,
         title,
         secondaryTitle,
         resalePrice,
@@ -116,9 +125,9 @@ router.post('/createPublicResaleListing', (req, res) => {
   if (filterSpecialRegex.test(address) === false) {
     return console.log('Address contains special characters')
   }
-  if (filterSpecialRegex.test(description) === false) {
-    return console.log('Description contains special characters')
-  }
+  // if (filterSpecialRegex.test(description) === false) {
+  //   return console.log('Description contains special characters')
+  // }
   if (filterSpecialRegex.test(address) === false) {
     return console.log('Address contains special characters')
   }
@@ -148,7 +157,8 @@ router.post('/createPublicResaleListing', (req, res) => {
         flatLevel: flatLevel,
         floorSqm: floorSqm,
         leaseCommenceDate: leaseStartDate,
-        resaleDate: dateOfSale
+        resaleDate: dateOfSale,
+        isViewable: false,
       })
       .then((hdbResale) => {
         console.log('Testing')
@@ -190,6 +200,52 @@ router.get('/editPublicResaleListing/:id', (req, res) => {
       resaleDate
     })
   }).catch((err) => console.log('Error: ', err))
+})
+
+// Update public property information to database
+router.put('/editPublicResaleListing/:id', (req, res) => {
+  res.send("")
+})
+
+// Confirmation Page for HDB properties
+router.get('/confirmPublicResaleListing', (req, res) => {
+  const title = "Confirm Resale Listing - Public"
+  const secondaryTitle = '304 Blaster Up'
+  const resalePublicID = '32a1d7fd-bf2e-4f9d-b481-1f8c0404d71b' // req.params.id
+  // Hard Code property ID
+  hdbResale
+    .findOne({
+      where: {
+        id: resalePublicID
+      }
+    })
+    // Will display more information regarding this property later
+    .then((hdbResaleDetail) => {
+      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const address = hdbResaleDetail.address
+      const town = hdbResaleDetail.town
+      const flatType = hdbResaleDetail.flatType
+      const floorSqm = hdbResaleDetail.floorSqm
+      const description = hdbResaleDetail.description
+      res.render('property/confirmPublicListing', {
+        address,
+        title,
+        secondaryTitle,
+        resalePrice,
+        town,
+        flatType,
+        floorSqm,
+        description
+      })
+    })
+    .catch((err) => {
+      console.log('Error', err)
+    })
+})
+
+// Confirmation Page for hdb properties
+router.post('/confirmPublicResaleListing/:id', (req, res) => {
+  res.send("Public Resale Listing Viewable")
 })
 
 // Basic Delete Function

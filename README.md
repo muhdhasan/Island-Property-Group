@@ -2,7 +2,7 @@
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-## What is Island Property Group?
+## About Us
 
  Island Property Group is a **fictitious** real estate company based in Singapore. Our company uses Node.js for web applications and Flask to host our API that contains our AI models that we will be applied in this web application. MySQL is used as its database.
 
