@@ -194,6 +194,7 @@ router.get('/editPublicResaleListing/:id', (req, res) => {
       where: { id: resalePublicID }
     }).then((result) => {
     // Display result from database
+      const id = result.id
       const address = result.address
       const description = result.description
       const town = result.town
@@ -205,6 +206,7 @@ router.get('/editPublicResaleListing/:id', (req, res) => {
       const resaleDate = result.resaleDate
       // Render property values from database
       res.render('property/editPublicResale', {
+        id,
         title,
         address,
         town,

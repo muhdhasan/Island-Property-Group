@@ -16,7 +16,8 @@ router.get('/about', (req, res) => {
 
 router.get('/contact', (req, res) => {
   const title = 'Contact Us'
-  res.render('contact', { title: title, success_msg: 'Testing' })
+  const activeNavContact = 'active'
+  res.render('contact', { title, success_msg: 'Testing', activeNavContact })
 })
 
 // Test api call here
