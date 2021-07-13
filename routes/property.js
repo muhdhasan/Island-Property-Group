@@ -8,7 +8,6 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
-const { UUIDV4 } = require('sequelize/types')
 
 // Call predict resale API
 async function predictPublicResale (dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartDate) {
@@ -88,7 +87,7 @@ router.get('/viewPublicResaleListing', (req, res) => {
 // Show create HDB Resale Page
 router.get('/createPublicResaleListing', (req, res) => {
   const title = 'Create HDB Resale Listing'
-  res.render('property/createPublicResale', { title: title })
+  res.render('property/createPublicResale', { title })
 })
 
 // Fixed data for testing
@@ -160,6 +159,31 @@ router.post('/createPublicResaleListing', (req, res) => {
   })
 })
 
+// Edit Function
+router.get('/editPublicResaleListing/:id', (req, res) => {
+  const title = 'Edit HDB Resale Listing'
+  const publicResaleId = '4b533aa4-3ee9-4312-ab10-80990d1b78e7'// req.params.id
+  // Find hdb property by id
+  hdbResale.findOne({
+    where: { id: publicResaleId }
+  }).then((result) => {
+    // display result from database
+    const address = result.address
+    const description = result.description
+    const town = result.town
+    const flatType = result.flatType
+    const flatModel = result.flatModel
+    // const flatLevel = result.flatLevel
+    res.render('property/editPublicResale', {
+      title,
+      address,
+      town,
+      flatType,
+      flatModel
+    })
+  })
+})
+
 // Basic Delete Function
 // Delete hdb resale listing
 router.get('/deletePublicResaleListing/:id', (req, res) => {
@@ -176,7 +200,7 @@ router.get('/deletePublicResaleListing/:id', (req, res) => {
   }).catch((err) => { console.log('Error: ', err) })
 })
 
-// View individual HDB Resale Page
+// View individual private Resale Page
 // router.get('/viewPrivateResaleListing', (req, res) => {
 //   const resalePrivateID = req.params.id
 // })

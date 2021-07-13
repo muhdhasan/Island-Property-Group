@@ -16,13 +16,14 @@ const userRoute = require('./routes/user')
 const propertyRoute = require('./routes/property')
 
 // Bring in Handlebars helpers
-const { formatDate } = require('./helpers/hbs')
+const { formatDate, autoSelectDropDown } = require('./helpers/hbs')
 
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main', // Specify default template views/layout/main.handlebar
   helpers: {
-    formatDate: formatDate
+    formatDate: formatDate,
+    autoSelectDropDown: autoSelectDropDown
   }
 }))
 app.set('view engine', 'handlebars')
