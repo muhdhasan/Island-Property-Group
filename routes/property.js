@@ -173,15 +173,23 @@ router.get('/editPublicResaleListing/:id', (req, res) => {
     const town = result.town
     const flatType = result.flatType
     const flatModel = result.flatModel
-    // const flatLevel = result.flatLevel
+    const floorLevel = parseInt(result.flatLevel)
+    const floorSqm = result.floorSqm
+    const leaseCommenceDate = result.leaseCommenceDate
+    const resaleDate = result.resaleDate
+    // Render property values from database
     res.render('property/editPublicResale', {
       title,
       address,
       town,
       flatType,
-      flatModel
+      flatModel,
+      floorLevel,
+      floorSqm,
+      leaseCommenceDate,
+      resaleDate
     })
-  })
+  }).catch((err) => console.log('Error: ', err))
 })
 
 // Basic Delete Function
