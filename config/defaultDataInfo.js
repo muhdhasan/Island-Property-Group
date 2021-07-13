@@ -51,7 +51,7 @@ const DefaultUsersObjects = () => {
           user.create(AdminUserSchema
           )
           user.create(AgentUserSchema
-            )
+          )
           console.log('Adding admin user')
           return res(1)
         } else { // if user is found
