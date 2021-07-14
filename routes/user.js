@@ -140,6 +140,10 @@ router.get('/userProfile', (req, res) => {
   res.render('user/userProfile', { title: title })
 })
 
+router.get('/chat',(req, res) => {
+  res.render('user/chatbot')
+})
+
 // Logout Route
 // Redirect user to home page
 router.get('/logout', (req, res) => {
