@@ -344,6 +344,7 @@
               type="date"
               name="leaseCommenceDate"
               class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
               value="{{formatDate leaseCommenceDate "YYYY-MM-DD"}}"
               required
             />
@@ -357,9 +358,11 @@
               type="date"
               name="dateOfSale"
               class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
               value="{{formatDate resaleDate "YYYY-MM-DD"}}"
               required
             />
+            <div id="resaleDateErrorMsg" class="form-text"></div>
           </div>
           <div class="col-md-6 mb-3">
           </div>
@@ -371,4 +374,4 @@
     </div>
   </section>
 </main>
-<script src="/js/inputValidation.js"></script>
+<script src="/js/propertyInputValidation.js"></script>
