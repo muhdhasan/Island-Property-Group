@@ -8,12 +8,12 @@ const nodemailer = require('nodemailer')
 
 router.get('/register', (req, res) => {
   const title = 'Register'
-  res.render('user/register', { title: title })
+  res.render('user/register', { title })
 })
 
 router.get('/login', (req, res) => {
   const title = 'Login'
-  res.render('user/login', { title: title })
+  res.render('user/login', { title })
 })
 
 router.post('/register', (req, res) => {
@@ -177,7 +177,7 @@ router.get('/register', (req, res) => {
 
 router.get('/userProfile', (req, res) => {
   const title = 'User Profile'
-  res.render('user/userProfile', { title: title })
+  res.render('user/userProfile', { title })
 })
 
 // Logout Route

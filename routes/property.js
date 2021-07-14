@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
+
+// Models
 const hdbResale = require('../models/hdbResale')
 const privateResale = require('../models/PrivateResale')
 const privateRental = require('../models/PrivateRental')
+
+// Required node modules
 const uuid = require('uuid')
 const moment = require('moment')
 const fetch = require('node-fetch')
@@ -45,16 +49,33 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
 }
 
 // Predict resale value for private housing
-async function predictPrivateResale (dateOfSale) {
+async function predictPrivateResale (dateOfSale, floorRange, floorSqm) {
   const body = {
     type: 'private',
-    resale_date: dateOfSale
+    resale_date: dateOfSale,
+    storey_range: floorRange,
+    floor_area_sqm: floorSqm
   }
   return new Promise((result, err) => {
-
+    fetch(baseAPIUrl + 'predictResale', {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(res => res.json())
+      .then((json) => {
+        console.log(json)
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
   })
 }
 
+// Router is placed according to CRUD order where you'll see create function then followed by retrieve and etc
+
+// Reference
 router.get('/propertysingle', (req, res) => {
   const title = 'Property Single'
   res.render('property/property-single', { title: title })
@@ -65,44 +86,6 @@ router.get('/propertylist', (req, res) => {
   res.render('property/property-grid', { title: title })
 })
 
-// View individual HDB Resale Page
-router.get('/viewPublicResaleListing', (req, res) => {
-  const title = 'HDB Resale Listing'
-  const secondaryTitle = '304 Blaster Up'
-
-  // Refer to mysql workbench for all property id
-  const resalePublicID = '32a1d7fd-bf2e-4f9d-b481-1f8c0404d71b' // req.params.id
-  // Hard Code property ID
-  hdbResale
-    .findOne({
-      where: {
-        id: resalePublicID
-      }
-    })
-    // Will display more information regarding this property later
-    .then((hdbResaleDetail) => {
-      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
-      const address = hdbResaleDetail.address
-      const town = hdbResaleDetail.town
-      const flatType = hdbResaleDetail.flatType
-      const floorSqm = hdbResaleDetail.floorSqm
-      const description = hdbResaleDetail.description
-      res.render('property/viewPublicResaleListing', {
-        address,
-        title,
-        secondaryTitle,
-        resalePrice,
-        town,
-        flatType,
-        floorSqm,
-        description
-      })
-    })
-    .catch((err) => {
-      console.log('Error', err)
-    })
-})
-
 // Show create HDB Resale Page
 router.get('/createPublicResaleListing', (req, res) => {
   const title = 'Create HDB Resale Listing'
@@ -111,7 +94,7 @@ router.get('/createPublicResaleListing', (req, res) => {
 
 // Fixed data for testing
 router.post('/createPublicResaleListing', (req, res) => {
-  const filterSpecialRegex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const hdbResaleId = uuid.v4()
   const address = req.body.address1
@@ -145,9 +128,14 @@ router.post('/createPublicResaleListing', (req, res) => {
     return console.log('Address contains special characters')
   }
 
-  // dateOfSale = dateOfSale.getFullYear() + "-" + dateOfSale.getMonth()
-  // const leaseStartDate = moment(req.body.leaseCommenceDate, 'DD/MM/YYYY')
-  // dateOfSale = moment(dateOfSale, 'YYYY-MM')
+  // Check if resale date is at least 5 years from lease commence date
+  const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
+  const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
+  if (yearDiff < 5) {
+    return console.log('Ensure that resale date is at least 5 years from lease date')
+  }
+
+  // Call predicting api for public housing
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
     console.log('Resale Value', response)
@@ -179,13 +167,71 @@ router.post('/createPublicResaleListing', (req, res) => {
   })
 })
 
+// View individual HDB Resale Page
+router.get('/viewPublicResaleListing/:id', (req, res) => {
+  const title = 'HDB Resale Listing'
+  const secondaryTitle = '304 Blaster Up'
+
+  // Refer to mysql workbench for all property id
+  const resalePublicID = req.params.id
+
+  // Redirect to homepage if uuid is invalid
+  if (uuidRegex.test(resalePublicID) === false) {
+    res.redirect('/')
+  } else {
+  hdbResale
+    .findOne({
+      where: {
+        id: resalePublicID,
+        isViewable: true
+      }
+    })
+    // Will display more information regarding this property later
+    .then((hdbResaleDetail) => {
+      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const address = hdbResaleDetail.address
+      const town = hdbResaleDetail.town
+      const flatType = hdbResaleDetail.flatType
+      const floorSqm = hdbResaleDetail.floorSqm
+      const description = hdbResaleDetail.description
+      res.render('property/viewPublicResaleListing', {
+        address,
+        title,
+        secondaryTitle,
+        resalePrice,
+        town,
+        flatType,
+        floorSqm,
+        description
+      })
+    })
+    .catch((err) => {
+      console.log('Error', err)
+    })
+  }
+})
+
+// HDB Properties that are currently viewable to customers can be found here
+router.get('/viewPublicResaleList', (req, res) => {
+  const title = 'HDB Resale Listings'
+  hdbResale.findAll({
+    // Only users can see viewable properties
+    where: {
+      isViewable: true
+    },
+    raw: true
+  }).then((hdbResale) => {
+    res.render('property/viewPublicResaleList', { title, hdbResale: hdbResale })
+  })
+})
+
 // Edit Function
 router.get('/editPublicResaleListing/:id', (req, res) => {
   const title = 'Edit HDB Resale Listing'
   // UUID Regex so that we can validate all ids in url
   // const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
   const resalePublicID = req.params.id
-  // Redirect to homepage
+  // Redirect to homepage if uuid is invalid
   if (uuidRegex.test(resalePublicID) === false) {
     res.redirect('/')
   } else {
