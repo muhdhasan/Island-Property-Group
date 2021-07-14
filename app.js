@@ -3,20 +3,30 @@ const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
 const https = require('https')
+const methodOverride = require('method-override')
+
 
 // Create Express Server
 const app = express()
 
+// Read environment variables
 require('dotenv').config()
 
+const mainRoute = require('./routes/main')
+const userRoute = require('./routes/user')
+const propertyRoute = require('./routes/property')
+
 // Bring in Handlebars helpers
-const { formatDate } = require('./helpers/hbs')
+const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion } = require('./helpers/hbs')
 
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main', // Specify default template views/layout/main.handlebar
   helpers: {
-    formatDate: formatDate
+    formatDate: formatDate,
+    autoSelectDropDown: autoSelectDropDown,
+    roundOffToThousand: roundOffToThousand,
+    roundOffToMillion: roundOffToMillion
   }
 }))
 app.set('view engine', 'handlebars')
@@ -28,9 +38,8 @@ app.use(express.json())
 // Creates static folder for publicly accessible HTML, CSS and Javascript files
 app.use(express.static(path.join(__dirname, 'public')))
 
-const mainRoute = require('./routes/main')
-const userRoute = require('./routes/user')
-const propertyRoute = require('./routes/property')
+// Method override middleware to use other HTTP methods such as PUT and DELETE
+app.use(methodOverride('_method'))
 
 // Routes
 app.use('/', mainRoute)
@@ -99,6 +108,7 @@ const options = {
 // This function shall not be disabled at all cost since this function automatically adds a admin user
 // should we intend to reset the database whenever we want
 const checkDefaultData = require('./config/defaultDataInfo')
+const floorRangeSelector = require('./helpers/floorRangeSelector')
 checkDefaultData.check().catch((err) => {
   // log error
   console.log(err)

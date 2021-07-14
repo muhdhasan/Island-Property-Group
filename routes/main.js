@@ -4,17 +4,20 @@ const fetch = require('node-fetch')
 
 router.get('/', (req, res) => {
   const title = 'Home'
-  res.render('index', { title: title })
+  const activeNavOne = 'active'
+  res.render('index', { title, activeNavOne })
 })
 
 router.get('/about', (req, res) => {
   const title = 'About Us'
-  res.render('about', { title: title })
+  const activeNavTwo = 'active'
+  res.render('about', { title, activeNavTwo })
 })
 
 router.get('/contact', (req, res) => {
   const title = 'Contact Us'
-  res.render('contact', { title: title, success_msg: 'Testing' })
+  const activeNavContact = 'active'
+  res.render('contact', { title, success_msg: 'Testing', activeNavContact })
 })
 
 // Test api call here
