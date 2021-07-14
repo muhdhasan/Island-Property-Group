@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const sanitize = require('sanitize')()
 const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
+const user = require('../models/User')
 const secret = process.env.secret
 
 const transporter = nodemailer.createTransport({
@@ -17,17 +18,15 @@ const transporter = nodemailer.createTransport({
     pass: 'Passw0rdyes' // generated ethereal password
   }
 })
-const user = require('../models/User')
-// const bcrypt = require('bcrypt');
 
 router.get('/register', (req, res) => {
   const title = 'Register'
-  res.render('user/register', { title: title })
+  res.render('user/register', { title })
 })
 
 router.get('/login', (req, res) => {
   const title = 'Login'
-  res.render('user/login', { title: title })
+  res.render('user/login', { title })
 })
 
 router.post('/register', (req, res) => {
@@ -106,7 +105,9 @@ router.get('/confirmation/:token', async (req, res) => {
 // Logs in user
 router.post('/login', (req, res) => {
   // Inputs
+  console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
+  console.log(email)
   const password = req.body.password
 
   // Email Regex
@@ -115,7 +116,7 @@ router.post('/login', (req, res) => {
   // Input Validation
   if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
 
-  res.redirect('#')
+  res.send('It works')
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -137,7 +138,7 @@ router.get('/register', (req, res) => {
 
 router.get('/userProfile', (req, res) => {
   const title = 'User Profile'
-  res.render('user/userProfile', { title: title })
+  res.render('user/userProfile', { title })
 })
 
 // Logout Route

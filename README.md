@@ -1,6 +1,10 @@
 # Island Property Group
 
-We will be applying AI for our real estate Node.js web application. MySQL is used as its database.
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
+## About Us
+
+ Island Property Group is a **fictitious** real estate company based in Singapore. Our company uses Node.js for web applications and Flask to host our API that contains our AI models that we will be applied in this web application. MySQL is used as its database.
 
 ## Features
 
@@ -23,6 +27,14 @@ npm i
 ```
 node app.js
 ```
+
+### Running
+We already have [nodemon](https://github.com/remy/nodemon) installed so give it a try! 
+```
+nodemon
+```
+
+Our HTTPS Server starts at https://localhost:8080
 
 ## License
 - [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
