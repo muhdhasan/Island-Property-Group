@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const sanitize = require('sanitize')()
 const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
+const user = require('../models/User')
 const secret = process.env.secret
 
 const transporter = nodemailer.createTransport({
@@ -17,10 +18,6 @@ const transporter = nodemailer.createTransport({
     pass: 'Passw0rdyes' // generated ethereal password
   }
 })
-
-const user = require('../models/User')
-const nodemailer = require('nodemailer')
-// const bcrypt = require('bcrypt');
 
 router.get('/register', (req, res) => {
   const title = 'Register'

@@ -12,6 +12,8 @@ from transformers import AlbertTokenizerFast
 import pandas as pd
 from datetime import datetime
 
+from transformers.utils.dummy_pt_objects import default_data_collator
+
 # Start Flask Server
 app = Flask(__name__)
 
@@ -25,7 +27,7 @@ class APIAuthError(Exception):
 # Check if cuda is available
 isCudaAvailable = torch.cuda.is_available()
 
-#intent classification tokenizer, model load and function
+# intent classification tokenizer, model load and function
 tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
 def infer_intent(text, isCudaAvailable):
     if isCudaAvailable == True:
@@ -63,10 +65,19 @@ def convertToOrdinal(df, houseType):
         df['Date of Sale'] = pd.to_datetime(df['Date of Sale'],format='%b-%Y', errors='coerce')
         # Convert Date of Sale to ordinal type so we can use the data for training our model
         df['Date of Sale'] = df['Date of Sale'].map(datetime.toordinal)
-
+        
         df['Start Lease Date'] = pd.to_datetime(df['Start Lease Date'],format='%Y', errors='coerce')
         # Convert month to ordinal type so we can use the data for training our model
         df['Start Lease Date'] = df['Start Lease Date'].map(datetime.toordinal)
+
+#Calling this function to convert datetime to number of days
+def convertToDays(df):
+    #gets the current datetime
+    now = pd.to_datetime("now")
+
+    # Convert month column to 'month' type
+    df['Lease_Commencement_Date'] = pd.to_datetime(df['Lease_Commencement_Date'])
+    df['Lease_Commencement_Date'] = (now - df['Lease_Commencement_Date']).dt.days
 
 # 'Catch all error handling'
 @app.errorhandler(500)
@@ -204,7 +215,43 @@ def predictHouseResale():
 # Predict rental prices route
 @app.route("/api/predictRental", methods=["POST"])
 def predictHouseRent():
-    return "Rental Result"
+    #getting input from website
+    input = request.get_json()
+
+    # Categorical columns List
+    categorical_cols = ['Postal_District','Type']
+
+    # Load encoder
+    with open('training/RentalEncoder.pickle', 'rb') as f:
+        ohe = pickle.load(f)
+
+    # Read JSON response
+    postal_district = input["Postal_District"]
+    type = input["Type"]
+    bedrooms = input["No_Bedroom"]
+    floorAreaSqf = input["Floor_Area"]
+    leaseCommenceDate = input["Lease_Commencement_Date"]
+    data = [[postal_district, type, bedrooms, floorAreaSqf, leaseCommenceDate]]
+    
+    # Convert json data into dataframe format
+    df = pd.DataFrame(data, columns=['Postal_District', 'Type', 'No_Bedroom', 'Floor_Area', 'Lease_Commencement_Date'])
+
+    convertToDays(df)
+
+    # Apply one hot encoding on newdf for prediction
+    cat_ohe_new = ohe.transform(df[categorical_cols])
+    #Create a Pandas DataFrame of the hot encoded column
+    ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
+    #concat with original data and drop original columns
+    df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
+    print(df_ohe_new.info())
+
+    RentalModel = pickle.load(open('training/rental.pickle', 'rb'))
+    
+    predictionResult = RentalModel.predict(df_ohe_new)
+
+    return str(predictionResult)
+    
 
 # Chatbot route
 @app.route("/api/chatbot", methods=["POST"])

@@ -3,12 +3,13 @@ const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
 const https = require('https')
-const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+
 
 // Create Express Server
 const app = express()
 
+// Read environment variables
 require('dotenv').config()
 
 const mainRoute = require('./routes/main')
