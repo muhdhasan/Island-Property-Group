@@ -11,9 +11,12 @@ const PrivateRental = db.define('privateRental', {
   numberOfBedroom: { type: Sequelize.INTEGER },
   postalDistrict: { type: Sequelize.STRING },
   floorSqm: { type: Sequelize.DECIMAL(10, 2) },
-  leaseCommenceDate: { type: Sequelize.DATEONLY }
-  // houseImage: { type: Sequelize.BLOB }
-
+  leaseCommenceDate: { type: Sequelize.DATEONLY },
+  isViewable: { type: Sequelize.BOOLEAN }
+  // houseImageOne: { type: Sequelize.BLOB },
+  // houseImageTwo: { type: Sequelize.BLOB },
+  // houseImageThree: { type: Sequelize.BLOB },
+  // postalCode: { type: Sequelize.STRING },
 })
 
 module.exports = PrivateRental

@@ -1,5 +1,5 @@
 {
-  "name": "ai-application-project-2021",
+  "name": "island-property-group",
   "version": "1.0.0",
   "description": "We will be predicting Singapore housing resale and rental prices using a variety of machine learning techniques. Our project will also consist of a chatbot that is able to recognise user's input regarding housing prices and such.",
   "main": "app.js",
@@ -8,16 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lmao5/AI-Application-Project-2021.git"
+    "url": "git+https://github.com/Lmao5/Island-Property-Group.git"
   },
   "keywords": [],
   "author": "Muhammad Hasan Bin Suwandi, Bryan Chin, Owen Ngo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Lmao5/AI-Application-Project-2021/issues"
+    "url": "https://github.com/Lmao5/Island-Property-Group/issues"
   },
-  "homepage": "https://github.com/Lmao5/AI-Application-Project-2021#readme",
+  "homepage": "https://github.com/Lmao5/Island-Property-Group#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^10.0.0",
@@ -27,6 +28,7 @@
     "express-paginate": "^1.0.2",
     "flash-messenger": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
@@ -36,6 +38,7 @@
     "nodemon": "^2.0.9",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "sanitize": "^2.1.0",
     "sequelize": "^6.6.2",
     "uuid": "^8.3.2"
   }
