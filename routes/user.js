@@ -80,9 +80,9 @@ router.post('/register', (req, res) => {
                 subject: 'Confirm Email',
                 html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
               })
-              .catch((err) => {
-                console.log(err)
-              })
+                .catch((err) => {
+                  console.log(err)
+                })
             })
         })
       })

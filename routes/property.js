@@ -13,6 +13,7 @@ const fetch = require('node-fetch')
 
 const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
+const checkUUIDFormat = require('../helpers/checkURL')
 
 // Consolidate check regex for uuid
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -168,47 +169,41 @@ router.post('/createPublicResaleListing', (req, res) => {
 })
 
 // View individual HDB Resale Page
-router.get('/viewPublicResaleListing/:id', (req, res) => {
+router.get('/viewPublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
   const title = 'HDB Resale Listing'
   const secondaryTitle = '304 Blaster Up'
 
   // Refer to mysql workbench for all property id
   const resalePublicID = req.params.id
-
-  // Redirect to homepage if uuid is invalid
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
-  hdbResale
-    .findOne({
-      where: {
-        id: resalePublicID,
-        isViewable: true
-      }
-    })
-    // Will display more information regarding this property later
-    .then((hdbResaleDetail) => {
-      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
-      const address = hdbResaleDetail.address
-      const town = hdbResaleDetail.town
-      const flatType = hdbResaleDetail.flatType
-      const floorSqm = hdbResaleDetail.floorSqm
-      const description = hdbResaleDetail.description
-      res.render('property/viewPublicResaleListing', {
-        address,
-        title,
-        secondaryTitle,
-        resalePrice,
-        town,
-        flatType,
-        floorSqm,
-        description
+    hdbResale
+      .findOne({
+        where: {
+          id: resalePublicID,
+          isViewable: true
+        }
       })
-    })
-    .catch((err) => {
-      console.log('Error', err)
-    })
-  }
+    // Will display more information regarding this property later
+      .then((hdbResaleDetail) => {
+        const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+        const address = hdbResaleDetail.address
+        const town = hdbResaleDetail.town
+        const flatType = hdbResaleDetail.flatType
+        const floorSqm = hdbResaleDetail.floorSqm
+        const description = hdbResaleDetail.description
+        res.render('property/viewPublicResaleListing', {
+          address,
+          title,
+          secondaryTitle,
+          resalePrice,
+          town,
+          flatType,
+          floorSqm,
+          description
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
 })
 
 // HDB Properties that are currently viewable to customers can be found here
@@ -226,15 +221,11 @@ router.get('/viewPublicResaleList', (req, res) => {
 })
 
 // Edit Function
-router.get('/editPublicResaleListing/:id', (req, res) => {
+router.get('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const title = 'Edit HDB Resale Listing'
-  // UUID Regex so that we can validate all ids in url
-  // const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+  // Get uuid from url
   const resalePublicID = req.params.id
-  // Redirect to homepage if uuid is invalid
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
   // Find hdb property by id
     hdbResale.findOne({
       where: { id: resalePublicID }
@@ -264,21 +255,18 @@ router.get('/editPublicResaleListing/:id', (req, res) => {
         resaleDate
       })
     }).catch((err) => console.log('Error: ', err))
-  }
 })
 
 // Update public property information to database
-router.put('/editPublicResaleListing/:id', (req, res) => {
+router.put('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const resalePublicID = req.params.id
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
+
     res.send('Hello World')
-  }
+  
 })
 
 // Confirmation Page for HDB properties
-router.get('/confirmPublicResaleListingPage/:id', (req, res) => {
+router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) => {
   const title = 'Confirm Resale Listing - Public'
 
   // Probably need to modify this secondary title
@@ -287,11 +275,6 @@ router.get('/confirmPublicResaleListingPage/:id', (req, res) => {
   // Get id from URL
   const resalePublicID = req.params.id
 
-  // Make sure that id matches uuid format
-  // Otherwise return to home page if false
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
     // Find based on uuid V4
     hdbResale
       .findOne({
@@ -323,16 +306,14 @@ router.get('/confirmPublicResaleListingPage/:id', (req, res) => {
       .catch((err) => {
         console.log('Error: ', err)
       })
-  }
+  
 })
 
 // Confirmation Page for hdb properties
-router.get('/confirmPublicResaleListing/:id', (req, res) => {
+router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const resalePublicID = req.params.id
   console.log(req.params.id)
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
+
     hdbResale.update({
       // Make this property visible to users from agent
       isViewable: true
@@ -344,16 +325,14 @@ router.get('/confirmPublicResaleListing/:id', (req, res) => {
       .then(() => {
         res.send('Public Resale Listing Viewable')
       }).catch((err) => { console.log('Error: ', err) })
-  }
+  
 })
 
 // Basic Delete Function
 // Delete hdb resale listing
-router.get('/deletePublicResaleListing/:id', (req, res) => {
+router.get('/deletePublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
   const resalePublicID = req.params.id
-  if (uuidRegex.test(resalePublicID) === false) {
-    res.redirect('/')
-  } else {
+
   // hdbResale.findOne({
   //   where: { id: hdbResaleId }
   // }).then((result) => {
@@ -364,7 +343,6 @@ router.get('/deletePublicResaleListing/:id', (req, res) => {
       console.log(result)
       res.send('Deleted Public Resale Listing')
     }).catch((err) => { console.log('Error: ', err) })
-  }
 })
 
 // View individual private Resale Page
@@ -399,7 +377,7 @@ router.post('/createPrivateResaleListing', (req, res) => {
 
 // Basic Delete Function
 // Delete private resale listing
-router.get('/deletePrivateResaleListing/:id', (req, res) => {
+router.get('/deletePrivateResaleListing/:id', checkUUIDFormat , (req, res) => {
   const privateResaleId = req.params.id
   privateResale.destroy({
     where: { id: privateResaleId }
