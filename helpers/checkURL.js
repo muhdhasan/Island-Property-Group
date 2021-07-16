@@ -10,8 +10,8 @@ const checkUUIDFormat = (req, res, next) => {
     res.redirect('/')
   }
   // Otherwise just continue to next statement
-  else{
-      return next()
+  else {
+    return next()
   }
 }
 

@@ -4,7 +4,6 @@ const router = express.Router()
 // Models
 const hdbResale = require('../models/hdbResale')
 const privateResale = require('../models/PrivateResale')
-const privateRental = require('../models/PrivateRental')
 
 // Required node modules
 const uuid = require('uuid')
@@ -166,41 +165,41 @@ router.post('/createPublicResaleListing', (req, res) => {
 })
 
 // View individual HDB Resale Page
-router.get('/viewPublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
+router.get('/viewPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const title = 'HDB Resale Listing'
   const secondaryTitle = '304 Blaster Up'
 
   // Refer to mysql workbench for all property id
   const resalePublicID = req.params.id
-    hdbResale
-      .findOne({
-        where: {
-          id: resalePublicID,
-          isViewable: true
-        }
-      })
+  hdbResale
+    .findOne({
+      where: {
+        id: resalePublicID,
+        isViewable: true
+      }
+    })
     // Will display more information regarding this property later
-      .then((hdbResaleDetail) => {
-        const resalePrice = Math.round(hdbResaleDetail.resalePrice)
-        const address = hdbResaleDetail.address
-        const town = hdbResaleDetail.town
-        const flatType = hdbResaleDetail.flatType
-        const floorSqm = hdbResaleDetail.floorSqm
-        const description = hdbResaleDetail.description
-        res.render('resale/viewPublicResaleListing', {
-          address,
-          title,
-          secondaryTitle,
-          resalePrice,
-          town,
-          flatType,
-          floorSqm,
-          description
-        })
+    .then((hdbResaleDetail) => {
+      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const address = hdbResaleDetail.address
+      const town = hdbResaleDetail.town
+      const flatType = hdbResaleDetail.flatType
+      const floorSqm = hdbResaleDetail.floorSqm
+      const description = hdbResaleDetail.description
+      res.render('resale/viewPublicResaleListing', {
+        address,
+        title,
+        secondaryTitle,
+        resalePrice,
+        town,
+        flatType,
+        floorSqm,
+        description
       })
-      .catch((err) => {
-        console.log('Error', err)
-      })
+    })
+    .catch((err) => {
+      console.log('Error', err)
+    })
 })
 
 // HDB Properties that are currently viewable to customers can be found here
@@ -220,7 +219,7 @@ router.get('/viewPublicResaleList', (req, res) => {
 
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPublicList', (req, res) => {
-  const title = "HDB Preview Listings"
+  const title = 'HDB Preview Listings'
   const isViewable = true
   hdbResale.findAll({
     // Only agents can see all properties
@@ -237,34 +236,34 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   // Get uuid from url
   const resalePublicID = req.params.id
   // Find hdb property by id
-    hdbResale.findOne({
-      where: { id: resalePublicID }
-    }).then((result) => {
+  hdbResale.findOne({
+    where: { id: resalePublicID }
+  }).then((result) => {
     // Display result from database
-      const id = result.id
-      const address = result.address
-      const description = result.description
-      const town = result.town
-      const flatType = result.flatType
-      const flatModel = result.flatModel
-      const floorLevel = parseInt(result.flatLevel)
-      const floorSqm = result.floorSqm
-      const leaseCommenceDate = result.leaseCommenceDate
-      const resaleDate = result.resaleDate
-      // Render property values from database
-      res.render('resale/editPublicResale', {
-        id,
-        title,
-        address,
-        town,
-        flatType,
-        flatModel,
-        floorLevel,
-        floorSqm,
-        leaseCommenceDate,
-        resaleDate
-      })
-    }).catch((err) => console.log('Error: ', err))
+    const id = result.id
+    const address = result.address
+    const description = result.description
+    const town = result.town
+    const flatType = result.flatType
+    const flatModel = result.flatModel
+    const floorLevel = parseInt(result.flatLevel)
+    const floorSqm = result.floorSqm
+    const leaseCommenceDate = result.leaseCommenceDate
+    const resaleDate = result.resaleDate
+    // Render property values from database
+    res.render('resale/editPublicResale', {
+      id,
+      title,
+      address,
+      town,
+      flatType,
+      flatModel,
+      floorLevel,
+      floorSqm,
+      leaseCommenceDate,
+      resaleDate
+    })
+  }).catch((err) => console.log('Error: ', err))
 })
 
 // Update public property information to database
@@ -312,9 +311,7 @@ router.put('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-
   res.send('Hello World')
-  
 })
 
 // Confirmation Page for HDB properties
@@ -327,38 +324,37 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
   // Get id from URL
   const resalePublicID = req.params.id
 
-    // Find based on uuid V4
-    hdbResale
-      .findOne({
-        where: {
-          id: resalePublicID
-        }
-      })
+  // Find based on uuid V4
+  hdbResale
+    .findOne({
+      where: {
+        id: resalePublicID
+      }
+    })
     // Will display more information regarding this property later
-      .then((hdbResaleDetail) => {
-        const id = hdbResaleDetail.id
-        const resalePrice = Math.round(hdbResaleDetail.resalePrice)
-        const address = hdbResaleDetail.address
-        const town = hdbResaleDetail.town
-        const flatType = hdbResaleDetail.flatType
-        const floorSqm = hdbResaleDetail.floorSqm
-        const description = hdbResaleDetail.description
-        res.render('resale/confirmPublicListing', {
-          id,
-          address,
-          title,
-          secondaryTitle,
-          resalePrice,
-          town,
-          flatType,
-          floorSqm,
-          description
-        })
+    .then((hdbResaleDetail) => {
+      const id = hdbResaleDetail.id
+      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const address = hdbResaleDetail.address
+      const town = hdbResaleDetail.town
+      const flatType = hdbResaleDetail.flatType
+      const floorSqm = hdbResaleDetail.floorSqm
+      const description = hdbResaleDetail.description
+      res.render('resale/confirmPublicListing', {
+        id,
+        address,
+        title,
+        secondaryTitle,
+        resalePrice,
+        town,
+        flatType,
+        floorSqm,
+        description
       })
-      .catch((err) => {
-        console.log('Error: ', err)
-      })
-  
+    })
+    .catch((err) => {
+      console.log('Error: ', err)
+    })
 })
 
 // Confirmation Page for hdb properties
@@ -366,35 +362,34 @@ router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const resalePublicID = req.params.id
   console.log(req.params.id)
 
-    hdbResale.update({
-      // Make this property visible to users from agent
-      isViewable: true
-    }, {
-      where: {
-        id: resalePublicID
-      }
-    })
-      .then(() => {
-        res.send('Public Resale Listing Viewable')
-      }).catch((err) => { console.log('Error: ', err) })
-  
+  hdbResale.update({
+    // Make this property visible to users from agent
+    isViewable: true
+  }, {
+    where: {
+      id: resalePublicID
+    }
+  })
+    .then(() => {
+      res.send('Public Resale Listing Viewable')
+    }).catch((err) => { console.log('Error: ', err) })
 })
 
 // Basic Delete Function
 // Delete hdb resale listing
-router.get('/deletePublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
+router.get('/deletePublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const resalePublicID = req.params.id
 
   // hdbResale.findOne({
   //   where: { id: hdbResaleId }
   // }).then((result) => {
   // })
-    hdbResale.destroy({
-      where: { id: resalePublicID }
-    }).then((result) => {
-      console.log(result)
-      res.render('resale/viewPublicResaleList')
-    }).catch((err) => { console.log('Error: ', err) })
+  hdbResale.destroy({
+    where: { id: resalePublicID }
+  }).then((result) => {
+    console.log(result)
+    res.render('resale/viewPublicResaleList')
+  }).catch((err) => { console.log('Error: ', err) })
 })
 
 // View individual private Resale Page
@@ -429,7 +424,7 @@ router.post('/createPrivateResaleListing', (req, res) => {
 
 // Basic Delete Function
 // Delete private resale listing
-router.get('/deletePrivateResaleListing/:id', checkUUIDFormat , (req, res) => {
+router.get('/deletePrivateResaleListing/:id', checkUUIDFormat, (req, res) => {
   const privateResaleId = req.params.id
   privateResale.destroy({
     where: { id: privateResaleId }
