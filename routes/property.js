@@ -79,18 +79,18 @@ async function predictPrivateResale (dateOfSale, floorRange, floorSqm) {
 // Reference
 router.get('/propertysingle', (req, res) => {
   const title = 'Property Single'
-  res.render('property/property-single', { title: title })
+  res.render('resale/property-single', { title: title })
 })
 
 router.get('/propertylist', (req, res) => {
   const title = 'List of Properties'
-  res.render('property/property-grid', { title: title })
+  res.render('resale/property-grid', { title: title })
 })
 
 // Show create HDB Resale Page
 router.get('/createPublicResaleListing', (req, res) => {
   const title = 'Create HDB Resale Listing'
-  res.render('property/createPublicResale', { title })
+  res.render('resale/createPublicResale', { title })
 })
 
 // Fixed data for testing
@@ -190,7 +190,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
         const flatType = hdbResaleDetail.flatType
         const floorSqm = hdbResaleDetail.floorSqm
         const description = hdbResaleDetail.description
-        res.render('property/viewPublicResaleListing', {
+        res.render('resale/viewPublicResaleListing', {
           address,
           title,
           secondaryTitle,
@@ -216,8 +216,14 @@ router.get('/viewPublicResaleList', (req, res) => {
     },
     raw: true
   }).then((hdbResale) => {
-    res.render('property/viewPublicResaleList', { title, hdbResale: hdbResale })
+    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale })
   })
+})
+
+// Unviewable property listings that customers cannot see
+router.get('/viewPreviewPublicList', (req, res) => {
+  const title = "HDB Preview Listings"
+  res.send('Test 1')
 })
 
 // Edit Function
@@ -242,7 +248,7 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
       const leaseCommenceDate = result.leaseCommenceDate
       const resaleDate = result.resaleDate
       // Render property values from database
-      res.render('property/editPublicResale', {
+      res.render('resale/editPublicResale', {
         id,
         title,
         address,
@@ -291,7 +297,7 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
         const flatType = hdbResaleDetail.flatType
         const floorSqm = hdbResaleDetail.floorSqm
         const description = hdbResaleDetail.description
-        res.render('property/confirmPublicListing', {
+        res.render('resale/confirmPublicListing', {
           id,
           address,
           title,
