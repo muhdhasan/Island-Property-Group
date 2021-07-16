@@ -113,7 +113,7 @@ checkDefaultData.check().catch((err) => {
   console.log(err)
 })
 
-// Create HTTP Server
+// Create HTTPS Server
 https.createServer(
   options,
   app
