@@ -1339,11 +1339,27 @@ a:hover {
   letter-spacing: 0.030em;
 }
 
+.price-unViewable {
+  color: #ffffff;
+  padding: .6rem .8rem;
+  border: 2px solid #ca2e2e;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.030em;
+}
+
 .card-footer-a {
   width: 100%;
   position: absolute;
   z-index: 2;
   background-color: #2eca6a;
+}
+
+.card-footer-unViewable {
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+  background-color: #ca2e2e;
 }
 
 .card-info {

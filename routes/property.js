@@ -15,9 +15,6 @@ const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const checkUUIDFormat = require('../helpers/checkURL')
 
-// Consolidate check regex for uuid
-const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-
 // Call predict resale API
 async function predictPublicResale (dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartDate) {
   // router.get('/getResalePrediction', (req, res) => {
@@ -209,10 +206,11 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
 // HDB Properties that are currently viewable to customers can be found here
 router.get('/viewPublicResaleList', (req, res) => {
   const title = 'HDB Resale Listings'
+  const isViewable = true
   hdbResale.findAll({
     // Only users can see viewable properties
     where: {
-      isViewable: true
+      isViewable: isViewable
     },
     raw: true
   }).then((hdbResale) => {
@@ -223,7 +221,13 @@ router.get('/viewPublicResaleList', (req, res) => {
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPublicList', (req, res) => {
   const title = "HDB Preview Listings"
-  res.send('Test 1')
+  const isViewable = true
+  hdbResale.findAll({
+    // Only agents can see all properties
+    raw: true
+  }).then((hdbResale) => {
+    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale })
+  })
 })
 
 // Edit Function
@@ -267,7 +271,49 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
 router.put('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
   const resalePublicID = req.params.id
 
-    res.send('Hello World')
+  const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
+  // Inputs
+  const hdbResaleId = uuid.v4()
+  const address = req.body.address1
+  const description = req.body.description
+  // Will add input validation here later
+  const town = req.body.town
+  const flatType = req.body.flatType
+  const flatModel = req.body.flatModel
+  const flatLevel = req.body.flatLevel
+
+  // Call floor range selector to select floor range from floor level accordingly
+  const floorRange = floorRangeSelector(req.body.flatLevel)
+  const floorSqm = req.body.floorSqm
+
+  // Date related inputs
+  const leaseStartDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseStartDate.getFullYear()
+  const dateOfSale = new Date(req.body.dateOfSale)
+
+  // Input Validation
+  if (filterSpecialRegex.test(address) === false) {
+    return console.log('Address contains special characters')
+  }
+  // if (filterSpecialRegex.test(description) === false) {
+  //   return console.log('Description contains special characters')
+  // }
+  if (filterSpecialRegex.test(address) === false) {
+    return console.log('Address contains special characters')
+  }
+  if (filterSpecialRegex.test(address) === false) {
+    return console.log('Address contains special characters')
+  }
+
+  // Check if resale date is at least 5 years from lease commence date
+  const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
+  const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
+  if (yearDiff < 5) {
+    return console.log('Ensure that resale date is at least 5 years from lease date')
+  }
+
+
+  res.send('Hello World')
   
 })
 
@@ -347,7 +393,7 @@ router.get('/deletePublicResaleListing/:id', checkUUIDFormat ,(req, res) => {
       where: { id: resalePublicID }
     }).then((result) => {
       console.log(result)
-      res.send('Deleted Public Resale Listing')
+      res.render('resale/viewPublicResaleList')
     }).catch((err) => { console.log('Error: ', err) })
 })
 
