@@ -4,7 +4,6 @@ const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-
 // Salt User password with bcrypt so its unreable in database
 function saltPassword (password) {
   const hash = bcrypt.hashSync(password, saltRounds)

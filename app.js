@@ -1,13 +1,12 @@
 const express = require('express')
-const session = require('express-session');
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
 const https = require('https')
 const methodOverride = require('method-override')
-const passport = require('passport');
-const cookieParser = require('cookie-parser');
-
+const passport = require('passport')
+const cookieParser = require('cookie-parser')
 
 // Create Express Server
 const app = express()
@@ -54,7 +53,7 @@ const MySQLStore = require('express-mysql-session')
 const db = require('./config/db.js')
 
 // Enables session to be stored using browser's Cookie ID
-app.use(cookieParser());
+app.use(cookieParser())
 
 // Messaging libraries
 // const flash = require('connect-flash')
@@ -73,32 +72,32 @@ const restartDB = false
 realEstateDB.setUpDB(restartDB)
 
 // Passport Config
-const authenticate = require('./config/passport');
-authenticate.localStrategy(passport);
+const authenticate = require('./config/passport')
+authenticate.localStrategy(passport)
 
 // Express session middleware - uses MySQL to store session
 app.use(session({
-	key: 'vidjot_session',
-	secret: 'tojiv',
-	store: new MySQLStore({
-	host: db.host,
-	port: db.port,
-	user: db.username,
-	password: db.password,
-	database: db.database,
-	clearExpired: true,
-	// How frequently expired sessions will be cleared; milliseconds:
-	checkExpirationInterval: 90000,
-	// The maximum age of a valid session; milliseconds:
-	expiration: 90000,
-	}),
-	resave: false,
-	saveUninitialized: false
-}));
+  key: 'vidjot_session',
+  secret: 'tojiv',
+  store: new MySQLStore({
+    host: db.host,
+    port: db.port,
+    user: db.username,
+    password: db.password,
+    database: db.database,
+    clearExpired: true,
+    // How frequently expired sessions will be cleared; milliseconds:
+    checkExpirationInterval: 90000,
+    // The maximum age of a valid session; milliseconds:
+    expiration: 90000
+  }),
+  resave: false,
+  saveUninitialized: false
+}))
 
 // Initilize Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Error Codes
 app.use((req, res) => {

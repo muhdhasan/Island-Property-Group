@@ -1,5 +1,4 @@
 <main id="main">
-
   <!-- ======= Intro Single ======= -->
   <section class="intro-single">
     <div class="container">
@@ -31,7 +30,8 @@
   <section class="contact mt-5">
     <div class="container">
       <form
-        action="/property/createPublicResaleListing"
+        action="/property/createPrivateResaleListing"
+        id="privatePropertyForm"
         class="form"
         method="POST"
         role="form"
@@ -60,101 +60,85 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="town" class="form-label">Town</label>
+            <label for="postalDistrict" class="form-label">Postal District</label>
             <select
-              id="town"
-              name="town"
+              id="postalDistrict"
+              name="postalDistrict"
               class="form-control form-control-lg form-control-a"
               required
             >
-              <option value="ANG MO KIO" selected>Ang Mo Kio</option>
-              <option value="BEDOK">Bedok</option>
-              <option value="BISHAN">Bishan</option>
-              <option value="BUKIT BATOK">Bukit Batok</option>
-              <option value="BUKIT MERAH">Bukit Merah</option>
-              <option value="BUKIT PANJANG">Bukit Panjang</option>
-              <option value="BUKIT TIMAH">Bukit Timah</option>
-              <option value="CENTRAL AREA">Central Area</option>
-              <option value="CHOA CHU KANG">Choa Chu Kang</option>
-              <option value="CLEMENTI">Clementi</option>
-              <option value="GEYLANG">Geylang</option>
-              <option value="HOUGANG">Hougang</option>
-              <option value="JURONG EAST">Jurong East</option>
-              <option value="JURONG WEST">Jurong West</option>
-              <option value="KALLANG/WHAMPOA">Kallang/Whampoa</option>
-              <option value="MARINE PARADE">Marine Parade</option>
-              <option value="PASIR RIS">Pasir Ris</option>
-              <option value="PUNGGOL">Punggol</option>
-              <option value="QUEENSTOWN">Queenstown</option>
-              <option value="SEMBAWANG">Sembawang</option>
-              <option value="SENGKANG">Sengkang</option>
-              <option value="SERANGOON">Serangoon</option>
-              <option value="TAMPINES">Tampines</option>
-              <option value="TOA PAYOH">Toa Payoh</option>
-              <option value="WOODLANDS">Woodlands</option>
-              <option value="YISHUN">Yishun</option>
+              <option value="Postal District_1" selected>1</option>
+              <option value="Postal District_2">2</option>
+              <option value="Postal District_3">3</option>
+              <option value="Postal District_4">4</option>
+              <option value="Postal District_5">5</option>
+              <option value="Postal District_6">6</option>
+              <option value="Postal District_7">7</option>
+              <option value="Postal District_8">8</option>
+              <option value="Postal District_9">9</option>
+              <option value="Postal District_10">10</option>
+              <option value="Postal District_11">11</option>
+              <option value="Postal District_12">12</option>
+              <option value="Postal District_13">13</option>
+              <option value="Postal District_14">14</option>
+              <option value="Postal District_15">15</option>
+              <option value="Postal District_16">16</option>
+              <option value="Postal District_17">17</option>
+              <option value="Postal District_18">18</option>
+              <option value="Postal District_19">19</option>
+              <option value="Postal District_20">20</option>
+              <option value="Postal District_21">21</option>
+              <option value="Postal District_22">22</option>
+              <option value="Postal District_23">23</option>
+              <option value="Postal District_24">24</option>
+              <option value="Postal District_25">25</option>
+              <option value="Postal District_26">26</option>
+              <option value="Postal District_27">27</option>
+              <option value="Postal District_28">28</option>
             </select>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="flatType" class="form-label">Flat Type</label>
-            <select
-              id="flatType"
-              name="flatType"
+            <label for="houseType" class="form-label">Type</label>
+                        <select
+              id="houseType"
+              name="houseType"
               class="form-control form-control-lg form-control-a"
               required
             >
-              <option value="1 ROOM" selected>1-ROOM</option>
-              <option value="2 ROOM">2-ROOM</option>
-              <option value="3 ROOM">3-ROOM</option>
-              <option value="4 ROOM">4-ROOM</option>
-              <option value="5 ROOM">5-ROOM</option>
-              <option value="EXECUTIVE">EXECUTIVE</option>
-              <option value="MULTI GENERATION">MULTI-GENERATION</option>
+              <option value="Condominium" selected>Condominium</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Detached">Detached</option>
+              <option value="Executive Condominium">Executive Condominium</option>
+              <option value="Semi-detached">Semi-detached</option>
+              <option value="Terrace">Terrace</option>
             </select>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="flatModel" class="form-label">Flat Model</label>
+            <label for="typeOfArea" class="form-label">Type of Area</label>
             <select
-              id="flatModel"
-              name="flatModel"
+              id="typeOfArea"
+              name="typeOfArea"
               class="form-control form-control-lg form-control-a"
               required
             >
-              <option value="IMPROVED" selected>Improved</option>
-              <option value="NEW GENERATION">New Generation</option>
-              <option value="DBSS">DBSS</option>
-              <option value="STANDARD">Standard</option>
-              <option value="MODEL A">Model A</option>
-              <option value="MODEL A2">Model A2</option>
-              <option value="APARTMENT">Apartment</option>
-              <option value="SIMPLIFIED">Simplified</option>
-              <option value="PREMIUM APARTMENT">Premium Apartment</option>
-              <option value="ADJOINED FLAT">Adjoined Flat</option>
-              <option value="MODEL A-MAISONETTE">Model A-Maisonette</option>
-              <option value="MAISONETTE">Maisonette</option>
-              <option value="MULTI GENERATION">Multi-Generation</option>
-              <option value="TYPE S1">Type S1</option>
-              <option value="TYPE S2">Type S2</option>
-              <option value="TERRACE">Terrace</option>
-              <option value="2-ROOM">2-Room</option>
-              <option value="PREMIUM MAISONETTE">Premium Maisonette</option>
-              <option value="IMPROVED-MAISONETTE">Improved Maisonette</option>
-              <option value="PREMIUM APARTMENT LOFT">Premium Apartment Loft</option>
+              <option value="Land" selected>Landed</option>
+              <option value="Strata">Strata</option>
             </select>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="flatLevel" class="form-label">Flat Level</label>
-            <input
-              id="flatLevel"
-              type="number"
-              name="flatLevel"
+            <label for="marketSegment" class="form-label">Market Segment</label>
+            <select
+              id="marketSegment"
+              name="marketSegment"
               class="form-control form-control-lg form-control-a"
-              min="1"
-              max="51"
               required
-            />
+            >
+              <option value="RCR" selected>RCR</option>
+              <option value="CCR">CCR</option>
+              <option value="OCR">OCR</option>
+            </select>
           </div>
         </div>
         <div class="row mb-3">
@@ -165,45 +149,79 @@
               type="text"
               name="floorSqm"
               class="form-control form-control-lg form-control-a"
-              min="25"
-              max="400"
+              min="40"
               required
             />
           </div>
           <div class="col-md-6 mb-3">
-            <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
+            <label for="floorLevel" class="form-label">Floor Level</label>
             <input
-              id="leaseCommenceDate"
-              type="date"
-              name="leaseCommenceDate"
+              id="floorLevel"
+              type="number"
+              name="floorLevel"
               class="form-control form-control-lg form-control-a"
-              min="1952-01-01"
+              min="1"
+              max="51"
               required
             />
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6 mb-3">
-            <label for="dateOfSale" class="form-label">Resale Date</label>
-            <input
-              id="dateOfSale"
-              type="date"
-              name="dateOfSale"
-              class="form-control form-control-lg form-control-a"
-              min="1952-01-01"
-              required
-            />
-            <div id="resaleDateErrorMsg" class="form-text"></div>
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+              <label for="isFreehold" class="form-label">Freehold</label>
+              <div class="form-check form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isFreehold"
+                  id="isFreeholdYes"
+                  value="1"
+                  onclick="javascript:isFreeholdCheck();"
+                  required
+                />
+                <label class="form-check-label" for="isFreeholdYes">Yes</label>
+              </div>
+              <div class="form-check form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isFreehold"
+                  id="isFreeholdNo"
+                  value="0"
+                  onclick="javascript:isFreeholdCheck();"
+                  required
+                />
+                <label class="form-check-label" for="isFreeholdNo">No</label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="leaseCommenceDateDiv">
+                <label for="leaseCommenceDate" class="form-label">Lease Start
+                  Date</label>
+                <input
+                  id="leaseCommenceDate"
+                  type="date"
+                  name="leaseCommenceDate"
+                  class="form-control form-control-lg form-control-a"
+                  min="1952-01-01"
+                  required
+                />
+              </div>
+            </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="resaleValue" class="form-label">Resale Price</label>
-            <div class="input-group">
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+              <label for="dateOfSale" class="form-label">Resale Date</label>
               <input
-                id="resaleValue"
-                type="text"
-                name="resaleValue"
+                id="dateOfSale"
+                type="date"
+                name="dateOfSale"
                 class="form-control form-control-lg form-control-a"
+                min="1952-01-01"
+                required
               />
+              <div id="resaleDateErrorMsg" class="form-text"></div>
+            </div>
+            <div class="col-md-6 mb-3">
             </div>
           </div>
         </div>
@@ -214,4 +232,5 @@
     </div>
   </section>
 </main>
-<script src="/js/propertyInputValidation.js"></script>
+{{! <script src="/js/resalePrivatePropertyInputValidation.js"></script> }}
+<script src="/js/showDateInput.js"></script>

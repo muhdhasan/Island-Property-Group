@@ -400,7 +400,7 @@ router.get('/deletePublicResaleListing/:id', checkUUIDFormat, (req, res) => {
 // Display create resale listing page
 router.get('/createPrivateResaleListing', (req, res) => {
   const title = 'Create Private Resale Listing'
-  res.send('Created private resale listing')
+  res.render('resale/createPrivateResale', { title })
 })
 
 // Create listing for private resale property
