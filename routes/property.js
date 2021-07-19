@@ -140,6 +140,8 @@ router.post('/createPublicResaleListing', (req, res) => {
     console.log(dateOfSale)
     console.log('Resale Value', resaleValue)
     const description = 'Sample Description'
+
+    // Create public resale listing
     hdbResale
       .create({
         id: hdbResaleId,
@@ -411,21 +413,39 @@ router.get('/createPrivateResaleListing', (req, res) => {
 
 // Create listing for private resale property
 router.post('/createPrivateResaleListing', (req, res) => {
-  // const address = req.body.address
-  // const description = "Sample Description"
+
+  // Create UUID
+  const privateResaleId = uuid.v4()
+
+  // Inputs
+  const address = req.body.address1
+  const description = "Sample Description"
+  const postalDistrict = req.body.postalDistrict
+  const houseType = req.body.houseType
+  const typeOfArea = req.body.typeOfArea
+  const marketSegment = req.body.marketSegment
+  const floorSqm = req.body.floorSqm
 
   // Date related inputs
-  // const leaseStartDate = new Date(req.body.leaseCommenceDate)
-  // const leaseStartYear = leaseStartDate.getFullYear()
-  // const dateOfSale = new Date(req.body.dateOfSale)
-  // privateResale.create({
-  //   id: uuid.V4(),
-  //   address: address,
-  //   description: description,
-  // }).then((result) => {
-  //   res.send("Created private resale listing")
-  // }).catch((err) => { console.log('Error: ', err) })
-  res.send('Created private resale listing')
+  const leaseStartDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseStartDate.getFullYear()
+  const dateOfSale = new Date(req.body.dateOfSale)
+
+  // Create private resale listing
+  privateResale.create({
+    id: privateResaleId,
+    address: address,
+    description: description,
+    resalePrice: 2000000,
+    houseType: houseType,
+    postalDistrict: postalDistrict,
+    floorSqm: floorSqm,
+    leaseCommenceDate: leaseStartDate,
+    resaleDate: dateOfSale,
+    isViewable: false
+  }).then((result) => {
+    res.send("Created private resale listing")
+  }).catch((err) => { console.log('Error: ', err) })
 })
 
 // Basic Delete Function
