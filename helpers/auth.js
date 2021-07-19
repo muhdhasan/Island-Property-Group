@@ -1,5 +1,13 @@
 const ensureUserAuthenticated = (req, res, next) => {
-  res.redirect('#')
+  if (req.isAuthenticated()) {
+    // Process to next statement if user is authenticated
+    return next()
+  }
+  // If user is not authenticated
+  // Return user to home page
+  else {
+    res.redirect('/')
+  }
 }
 
 module.exports = ensureUserAuthenticated

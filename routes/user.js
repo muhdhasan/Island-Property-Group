@@ -70,40 +70,40 @@ router.post('/register', (req, res) => {
       bcrypt.hash(firstPassword, salt, function (err, hash) {
         password = hash
         userid = uuidv1()
-        User.create({ id: userid, fullName, email, password, isAgent: false, isAdmin: false }).then((user) => {
-          jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
-            (err, emailToken) => {
-              const url = `https://localhost:8080/user/confirmation/${emailToken}`
-              console.log(url)
-              transporter.sendMail({
-                to: req.body.email,
-                subject: 'Confirm Email',
-                html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
-              })
-                .catch((err) => {
-                  console.log(err)
-                })
-            })
-        })
+         User.create({ id: userid, fullName, email, password, isAgent: false, isAdmin: false })//.then((user) => {
+        //   jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
+        //     (err, emailToken) => {
+        //       const url = `https://localhost:8080/user/confirmation/${emailToken}`
+        //       console.log(url)
+        //       transporter.sendMail({
+        //         to: req.body.email,
+        //         subject: 'Confirm Email',
+        //         html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+        //       })
+        //         .catch((err) => {
+        //           console.log(err)
+        //         })
+        //     })
+        // })
       })
     })
     res.redirect('/user/login')
   }
 })
 
-router.get('/confirmation/:token', async (req, res) => {
-  const token = jwt.verify(req.params.token, SECRET)
-  User.findOne({ where: { id: token.user } }).then((user) => {
-    user.update({ confirmed: true })
-    console.log('email verified')
-  })
-  // This function below is not defined
-  alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
-  res.redirect('https://localhost:8080/user/login')
-})
+// router.get('/confirmation/:token', async (req, res) => {
+//   const token = jwt.verify(req.params.token, SECRET)
+//   User.findOne({ where: { id: token.user } }).then((user) => {
+//     user.update({ confirmed: true })
+//     console.log('email verified')
+//   })
+//   // This function below is not defined
+//   alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
+//   res.redirect('https://localhost:8080/user/login')
+// })
 
 // Logs in user
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   // Inputs
   console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
@@ -114,9 +114,12 @@ router.post('/login', (req, res) => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   // Input Validation
-  if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
+  if (emailRegex.test(email) === false || password.length < 8) return;// console.log('It failed')
 
-  res.send('It works')
+  passport.authenticate("local",{
+    successRedirect: "/user/", // Route to /video/listVideos URL
+    failureRedirect: "/login", 
+  })(req, res,next);
 })
 
 // router.get('/forgetpassword', (req, res) => {

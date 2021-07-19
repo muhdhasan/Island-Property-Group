@@ -1,8 +1,15 @@
 // This file main purpose is to autocreate default users so we don't need to add them manually everytime we restart the server.
 const user = require('../models/User')
 const uuid = require('uuid')
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const bcrypt = require('bcrypt')
+const saltRounds = 10
+
+
+// Salt User password with bcrypt so its unreable in database
+function saltPassword (password) {
+  const hash = bcrypt.hashSync(password, saltRounds)
+  return hash
+}
 
 // Admin User Schema
 const AdminUserSchema = {
@@ -37,7 +44,7 @@ const NormalUserSchema = {
   phoneNo: '12345678'
 }
 
-defaultUserList = [AdminUserSchema, AgentUserSchema]
+// defaultUserList = [AdminUserSchema, AgentUserSchema]
 
 const DefaultUsersObjects = () => {
   return new Promise((res) => {
@@ -62,28 +69,18 @@ const DefaultUsersObjects = () => {
           console.log('Admin user exists')
           return res(0)
         }
-      }).catch((err) => {console.log("Error in auto-creating users:", err)})
-  })
-}
-
-// Salt User password with bcrypt so its unreable in database
-const saltPassword = (password) => {
-
-  bcrypt.genSalt(saltRounds, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => {
-      return hash;
-    })
+      }).catch((err) => { console.log('Error in auto-creating users:', err) })
   })
 }
 
 // Create default HDB properties
 const DefaultHDBPropertiesObjects = () => {
-  
+
 }
 
 // Create default Private properties
 const DefaultPrivatePropertiesObjects = () => {
-  
+
 }
 
 // check function
