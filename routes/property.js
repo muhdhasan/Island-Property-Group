@@ -343,6 +343,7 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
+      const isViewable = hdbResaleDetail.isViewable
       res.render('resale/confirmPublicListing', {
         id,
         address,
@@ -353,7 +354,8 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
         flatType,
         floorSqm,
         description,
-        leaseCommenceDate
+        leaseCommenceDate,
+        isViewable
       })
     })
     .catch((err) => {

@@ -64,7 +64,11 @@
       <div class="m-5 d-flex justify-content-center">
         <button type="button" class="btn btn-lg btn-outline-danger mx-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
         <a href="/property/editPublicResaleListing/{{id}}" class="btn btn-lg btn-outline-dark mx-2">Edit</a>
+        {{#if isViewable}}
+        <button type="button" class="btn btn-lg btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#confirmModal" disabled>Confirm Listing</button>
+        {{else}}
         <button type="button" class="btn btn-lg btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#confirmModal">Confirm Listing</button>
+        {{/if}}
       </div>
       <div class="row mt-5">
         <div class="col-sm-12">
