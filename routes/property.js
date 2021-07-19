@@ -186,6 +186,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
       const flatType = hdbResaleDetail.flatType
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
+      const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       res.render('resale/viewPublicResaleListing', {
         address,
         title,
@@ -194,7 +195,8 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
         town,
         flatType,
         floorSqm,
-        description
+        description,
+        leaseCommenceDate
       })
     })
     .catch((err) => {
@@ -340,6 +342,7 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
       const flatType = hdbResaleDetail.flatType
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
+      const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       res.render('resale/confirmPublicListing', {
         id,
         address,
@@ -349,7 +352,8 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, (req, res) =>
         town,
         flatType,
         floorSqm,
-        description
+        description,
+        leaseCommenceDate
       })
     })
     .catch((err) => {

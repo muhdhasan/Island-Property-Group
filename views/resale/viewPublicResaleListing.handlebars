@@ -39,10 +39,20 @@
           <div id="property-single-carousel" class="swiper-container">
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat1.jpg" alt="" height="800px" width="800px"/>
+                <img
+                  src="/img/hdbFlat1.jpg"
+                  alt=""
+                  height="800px"
+                  width="800px"
+                />
               </div>
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat2.jpg" alt="" height="800px" width="800px"/>
+                <img
+                  src="/img/hdbFlat2.jpg"
+                  alt=""
+                  height="800px"
+                  width="800px"
+                />
               </div>
             </div>
           </div>
@@ -102,6 +112,10 @@
                       <span>{{floorSqm}}m
                         <sup>2</sup>
                       </span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Lease Commence Date:</strong>
+                      <span>{{formatDate leaseCommenceDate 'DD/MM/YYYY'}}</span>
                     </li>
                   </ul>
                 </div>
