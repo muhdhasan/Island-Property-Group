@@ -233,11 +233,11 @@ router.get('/viewPreviewPublicList', (req, res) => {
   })
 })
 
-// Edit Function
+// Edit Function for public resale listings
 router.get('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Edit HDB Resale Listing'
 
-  // Get uuid from url
+  // Get UUID from URL
   const resalePublicID = req.params.id
   // Find hdb property by id
   hdbResale.findOne({
@@ -271,7 +271,7 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 })
 
 // Update public property information to database
-router.put('/editPublicResaleListing/:id', checkUUIDFormat, (req, res) => {
+router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const resalePublicID = req.params.id
 
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
@@ -413,18 +413,21 @@ router.get('/createPrivateResaleListing', (req, res) => {
 
 // Create listing for private resale property
 router.post('/createPrivateResaleListing', (req, res) => {
-
   // Create UUID
   const privateResaleId = uuid.v4()
 
   // Inputs
   const address = req.body.address1
-  const description = "Sample Description"
+  const description = 'Sample Description'
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType
   const typeOfArea = req.body.typeOfArea
   const marketSegment = req.body.marketSegment
   const floorSqm = req.body.floorSqm
+  const floorLevel = req.body.floorLevel
+
+  // Call floor range selector to select floor range from floor level accordingly
+  const floorRange = floorRangeSelector(req.body.floorLevel)
 
   // Date related inputs
   const leaseStartDate = new Date(req.body.leaseCommenceDate)
@@ -444,8 +447,49 @@ router.post('/createPrivateResaleListing', (req, res) => {
     resaleDate: dateOfSale,
     isViewable: false
   }).then((result) => {
-    res.send("Created private resale listing")
+    res.send('Created private resale listing')
   }).catch((err) => { console.log('Error: ', err) })
+})
+
+// Edit Function for private resale listings
+router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  const title = 'Edit Private Resale Listing'
+
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+  console.log(privateResaleId)
+
+  privateResale.findOne({
+    where: { id: privateResaleId }
+  }).then((result) => {
+    // Display result from database
+    const id = result.id
+    const address = result.address
+    const description = result.description
+    const resalePrice = result.resalePrice
+    const houseType = result.houseType
+    const postalDistrict = result.postalDistrict
+    const floorSqm = result.floorSqm
+    const leaseCommenceDate = result.leaseCommenceDate
+    const resaleDate = result.resaleDate
+    res.render('resale/editPrivateResale', {
+      id,
+      title,
+      address,
+      resalePrice,
+      houseType,
+      postalDistrict,
+      floorSqm,
+      leaseCommenceDate,
+      resaleDate
+    })
+  }).catch((err) => console.log('Error: ', err))
+})
+
+router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  // Get UUID from URL
+  const resalePrivateID = req.params.id
+  res.send('Editing Successful')
 })
 
 // Basic Delete Function
