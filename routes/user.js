@@ -103,7 +103,7 @@ router.get('/confirmation/:token', async (req, res) => {
 })
 
 // Logs in user
-router.post('/login', (req, res,next) => {
+router.post('/login', (req, res) => {
   // Inputs
   console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
@@ -115,8 +115,6 @@ router.post('/login', (req, res,next) => {
 
   // Input Validation
   if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
-  
-  res.send('It works')
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err)
@@ -133,7 +131,7 @@ router.post('/login', (req, res,next) => {
       }
       return res.redirect('/')
     })
-  })(req, res, next)
+  })
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -164,6 +162,7 @@ router.get('/chat/:listing',(req, res) => {
   chat = Chat.findAll({where: {userid: user ,listingid: listing},order:['chatorder','ASC']})
   if (!chat){
     //Chat.create()
+    console.log("new chat ")
   }
   else{
     for (messages in chat){
