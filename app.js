@@ -15,6 +15,7 @@ require('dotenv').config()
 const mainRoute = require('./routes/main')
 const userRoute = require('./routes/user')
 const propertyRoute = require('./routes/property')
+const rentalRoute = require('./routes/rental')
 
 // Bring in Handlebars helpers
 const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion } = require('./helpers/hbs')
@@ -45,6 +46,7 @@ app.use(methodOverride('_method'))
 app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)
+app.use('/rental', rentalRoute)
 
 // Library to use MySQL to store session objects
 // const MySQLStore = require('express-mysql-session')
