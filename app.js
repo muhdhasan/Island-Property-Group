@@ -4,7 +4,8 @@ const path = require('path')
 const fs = require('fs')
 const https = require('https')
 const methodOverride = require('method-override')
-
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
 
 // Create Express Server
 const app = express()
@@ -47,9 +48,32 @@ app.use('/user', userRoute)
 app.use('/property', propertyRoute)
 
 // Library to use MySQL to store session objects
-// const MySQLStore = require('express-mysql-session')
-// const db = require('./config/db.js')
-
+const MySQLStore = require('express-mysql-session')
+const db = require('./config/db.js')
+app.use(cookieParser())
+app.use(
+  session({
+    key: 'iPG_session',
+    secret: 'tojiv',
+    store: new MySQLStore({
+      host: process.env.dbHost,
+      port: process.env.port,
+      user: process.env.dbUsername,
+      password: process.env.password,
+      database: process.env.dbName,
+      clearExpired: true,
+      // How frequently expired sessions will be cleared; milliseconds:
+      checkExpirationInterval: 900000,
+      // The maximum age of a valid session; milliseconds:
+      expiration: 900000
+    }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true
+    }
+  })
+)
 // Messaging libraries
 // const flash = require('connect-flash')
 // const FlashMessenger = require('flash-messenger')
@@ -65,6 +89,13 @@ const realEstateDB = require('./config/DBConnection')
 // To set up database with new tables set (true)
 const restartDB = false
 realEstateDB.setUpDB(restartDB)
+
+//passport
+const passport = require('passport')
+const authenticate = require('./config/passport')
+authenticate.localStrategy(passport)
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Error Codes
 app.use((req, res) => {

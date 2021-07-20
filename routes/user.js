@@ -3,10 +3,10 @@ const router = express.Router()
 const passport = require('passport')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
-const sanitize = require('sanitize')()
 const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
-const user = require('../models/User')
+const User = require('../models/User')
+const { session } = require('passport')
 const secret = process.env.secret
 
 const transporter = nodemailer.createTransport({
@@ -70,7 +70,7 @@ router.post('/register', (req, res) => {
       bcrypt.hash(firstPassword, salt, function (err, hash) {
         password = hash
         userid = uuidv1()
-        User.create({ id: userid, fullName, email, password, isAgent: false, isAdmin: false }).then((user) => {
+        User.create({ id: userid, name: fullName, email, password, isAgent: false, isAdmin: false }).then((user) => {
           jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
             (err, emailToken) => {
               const url = `https://localhost:8080/user/confirmation/${emailToken}`
@@ -98,12 +98,12 @@ router.get('/confirmation/:token', async (req, res) => {
     console.log('email verified')
   })
   // This function below is not defined
-  alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
+  //alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
   res.redirect('https://localhost:8080/user/login')
 })
 
 // Logs in user
-router.post('/login', (req, res) => {
+router.post('/login', (req, res,next) => {
   // Inputs
   console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
@@ -115,8 +115,25 @@ router.post('/login', (req, res) => {
 
   // Input Validation
   if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
-
+  
   res.send('It works')
+  passport.authenticate('local', function (err, user, info) {
+    if (err) {
+      return next(err)
+    }
+    if (!user) {
+      return res.redirect('/login')
+    }
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err)
+      } else if (user.isadmin == true) {
+        console.log('Admin has logged in')
+        return res.redirect('/')
+      }
+      return res.redirect('/')
+    })
+  })(req, res, next)
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -141,9 +158,28 @@ router.get('/userProfile', (req, res) => {
   res.render('user/userProfile', { title })
 })
 
-router.get('/chat',(req, res) => {
+router.get('/chat/:listing',(req, res) => {
+  var user = User.userid;
+  var listing = req.params.listing
+  chat = Chat.findAll({where: {userid: user ,listingid: listing},order:['chatorder','ASC']})
+  if (!chat){
+    //Chat.create()
+  }
+  else{
+    for (messages in chat){
+      chatmessage = messages.message
+      if (!messages.isBot){
+        //create user chat message
+      }else{
+        //create bot chat message
+      }
+
+    }
+    
+  }
   res.render('user/chatbot')
 })
+
 
 // Logout Route
 // Redirect user to home page
