@@ -115,6 +115,7 @@ router.post('/login', (req, res) => {
 
   // Input Validation
   if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
+  
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err)

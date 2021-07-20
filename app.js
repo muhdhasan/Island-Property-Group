@@ -50,18 +50,18 @@ app.use(
   session({
     key: 'iPG_session',
     secret: 'tojiv',
-    store: new MySQLStore({
-      host: process.env.dbHost,
-      port: process.env.port,
-      user: process.env.dbUsername,
-      password: process.env.password,
-      database: process.env.dbName,
-      clearExpired: true,
-      // How frequently expired sessions will be cleared; milliseconds:
-      checkExpirationInterval: 900000,
-      // The maximum age of a valid session; milliseconds:
-      expiration: 900000
-    }),
+    // store: new MySQLStore({
+    //   host: process.env.dbHost,
+    //   port: process.env.port,
+    //   username: process.env.dbUsername,
+    //   password: process.env.password,
+    //   database: process.env.dbName,
+    //   clearExpired: true,
+    //   // How frequently expired sessions will be cleared; milliseconds:
+    //   checkExpirationInterval: 900000,
+    //   // The maximum age of a valid session; milliseconds:
+    //   expiration: 900000
+    // }),
     resave: false,
     saveUninitialized: false,
     cookie: {
