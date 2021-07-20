@@ -272,11 +272,11 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 
 // Update public property information to database
 router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+  // Get UUID from URL
   const resalePublicID = req.params.id
 
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
-  const hdbResaleId = uuid.v4()
   const address = req.body.address1
   const description = req.body.description
   // Will add input validation here later
@@ -292,30 +292,47 @@ router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
   // Date related inputs
   const leaseStartDate = new Date(req.body.leaseCommenceDate)
   const leaseStartYear = leaseStartDate.getFullYear()
-  const dateOfSale = new Date(req.body.dateOfSale)
+  const resaleDate = new Date(req.body.dateOfSale)
 
   // Input Validation
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
-  const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
+  const yearDiff = ((resaleDate - leaseStartDate) / totalMilisecondsPerDay) / 365
   if (yearDiff < 5) {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  res.send('Hello World')
+  // Update hdb resale listing according to UUID
+  hdbResale.update({
+    address,
+    description,
+    resalePrice: 500000,
+    town,
+    flatType,
+    flatModel,
+    flatLevel,
+    floorSqm,
+    leaseCommenceDate,
+    resaleDate
+  }, {
+    where: { id: resalePublicID }
+  }).then(() => {
+    // Redirect to confirmation page
+    res.redirect('confirmPublicResaleListingPage/' + resalePublicID)
+  }).catch((err) => { console.log('Error in updating hdb resale listing: ', err) })
 })
 
 // Confirmation Page for HDB properties
@@ -386,12 +403,9 @@ router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublic
 // Basic Delete Function
 // Delete hdb resale listing
 router.get('/deletePublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+  // Get UUID from URL
   const resalePublicID = req.params.id
 
-  // hdbResale.findOne({
-  //   where: { id: hdbResaleId }
-  // }).then((result) => {
-  // })
   hdbResale.destroy({
     where: { id: resalePublicID }
   }).then((result) => {
