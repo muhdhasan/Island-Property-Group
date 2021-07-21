@@ -325,13 +325,13 @@ router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
     flatModel,
     flatLevel,
     floorSqm,
-    leaseCommenceDate,
+    leaseCommenceDate: leaseStartDate,
     resaleDate
   }, {
     where: { id: resalePublicID }
   }).then(() => {
     // Redirect to confirmation page
-    res.redirect('confirmPublicResaleListingPage/' + resalePublicID)
+    res.redirect('/property/confirmPublicResaleListingPage/' + resalePublicID)
   }).catch((err) => { console.log('Error in updating hdb resale listing: ', err) })
 })
 

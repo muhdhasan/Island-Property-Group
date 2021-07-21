@@ -43,11 +43,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Method override middleware to use other HTTP methods such as PUT and DELETE
 app.use(methodOverride('_method'))
 
-// Routes
-app.use('/', mainRoute)
-app.use('/user', userRoute)
-app.use('/property', propertyRoute)
-
 // Library to use MySQL to store session objects
 const MySQLStore = require('express-mysql-session')
 const db = require('./config/db.js')
@@ -79,18 +74,18 @@ authenticate.localStrategy(passport)
 app.use(session({
   key: 'vidjot_session',
   secret: 'tojiv',
-  store: new MySQLStore({
-    host: db.host,
-    port: db.port,
-    user: db.username,
-    password: db.password,
-    database: db.database,
-    clearExpired: true,
-    // How frequently expired sessions will be cleared; milliseconds:
-    checkExpirationInterval: 90000,
-    // The maximum age of a valid session; milliseconds:
-    expiration: 90000
-  }),
+  // store: new MySQLStore({
+  //   host: db.host,
+  //   port: db.port,
+  //   user: db.username,
+  //   password: db.password,
+  //   database: db.database,
+  //   clearExpired: true,
+  //   // How frequently expired sessions will be cleared; milliseconds:
+  //   checkExpirationInterval: 90000,
+  //   // The maximum age of a valid session; milliseconds:
+  //   expiration: 90000
+  // }),
   resave: false,
   saveUninitialized: false
 }))
@@ -98,6 +93,11 @@ app.use(session({
 // Initilize Passport middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
+// Routes
+app.use('/', mainRoute)
+app.use('/user', userRoute)
+app.use('/property', propertyRoute)
 
 // Error Codes
 app.use((req, res) => {
