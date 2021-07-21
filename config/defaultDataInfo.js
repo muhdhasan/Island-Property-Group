@@ -141,7 +141,7 @@ check = async () => {
   const score = await DefaultUsersObjects() + await DefaultHDBPropertiesObjects()
 
   if (score !== 0) {
-    throw Error("Initial users (Admin) is missing in the database.\nWe will be creating initial users right now.\nWe will also create inital listings for HDB and private properties.")
+    throw Error('Initial users (Admin) is missing in the database.\nWe will be creating initial users right now.\nWe will also create inital listings for HDB and private properties.')
   }
 }
 

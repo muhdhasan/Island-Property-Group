@@ -72,7 +72,7 @@ authenticate.localStrategy(passport)
 
 // Express session middleware - uses MySQL to store session
 app.use(session({
-  key: 'vidjot_session',
+  key: 'iPG_session',
   secret: 'tojiv',
   // store: new MySQLStore({
   //   host: db.host,

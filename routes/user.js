@@ -8,6 +8,7 @@ const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const user = require('../models/User')
 const secret = process.env.secret
+const ensureUserAuthenticated = require('../helpers/auth')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.googlemail.com',
@@ -117,7 +118,7 @@ router.post('/login', (req, res, next) => {
   if (emailRegex.test(email) === false || password.length < 8) return// console.log('It failed')
 
   passport.authenticate('local', {
-    successRedirect: '/user/', // Route to /video/listVideos URL
+    successRedirect: '/user/userProfile', // Route to /video/listVideos URL
     failureRedirect: '/login'
   })(req, res, next)
 })
@@ -139,9 +140,16 @@ router.get('/register', (req, res) => {
   })
 })
 
-router.get('/userProfile', (req, res) => {
+router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const title = 'User Profile'
-  res.render('user/userProfile', { title })
+
+  // Retrieve user info
+  const userInfo = req.user
+  const userName = userInfo.name
+  const userEmail = userInfo.email
+  const userPhoneNo = userInfo.phoneNo
+
+  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo })
 })
 
 // Logout Route
