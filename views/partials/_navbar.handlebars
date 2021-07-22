@@ -163,12 +163,15 @@
         <li class="nav-item">
           <a class="nav-link {{activeNavContact}}" href="/contact">Contact</a>
         </li>
+        {{#if user}}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {{else}}
         <li class="nav-item">
           <a class="nav-link" href="/user/login">Login</a>
         </li>
-        <li class="nav-item" style="display: none;">
-          <a class="nav-link" href="/logout">Logout</a>
-        </li>
+        {{/if}}
       </ul>
     </div>
 
