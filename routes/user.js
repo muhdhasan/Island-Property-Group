@@ -33,7 +33,6 @@ async function getbotmsg (usermsg) {
       headers: { 'Content-Type': 'application/json' }
     })
       .then((res) => {
-        console.log(res)
         res.json()
       })
       .then((json) => {
@@ -228,9 +227,9 @@ router.post('/chat', (req, res) => {
     const botorder = order + 1
 
     const botmsg = getbotmsg(message)
-    botmsg.then((response) => {
+    botmsg.then((result) => {
       console.log('Hello2')
-      console.log(response)
+      console.log(result)
       // Create user message
       // Chat.create(msgid, message, order, userid, listingid, false)
       // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)

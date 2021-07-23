@@ -269,7 +269,7 @@ def chatbot():
     # Get value from 'userInput' key
     userResponse = text["userInput"]
     result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
-    return str(result)
+    return jsonify({"result":result})
     
 # Start at localhost:8000
 if __name__ == '__main__':
