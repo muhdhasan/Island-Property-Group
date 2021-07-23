@@ -268,7 +268,7 @@ def chatbot():
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
-    return sentence_labels[infer_intent(userResponse, isCudaAvailable)]
+    return str(sentence_labels[infer_intent(userResponse, isCudaAvailable)])
     
 # Start at localhost:8000
 if __name__ == '__main__':

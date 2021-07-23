@@ -6,7 +6,11 @@ const bcrypt = require('bcrypt')
 const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const Chat = require('../models/Chat')
 const { session } = require('passport')
+const { response } = require('express')
+const fetch = require("node-fetch");
+
 const secret = process.env.secret
 
 const transporter = nodemailer.createTransport({
@@ -18,6 +22,27 @@ const transporter = nodemailer.createTransport({
     pass: 'Passw0rdyes' // generated ethereal password
   }
 })
+
+function getbotmsg(usermsg){
+  const body ={
+    userInput : "Hello"
+  }
+  return new Promise((result, err) => {
+    fetch('http://localhost:8000/api/chatbot', {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(res => res.json())
+      .then((json) => {
+        console.log(json)
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
 
 router.get('/register', (req, res) => {
   const title = 'Register'
@@ -157,29 +182,59 @@ router.get('/userProfile', (req, res) => {
   res.render('user/userProfile', { title })
 })
 
-router.get('/chat/:listing',(req, res) => {
-  var user = User.userid;
-  var listing = req.params.listing
-  chat = Chat.findAll({where: {userid: user ,listingid: listing},order:['chatorder','ASC']})
-  if (!chat){
-    //Chat.create()
-    console.log("new chat ")
-  }
-  else{
-    for (messages in chat){
-      chatmessage = messages.message
-      if (!messages.isBot){
-        //create user chat message
-      }else{
-        //create bot chat message
-      }
-
-    }
-    
-  }
-  res.render('user/chatbot')
+router.get('/chat',(req, res) => {
+  //var user = User.userid;
+  var user = '00000000-0000-0000-0000-000000000001'
+  //var listingid = req.params.listing
+  var listing = '00000000-0000-0000-0000-000000000001'
+  Chat.findAll({
+    where: {
+      userid: user ,
+      listingid: listing
+    },
+    order:[
+      ['chatorder','ASC']
+    ]
+  }).then((messages)=>{
+    res.render('user/chatbot',{messages:messages})
+  })
+  .catch(err => console.log(err))
 })
 
+router.post('/chat', (req, res) => {
+  message = req.body.userinput
+  //var userid = User.userid
+  var user = '00000000-0000-0000-0000-000000000001'
+  //var listingid = req.params.listing
+  var listing = '00000000-0000-0000-0000-000000000001'
+  Chat.findOne({
+    where:{
+      userid: user,
+      listingid: listing
+    },
+    order:[
+      ['chatorder','DESC']
+    ]
+  }).then((msg)=>{
+    var msgid = uuidv1()
+    var order= 0
+    if (!msg){
+      order = 1
+    }else{
+       order = msg.chatorder + 1
+    }
+    botorder = order + 1
+    var botmsg = getbotmsg(message)
+    botmsg.then((response) =>{
+      //Create user message
+      Chat.create(msgid,message,order,userid,listingid,false)
+      //Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
+      var botmsgid = uuidv1()
+      Chat.create(botmsgid,response,botorder,userid,listingid,true)
+    })
+  }).catch(err=> console.log(err))
+  res.redirect('back')
+})
 
 // Logout Route
 // Redirect user to home page
