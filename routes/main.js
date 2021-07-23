@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch')
+const baseAPIUrl = 'http://localhost:8000/api/'
+
 
 router.get('/', (req, res) => {
   const title = 'Home'
@@ -20,19 +22,39 @@ router.get('/contact', (req, res) => {
   res.render('contact', { title, success_msg: 'Testing', activeNavContact })
 })
 
+// Call predict resale API
+async function test (msg) {
+  // router.get('/getResalePrediction', (req, res) => {
+  const body = {
+    userInput: 'hello',
+  }
+  return new Promise((result, err) => {
+    fetch(baseAPIUrl + 'chatbot', {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(res => res.json())
+      .then((json) => {
+        // console.log(json)
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  // })
+  })
+}
+
+
 // Test api call here
 router.get('/testRoute', (req, res) => {
-  const body = {
-    a: 10,
-    b: 5
-  }
-  fetch('http://localhost:8000/api/test', {
-    method: 'post',
-    body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json' }
+  const predictedValue = test("hello")
+  predictedValue.then((result) => {
+    // var test = JSON.parse(result)
+    console.log(result["result"])
+    res.send('hello')
   })
-    .then((res) => res.json())
-    .then((json) => res.send(json))
 })
 
 module.exports = router
