@@ -160,7 +160,7 @@ def predictHouseResale():
 
         # Predict Model
         predictionResult = resalePublicModel.predict(df_ohe_new)
-
+        print(predictionResult)
         return str(predictionResult)
     elif input["type"] == "private":
         # Categorical columns List
@@ -268,7 +268,8 @@ def chatbot():
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
-    return str(sentence_labels[infer_intent(userResponse, isCudaAvailable)])
+    result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
+    return str(result)
     
 # Start at localhost:8000
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ const ensureUserAuthenticated = (req, res, next) => {
     return next()
   }
   // If not authenticated, show alert message and redirect to ‘/’
-  //alertMessage(res, 'danger', 'Access Denied', 'fas fa-exclamation-circle', true)
+  // alertMessage(res, 'danger', 'Access Denied', 'fas fa-exclamation-circle', true)
   res.redirect('/')
 }
 

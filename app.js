@@ -85,12 +85,12 @@ const realEstateDB = require('./config/DBConnection')
 const restartDB = false
 realEstateDB.setUpDB(restartDB)
 
-//passport
+// passport
 const passport = require('passport')
 const authenticate = require('./config/passport')
 authenticate.localStrategy(passport)
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Routes
 app.use('/', mainRoute)

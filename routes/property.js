@@ -36,7 +36,8 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then(res => res.json())
+      .then(res => { console.log(res)
+        res.json()})
       .then((json) => {
         console.log(json)
         result(json)
@@ -115,18 +116,18 @@ router.post('/createPublicResaleListing', (req, res) => {
   const dateOfSale = new Date(req.body.dateOfSale)
 
   // Input Validation
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
-  if (filterSpecialRegex.test(address) === false) {
-    return console.log('Address contains special characters')
-  }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
+  // if (filterSpecialRegex.test(address) === false) {
+  //   return console.log('Address contains special characters')
+  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
@@ -179,35 +180,35 @@ router.get('/viewPublicResaleListing/:id', (req, res) => {
   if (uuidRegex.test(resalePublicID) === false) {
     res.redirect('/')
   } else {
-  hdbResale
-    .findOne({
-      where: {
-        id: resalePublicID,
-        isViewable: true
-      }
-    })
-    // Will display more information regarding this property later
-    .then((hdbResaleDetail) => {
-      const resalePrice = Math.round(hdbResaleDetail.resalePrice)
-      const address = hdbResaleDetail.address
-      const town = hdbResaleDetail.town
-      const flatType = hdbResaleDetail.flatType
-      const floorSqm = hdbResaleDetail.floorSqm
-      const description = hdbResaleDetail.description
-      res.render('property/viewPublicResaleListing', {
-        address,
-        title,
-        secondaryTitle,
-        resalePrice,
-        town,
-        flatType,
-        floorSqm,
-        description
+    hdbResale
+      .findOne({
+        where: {
+          id: resalePublicID,
+          isViewable: true
+        }
       })
-    })
-    .catch((err) => {
-      console.log('Error', err)
-    })
+    // Will display more information regarding this property later
+      .then((hdbResaleDetail) => {
+        const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+        const address = hdbResaleDetail.address
+        const town = hdbResaleDetail.town
+        const flatType = hdbResaleDetail.flatType
+        const floorSqm = hdbResaleDetail.floorSqm
+        const description = hdbResaleDetail.description
+        res.render('property/viewPublicResaleListing', {
+          address,
+          title,
+          secondaryTitle,
+          resalePrice,
+          town,
+          flatType,
+          floorSqm,
+          description
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
   }
 })
 
