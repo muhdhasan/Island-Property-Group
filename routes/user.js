@@ -9,6 +9,7 @@ const User = require('../models/User')
 const Chat = require('../models/Chat')
 const { session } = require('passport')
 const fetch = require('node-fetch')
+const baseAPIUrl = 'http://localhost:8000/api/'
 
 const secret = process.env.secret
 
@@ -24,7 +25,7 @@ const transporter = nodemailer.createTransport({
 
 async function getbotmsg (usermsg) {
   const body = {
-    userInput: "Hello"
+    userInput: usermsg
   }
   return new Promise((result, err) => {
     fetch('http://localhost:8000/api/chatbot', {
@@ -32,9 +33,8 @@ async function getbotmsg (usermsg) {
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then((res) => {
-        res.json()
-      })
+      .then(res => res.json()
+      )
       .then((json) => {
         result(json)
       })
@@ -205,39 +205,40 @@ router.get('/chat', (req, res) => {
 router.post('/chat', (req, res) => {
   message = req.body.userinput
   // var userid = User.userid
-  const user = '00000000-0000-0000-0000-000000000001'
+  const userid = '00000000-0000-0000-0000-000000000001'
   // var listingid = req.params.listing
-  const listing = '00000000-0000-0000-0000-000000000001'
-  Chat.findOne({
-    where: {
-      userid: user,
-      listingid: listing
-    },
-    order: [
-      ['chatorder', 'DESC']
-    ]
-  }).then((msg) => {
-    const msgid = uuid.v1()
-    let order = 0
-    if (!msg) {
-      order = 1
-    } else {
-      order = msg.chatorder + 1
-    }
-    const botorder = order + 1
+  const listingid = '00000000-0000-0000-0000-000000000001'
+  // Chat.findOne({
+  //   where: {
+  //     userid: userid,
+  //     listingid: listingid
+  //   },
+  //   order: [
+  //     ['chatorder', 'DESC']
+  //   ]
+  // }).then((msg) => {
+  //   const msgid = uuid.v1()
+  //   let order = 0
+  //   if (!msg) {
+  //     order = 1
+  //   } else {
+  //     order = msg.chatorder + 1
+  //   }
+  //   const botorder = order + 1
 
-    const botmsg = getbotmsg(message)
-    botmsg.then((result) => {
-      console.log('Hello2')
-      console.log(result)
-      // Create user message
-      // Chat.create(msgid, message, order, userid, listingid, false)
-      // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
-      // const botmsgid = uuid.v1()
-      // Chat.create(botmsgid, response, botorder, userid, listingid, true)
-    })
-  }).catch(err => console.log(err))
-  res.redirect('/user/chat')
+  const botmsg = getbotmsg('hello')
+  botmsg.then((result) => {
+    console.log('Hello2')
+    console.log(result["result"])
+    // Create user message
+    // Chat.create(msgid, message, order, userid, listingid, false)
+    // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
+    // const botmsgid = uuid.v1()
+    // Chat.create(botmsgid, result, botorder, userid, listingid, true)
+    res.send(result["result"])
+  })
+  // }).catch(err => console.log(err))
+  // res.redirect('/user/chat')
 })
 
 // Logout Route
