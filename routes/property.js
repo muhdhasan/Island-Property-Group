@@ -157,8 +157,8 @@ router.post('/createPublicResaleListing', (req, res) => {
         resaleDate: dateOfSale,
         isViewable: false
       })
-      .then((result) => {
-        console.log('Testing')
+      .then(() => {
+        console.log('Created HDB Resale Listing')
         // Redirect to confirming property page
         res.redirect('confirmPublicResaleListingPage/' + hdbResaleId)
       })
@@ -455,12 +455,16 @@ router.post('/createPrivateResaleListing', (req, res) => {
     description: description,
     resalePrice: 2000000,
     houseType: houseType,
+    typeOfArea: typeOfArea,
+    marketSegment: marketSegment,
     postalDistrict: postalDistrict,
     floorSqm: floorSqm,
+    floorLevel: floorLevel,
     leaseCommenceDate: leaseStartDate,
     resaleDate: dateOfSale,
     isViewable: false
-  }).then((result) => {
+  }).then(() => {
+    console.log("Created private resale listing")
     res.send('Created private resale listing')
   }).catch((err) => { console.log('Error: ', err) })
 })
@@ -482,8 +486,11 @@ router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
     const description = result.description
     const resalePrice = result.resalePrice
     const houseType = result.houseType
+    const typeOfArea = result.typeOfArea
+    const marketSegment = result.marketSegment
     const postalDistrict = result.postalDistrict
     const floorSqm = result.floorSqm
+    const floorLevel = result.floorLevel
     const leaseCommenceDate = result.leaseCommenceDate
     const resaleDate = result.resaleDate
     res.render('resale/editPrivateResale', {
@@ -492,8 +499,11 @@ router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
       address,
       resalePrice,
       houseType,
+      typeOfArea,
+      marketSegment,
       postalDistrict,
       floorSqm,
+      floorLevel,
       leaseCommenceDate,
       resaleDate
     })
