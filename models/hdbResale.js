@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize')
 const db = require('../config/DBConfig')
-const sequelize = require('../config/DBConfig')
 
 const HDBResale = db.define('hdb_resale', {
   id: { type: Sequelize.STRING, primaryKey: true },

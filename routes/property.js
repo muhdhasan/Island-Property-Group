@@ -605,12 +605,13 @@ router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivate
     floorSqm,
     floorLevel,
     leaseCommenceDate: leaseStartDate,
-    resaleDate: dateOfSale,
+    resaleDate: dateOfSale
   }, {
-    where : {id: resalePrivateID}
+    where: { id: resalePrivateID }
   }).then(() => {
     console.log('Successfully edited private resale listing')
-    res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)  })
+    res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+  })
 })
 
 // Basic Delete Function
@@ -623,23 +624,6 @@ router.get('/deletePrivateResaleListing/:id', checkUUIDFormat, checkResalePrivat
     console.log(result)
     res.send('Deleted Private Resale Listing')
   }).catch((err) => { console.log('Error: ', err) })
-})
-
-// Test api call here
-router.get('/testRoute', (req, res) => {
-  const body = {
-    a: 10,
-    b: 5
-  }
-  fetch('http://localhost:8000/api/test', {
-    method: 'post',
-    body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json' }
-  })
-    .then(res => res.json())
-    .then(json =>
-      res.send(json))
-    .catch((err) => { console.log('Error: ', err) })
 })
 
 module.exports = router
