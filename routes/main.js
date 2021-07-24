@@ -3,7 +3,6 @@ const router = express.Router()
 const fetch = require('node-fetch')
 const baseAPIUrl = 'http://localhost:8000/api/'
 
-
 router.get('/', (req, res) => {
   const title = 'Home'
   const activeNavOne = 'active'
@@ -26,7 +25,7 @@ router.get('/contact', (req, res) => {
 async function test (msg) {
   // router.get('/getResalePrediction', (req, res) => {
   const body = {
-    userInput: 'hello',
+    userInput: 'hello'
   }
   return new Promise((result, err) => {
     fetch(baseAPIUrl + 'chatbot', {
@@ -46,13 +45,12 @@ async function test (msg) {
   })
 }
 
-
 // Test api call here
 router.get('/testRoute', (req, res) => {
-  const predictedValue = test("hello")
+  const predictedValue = test('hello')
   predictedValue.then((result) => {
     // var test = JSON.parse(result)
-    console.log(result["result"])
+    console.log(result.result)
     res.send('hello')
   })
 })

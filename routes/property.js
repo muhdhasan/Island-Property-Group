@@ -331,18 +331,18 @@ router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
     where: { id: resalePublicID }
   }).then(() => {
     // Redirect to confirmation page
-    res.redirect('/property/confirmPublicResaleListingPage/' + resalePublicID)
+    res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
   }).catch((err) => { console.log('Error in updating hdb resale listing: ', err) })
 })
 
 // Confirmation Page for HDB properties
-router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Confirm Resale Listing - Public'
 
   // Probably need to modify this secondary title
   const secondaryTitle = '304 Blaster Up'
 
-  // Get id from URL
+  // Get UUID from URL
   const resalePublicID = req.params.id
 
   // Find based on uuid V4
@@ -384,6 +384,7 @@ router.get('/confirmPublicResaleListingPage/:id', checkUUIDFormat, checkResalePu
 
 // Confirmation Page for hdb properties
 router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+  // Get UUID from URL
   const resalePublicID = req.params.id
   console.log(req.params.id)
 
@@ -464,9 +465,53 @@ router.post('/createPrivateResaleListing', (req, res) => {
     resaleDate: dateOfSale,
     isViewable: false
   }).then(() => {
-    console.log("Created private resale listing")
-    res.send('Created private resale listing')
+    console.log('Created private resale listing')
+    res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
   }).catch((err) => { console.log('Error: ', err) })
+})
+
+router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  const title = 'Confirm Resale Listing - Private'
+
+  // Probably need to modify this secondary title
+  const secondaryTitle = '304 Blaster Up'
+
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+
+  privateResale.findOne({
+    where: { id: privateResaleId }
+  }).then((result) => {
+    // Display result from database
+    const id = result.id
+    const address = result.address
+    const description = result.description
+    const resalePrice = result.resalePrice
+    const houseType = result.houseType
+    const typeOfArea = result.typeOfArea
+    const marketSegment = result.marketSegment
+    const postalDistrict = result.postalDistrict
+    const floorSqm = result.floorSqm
+    const floorLevel = result.floorLevel
+    const leaseCommenceDate = result.leaseCommenceDate
+    const resaleDate = result.resaleDate
+    res.render('resale/confirmPrivateListing', {
+      id,
+      title,
+      secondaryTitle,
+      address,
+      resalePrice,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      postalDistrict,
+      floorSqm,
+      floorLevel,
+      description,
+      leaseCommenceDate,
+      resaleDate
+    })
+  }).catch((err) => console.log('Error: ', err))
 })
 
 // Edit Function for private resale listings
@@ -475,7 +520,6 @@ router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
 
   // Get UUID from URL
   const privateResaleId = req.params.id
-  console.log(privateResaleId)
 
   privateResale.findOne({
     where: { id: privateResaleId }
@@ -508,6 +552,24 @@ router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
       resaleDate
     })
   }).catch((err) => console.log('Error: ', err))
+})
+
+// Confirmation Page for private properties
+router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+
+  privateResale.update({
+    // Make this property visible to users from agent
+    isViewable: true
+  }, {
+    where: {
+      id: privateResaleId
+    }
+  })
+    .then(() => {
+      res.send('Private Resale Listing Viewable')
+    }).catch((err) => { console.log('Error: ', err) })
 })
 
 router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
