@@ -1,19 +1,23 @@
 const LocalStrategy = require('passport-local').Strategy
 
+// Encrypt password
 const bcrypt = require('bcryptjs')
 
+// Model
 const User = require('../models/User')
 
 function localStrategy (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
       User.findOne({ where: { email: email } }).then((user) => {
+        // If user is not found
         if (!user) {
           return done(null, false, { message: 'Invalid Email' })
         }
         // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) throw err
+          // If password match
           if (isMatch) {
             return done(null, user)
           } else {

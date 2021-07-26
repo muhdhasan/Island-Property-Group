@@ -27,7 +27,8 @@ router.get('/register', (req, res) => {
 
 router.get('/login', (req, res) => {
   const title = 'Login'
-  res.render('user/login', { title })
+  const activeNavLogin = 'active'
+  res.render('user/login', { title, activeNavLogin })
 })
 
 router.post('/register', (req, res) => {
@@ -106,21 +107,27 @@ router.post('/register', (req, res) => {
 // Logs in user
 router.post('/login', (req, res, next) => {
   // Inputs
-  console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
   console.log(email)
   const password = req.body.password
+
+  // let errors = []
 
   // Email Regex
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   // Input Validation
-  if (emailRegex.test(email) === false || password.length < 8) return// console.log('It failed')
-
-  passport.authenticate('local', {
-    successRedirect: '/user/userProfile', // Route to /video/listVideos URL
-    failureRedirect: '/login'
-  })(req, res, next)
+  if (emailRegex.test(email) === false || password.length < 8) {
+    // Flash the following message below to user
+    req.flash('error', 'Please enter valid credentials')
+    res.redirect('/user/login')
+  } else {
+    passport.authenticate('local', {
+      successRedirect: '/user/userProfile',
+      failureRedirect: '/user/login',
+      failureFlash: true
+    })(req, res, next)
+  }
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -140,6 +147,7 @@ router.get('/register', (req, res) => {
   })
 })
 
+// Display User Profile Page
 router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const title = 'User Profile'
 
