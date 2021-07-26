@@ -10,4 +10,12 @@ const ensureUserAuthenticated = (req, res, next) => {
   }
 }
 
-module.exports = ensureUserAuthenticated
+const checkNotAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return res.redirect('/')
+  } else {
+    next()
+  }
+}
+
+module.exports = { ensureUserAuthenticated, checkNotAuthenticated }

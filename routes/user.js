@@ -8,7 +8,7 @@ const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const user = require('../models/User')
 const secret = process.env.secret
-const ensureUserAuthenticated = require('../helpers/auth')
+const { ensureUserAuthenticated } = require('../helpers/auth')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.googlemail.com',

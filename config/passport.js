@@ -9,7 +9,7 @@ function localStrategy (passport) {
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
       User.findOne({ where: { email: email } }).then((user) => {
         if (!user) {
-          return done(null, false)
+          return done(null, false, { message: 'Invalid Email' })
         }
         // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -17,7 +17,7 @@ function localStrategy (passport) {
           if (isMatch) {
             return done(null, user)
           } else {
-            return done(null, false)
+            return done(null, false, { message: 'Incorrect Passwoord' })
           }
         })
       })
@@ -33,9 +33,11 @@ function localStrategy (passport) {
   passport.deserializeUser((userId, done) => {
     User.findByPk(userId)
       .then((user) => {
+        console.log(user)
         done(null, user) // user object saved in req.session
       })
       .catch((done) => {
+        console.log(done)
         // No user found, not stored in req.session
         console.log(done)
       })

@@ -10,9 +10,13 @@ const uuid = require('uuid')
 const moment = require('moment')
 const fetch = require('node-fetch')
 
+// Base URL String
 const baseAPIUrl = 'http://localhost:8000/api/'
+
+// Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
+const { ensureUserAuthenticated } = require('../helpers/auth')
 
 // Call predict resale API
 async function predictPublicResale (dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartDate) {
@@ -84,13 +88,13 @@ router.get('/propertylist', (req, res) => {
 })
 
 // Show create HDB Resale Page
-router.get('/createPublicResaleListing', (req, res) => {
+router.get('/createPublicResaleListing', ensureUserAuthenticated, (req, res) => {
   const title = 'Create HDB Resale Listing'
   res.render('resale/createPublicResale', { title })
 })
 
 // Fixed data for testing
-router.post('/createPublicResaleListing', (req, res) => {
+router.post('/createPublicResaleListing', ensureUserAuthenticated, (req, res) => {
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const hdbResaleId = uuid.v4()
