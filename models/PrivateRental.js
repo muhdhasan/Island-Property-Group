@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize')
 const db = require('../config/DBConfig')
-const sequelize = require('../config/DBConfig')
 
 const PrivateRental = db.define('privateRental', {
   id: { type: Sequelize.STRING, primaryKey: true },

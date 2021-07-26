@@ -1,6 +1,7 @@
 from flask import Flask, json
 from flask import request
 from flask import jsonify
+from flask.logging import create_logger
 from sklearn.preprocessing import OneHotEncoder
 from flask_cors import CORS
 
@@ -16,6 +17,7 @@ from transformers.utils.dummy_pt_objects import default_data_collator
 
 # Start Flask Server
 app = Flask(__name__)
+log = create_logger(app)
 
 # Expose api in the 'api' route and allow connection to localhost 8080
 CORS(app, resources=r'/api/*', origin=["https://localhost:8080/", "https://localhost:5000/"])
@@ -31,7 +33,7 @@ isCudaAvailable = torch.cuda.is_available()
 tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
 def infer_intent(text, isCudaAvailable):
     if isCudaAvailable == True:
-        intent_model = torch.load("./training/intentclassification.model")
+        intent_model = torch.load("./flask/intentclassification.model")
         input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
         output = intent_model(**input, return_dict=True)
         output = output.logits[0].to("cpu").detach().numpy()
@@ -41,8 +43,8 @@ def infer_intent(text, isCudaAvailable):
         torch.cuda.empty_cache()
         return label_index
     else:
-        intent_model = torch.load("./training/intentclassification.model",map_location ='cpu')
-        input = tokenizer(text, truncation=True, padding=True, return_tensors="pt")#.to("cuda")
+        intent_model = torch.load("./flask/intentclassification.model",map_location ='cpu')
+        input = tokenizer(text, truncation=True, padding=True, return_tensors="pt")
         output = intent_model(**input, return_dict=True)
         output = output.logits[0].to("cpu").detach().numpy()
         label_index = np.argmax(output)
@@ -83,8 +85,8 @@ def convertToDays(df):
 @app.errorhandler(500)
 def handle_exception(err):
     """Return JSON instead of HTML for any other server error"""
-    app.logger.exception(f"Unknown Exception: {str(err)}")
-    app.logger.debug(''.join(traceback.format_exception(etype=type(err), value=err, tb=err.__traceback__)))
+    log.exception(f"Unknown Exception: {str(err)}")
+    log.debug(''.join(traceback.format_exception(etype=type(err), value=err, tb=err.__traceback__)))
     response = {"Status Code": "500",
                 "Reason": "It seems there is an error on our servers. Contact our support if this error persists."}
     return jsonify(response), 500
@@ -92,8 +94,8 @@ def handle_exception(err):
 # Handle unknown URLs
 @app.errorhandler(404)
 def page_not_found(err):
-    app.logger.exception(f"Unknown URL: {str(err)}")
-    app.logger.debug(''.join(traceback.format_exception(etype=type(err), value=err, tb=err.__traceback__)))
+    log.exception(f"Unknown URL: {str(err)}")
+    log.debug(''.join(traceback.format_exception(etype=type(err), value=err, tb=err.__traceback__)))
     response = {"Status Code": "404",
                 "Reason": "This page doesn't exist. Try another URL to see if it works."}
     return jsonify(response), 404
@@ -126,7 +128,7 @@ def predictHouseResale():
         categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
 
         # Load encoder
-        with open('training/publicResaleEncoder.pickle', 'rb') as f:
+        with open('flask/publicResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
 
         # Read JSON response
@@ -156,7 +158,7 @@ def predictHouseResale():
         df_ohe_new = df_ohe_new.values
 
         # Load model
-        resalePublicModel = pickle.load(open('training/xgb_public_resale.pickle', 'rb'))
+        resalePublicModel = pickle.load(open('flask/xgb_public_resale.pickle', 'rb'))
 
         # Predict Model
         predictionResult = resalePublicModel.predict(df_ohe_new)
@@ -167,7 +169,7 @@ def predictHouseResale():
         categorical_cols = ['Type', 'Postal District', 'Market Segment', 'Type of Area', 'Floor Level']
 
         # Load encoder
-        with open('training/privateResaleEncoder.pickle', 'rb') as f:
+        with open('privateResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
         
         # Read JSON response
@@ -202,7 +204,7 @@ def predictHouseResale():
         df_ohe_new = df_ohe_new.values
 
         # Load Model
-        resalePrivateModel = pickle.load(open('training/xgb_private_resale.pickle', 'rb'))
+        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
 
         # Predict Model
         predictionResult = resalePrivateModel.predict(df_ohe_new)
@@ -222,7 +224,7 @@ def predictHouseRent():
     categorical_cols = ['Postal_District','Type']
 
     # Load encoder
-    with open('training/RentalEncoder.pickle', 'rb') as f:
+    with open('flask/RentalEncoder.pickle', 'rb') as f:
         ohe = pickle.load(f)
 
     # Read JSON response
@@ -246,7 +248,7 @@ def predictHouseRent():
     df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
     print(df_ohe_new.info())
 
-    RentalModel = pickle.load(open('training/rental.pickle', 'rb'))
+    RentalModel = pickle.load(open('flask/rental.pickle', 'rb'))
     
     predictionResult = RentalModel.predict(df_ohe_new)
 
@@ -268,7 +270,8 @@ def chatbot():
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
-    return sentence_labels[infer_intent(userResponse, isCudaAvailable)]
+    result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
+    return jsonify({"result": result})
     
 # Start at localhost:8000
 if __name__ == '__main__':

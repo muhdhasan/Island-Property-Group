@@ -19,7 +19,7 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="#">HDB Resale Listings</a>
+                <a href="#">Private Resale Listings</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
                 {{secondaryTitle}}
@@ -39,10 +39,20 @@
           <div id="property-single-carousel" class="swiper-container">
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat1.jpg" alt="" height="800px" width="800px"/>
+                <img
+                  src="/img/hdbFlat1.jpg"
+                  alt=""
+                  height="800px"
+                  width="800px"
+                />
               </div>
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat2.jpg" alt="" height="800px" width="800px"/>
+                <img
+                  src="/img/hdbFlat2.jpg"
+                  alt=""
+                  height="800px"
+                  width="800px"
+                />
               </div>
             </div>
           </div>
@@ -51,10 +61,8 @@
           ></div>
         </div>
       </div>
-
       <div class="row mt-5">
         <div class="col-sm-12">
-
           <div class="row justify-content-between">
             <div class="col-md-5 col-lg-4">
               <div class="property-price d-flex justify-content-center foo">
@@ -63,7 +71,7 @@
                     <span class="bi bi-cash">$</span>
                   </div>
                   <div class="card-title-c align-self-center">
-                    <h5 class="title-c">{{resalePrice}}</h5>
+                    <h5 class="title-c">{{roundOffToThousand resalePrice}}k</h5>
                   </div>
                 </div>
               </div>
@@ -86,12 +94,20 @@
                       <span>{{address}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Town:</strong>
-                      <span>{{town}}</span>
+                      <strong>House Type:</strong>
+                      <span>{{houseType}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Flat Type:</strong>
-                      <span>{{flatType}}</span>
+                      <strong>Area Type:</strong>
+                      <span>{{typeOfArea}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Market Segment:</strong>
+                      <span>{{marketSegment}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Postal District:</strong>
+                      <span>{{postalDistrict}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Status:</strong>
@@ -103,6 +119,20 @@
                         <sup>2</sup>
                       </span>
                     </li>
+                    {{#if leaseCommenceDate}}
+                      <li class="d-flex justify-content-between">
+                        <strong>Lease Commence Date:</strong>
+                        <span>{{formatDate
+                            leaseCommenceDate
+                            "DD/MM/YYYY"
+                          }}</span>
+                      </li>
+                    {{else}}
+                      <li class="d-flex justify-content-between">
+                        <strong>Lease Commence Date:</strong>
+                        <span>-</span>
+                      </li>
+                    {{/if}}
                   </ul>
                 </div>
               </div>
@@ -293,7 +323,7 @@
               </div>
             </div>
             <div class="col-md-12 col-lg-4">
-              <div class="property-contact">
+              {{! <div class="property-contact">
                 <form class="form-a">
                   <div class="row">
                     <div class="col-md-12 mb-1">
@@ -336,7 +366,7 @@
                     </div>
                   </div>
                 </form>
-              </div>
+              </div> }}
             </div>
           </div>
         </div>

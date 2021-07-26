@@ -17,11 +17,11 @@ module.exports = {
 
   // Basically converts 1000 to 1k so its more eligible for users
   roundOffToThousand: (inputPrice) => {
-    return Math.round(inputPrice) / 1000
+    return Math.round(inputPrice / 1000)
   },
 
   // Basically converts 1000000 to 1m so its more eligible for users
   roundOffToMillion: (inputPrice) => {
-    return Math.round(inputPrice) / 1000000
+    return Math.round(inputPrice / 1000000)
   }
 }

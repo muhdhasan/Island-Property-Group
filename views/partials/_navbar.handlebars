@@ -139,13 +139,9 @@
           <a class="nav-link {{activeNavTwo}}" href="/about">About</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/property/propertylist">Property</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="blog-grid.html">Blog</a>
-        </li>
+        {{!-- <li class="nav-item">
+          <a class="nav-link" href="/property/propertylist"></a>
+        </li> --}}
 
         <li class="nav-item dropdown">
           <a
@@ -158,22 +154,24 @@
             aria-expanded="false"
           >Pages</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/property/propertysingle">Property
-              Single</a>
-            <a class="dropdown-item" href="blog-single.html">Blog Single</a>
-            <a class="dropdown-item" href="agents-grid.html">Agents Grid</a>
-            <a class="dropdown-item" href="agent-single.html">Agent Single</a>
+            <a class="dropdown-item" href="/property/viewPublicResaleList">HDB Resale Properties
+              </a>
+            <a class="dropdown-item" href="#">Private Resale Properties</a>
+            <a class="dropdown-item" href="#">Private Rental Properties</a>
           </div>
         </li>
         <li class="nav-item">
           <a class="nav-link {{activeNavContact}}" href="/contact">Contact</a>
         </li>
+        {{#if user}}
         <li class="nav-item">
-          <a class="nav-link" href="/user/login">Login</a>
+          <a class="nav-link" href="/user/logout">Logout</a>
         </li>
-        <li class="nav-item" style="display: none;">
-          <a class="nav-link" href="/logout">Logout</a>
+        {{else}}
+        <li class="nav-item">
+          <a class="nav-link {{activeNavLogin}}" href="/user/login">Login</a>
         </li>
+        {{/if}}
       </ul>
     </div>
 

@@ -1,10 +1,13 @@
 const express = require('express')
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
 const https = require('https')
 const methodOverride = require('method-override')
-
+const passport = require('passport')
+const cookieParser = require('cookie-parser')
+const flash = require('express-flash')
 
 // Create Express Server
 const app = express()
@@ -41,21 +44,21 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Method override middleware to use other HTTP methods such as PUT and DELETE
 app.use(methodOverride('_method'))
 
-// Routes
-app.use('/', mainRoute)
-app.use('/user', userRoute)
-app.use('/property', propertyRoute)
-
 // Library to use MySQL to store session objects
-// const MySQLStore = require('express-mysql-session')
-// const db = require('./config/db.js')
+const MySQLStore = require('express-mysql-session')
+const db = require('./config/db.js')
+
+// Enables session to be stored using browser's Cookie ID
+app.use(cookieParser())
+
+// Removed unused libraries later
 
 // Messaging libraries
 // const flash = require('connect-flash')
 // const FlashMessenger = require('flash-messenger')
 
 // Two flash messenging libraries - Flash (connect-flash) and Flash Messenger
-// app.use(flash())
+app.use(flash())
 // app.use(FlashMessenger.middleware)
 
 // Bring in database connection
@@ -66,17 +69,62 @@ const realEstateDB = require('./config/DBConnection')
 const restartDB = false
 realEstateDB.setUpDB(restartDB)
 
+// Passport Config
+const authenticate = require('./config/passport')
+authenticate.localStrategy(passport)
+
+// Express session middleware - uses MySQL to store session
+app.use(session({
+  key: 'iPG_session',
+  secret: process.env.cookieSecret || 'toGic',
+  store: new MySQLStore({
+    host: db.host,
+    port: db.port,
+    user: db.username,
+    password: db.password,
+    database: db.database,
+    clearExpired: true,
+    // How frequently expired sessions will be cleared; milliseconds:
+    checkExpirationInterval: 90000,
+    // The maximum age of a valid session; milliseconds:
+    expiration: 90000
+  }),
+  resave: false,
+  saveUninitialized: false
+}))
+
+// Initilize Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
+// Global cookies
+app.use((req, res, next) => {
+  // Defaults to null if user is not logged in
+  res.locals.user = req.user || null
+  next()
+})
+
+// Routes
+app.use('/', mainRoute)
+app.use('/user', userRoute)
+app.use('/property', propertyRoute)
+
+// Catch all URL that is not valid and return 404 error
+app.get('*', (req, res) => {
+  res.render('errorCodes', {
+    errorCode: '404',
+    errorMessage: 'Are you on the right page?'
+  })
+})
+
 // Error Codes
-app.use((req, res) => {
+app.use((err, req, res, next) => {
+  // Log Error
+  console.log(err)
   if (res.status(400)) {
     res.render('errorCodes', {
       errorCode: '400',
       errorMessage: 'Its a bad request!'
-    })
-  } else if (res.status(404)) {
-    res.render('errorCodes', {
-      errorCode: '404',
-      errorMessage: 'Are you on the right page?'
     })
   } else if (res.status(500)) {
     res.render('errorCodes', {
@@ -105,19 +153,18 @@ const options = {
   cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
 }
 
-// This function shall not be disabled at all cost since this function automatically adds a admin user
+// This function shall not be disabled at all cost since this function automatically adds a required users
 // should we intend to reset the database whenever we want
 const checkDefaultData = require('./config/defaultDataInfo')
-const floorRangeSelector = require('./helpers/floorRangeSelector')
 checkDefaultData.check().catch((err) => {
   // log error
   console.log(err)
 })
 
-// Create HTTP Server
+// Create HTTPS Server
 https.createServer(
   options,
   app
 ).listen(port, () => {
-  console.log(`HTTPS Web Server started at ${port}`)
+  console.log(`HTTPS Web Server started at port ${port}`)
 })
