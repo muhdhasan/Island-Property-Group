@@ -409,9 +409,9 @@ router.get('/deletePublicResaleListing/:id', checkUUIDFormat, checkResalePublicL
 
   hdbResale.destroy({
     where: { id: resalePublicID }
-  }).then((result) => {
-    console.log(result)
-    res.render('resale/viewPublicResaleList')
+  }).then(() => {
+    // Redirect to preview resale list page for private properties
+    res.redirect('/property/viewPreviewPublicList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
@@ -684,9 +684,10 @@ router.get('/deletePrivateResaleListing/:id', checkUUIDFormat, checkResalePrivat
   const privateResaleId = req.params.id
   privateResale.destroy({
     where: { id: privateResaleId }
-  }).then((result) => {
-    console.log(result)
-    res.send('Deleted Private Resale Listing')
+  }).then(() => {
+    console.log("Deleted private property resale listing")
+    // Redirect to preview resale list page for private properties
+     res.redirect('/property/viewPreviewPrivateResaleList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
