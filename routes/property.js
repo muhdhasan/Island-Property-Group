@@ -397,7 +397,7 @@ router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublic
     }
   })
     .then(() => {
-      res.send('Public Resale Listing Viewable')
+      res.send('/property/confirmPublicResaleListing/' + resalePublicID)
     }).catch((err) => { console.log('Error: ', err) })
 })
 
@@ -468,7 +468,7 @@ router.post('/createPrivateResaleListing', (req, res) => {
 // View individual private Resale Page
 router.get('/viewPrivateResaleListing/:id', (req, res) => {
   const title = 'Private Resale Listing'
-  const secondaryTitle = "304 Blaster Up"
+  const secondaryTitle = '304 Blaster Up'
   // Get UUID from URL
   const privateResaleId = req.params.id
 
@@ -674,7 +674,7 @@ router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePubli
     }
   })
     .then(() => {
-      res.send('Private Resale Listing Viewable')
+      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
     }).catch((err) => { console.log('Error: ', err) })
 })
 
@@ -685,9 +685,9 @@ router.get('/deletePrivateResaleListing/:id', checkUUIDFormat, checkResalePrivat
   privateResale.destroy({
     where: { id: privateResaleId }
   }).then(() => {
-    console.log("Deleted private property resale listing")
+    console.log('Deleted private property resale listing')
     // Redirect to preview resale list page for private properties
-     res.redirect('/property/viewPreviewPrivateResaleList')
+    res.redirect('/property/viewPreviewPrivateResaleList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
