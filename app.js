@@ -7,6 +7,7 @@ const https = require('https')
 const methodOverride = require('method-override')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
+const flash = require('express-flash')
 
 // Create Express Server
 const app = express()
@@ -73,19 +74,19 @@ authenticate.localStrategy(passport)
 // Express session middleware - uses MySQL to store session
 app.use(session({
   key: 'iPG_session',
-  secret: 'tojiv',
-  // store: new MySQLStore({
-  //   host: db.host,
-  //   port: db.port,
-  //   user: db.username,
-  //   password: db.password,
-  //   database: db.database,
-  //   clearExpired: true,
-  //   // How frequently expired sessions will be cleared; milliseconds:
-  //   checkExpirationInterval: 90000,
-  //   // The maximum age of a valid session; milliseconds:
-  //   expiration: 90000
-  // }),
+  secret: 'tojiv',//process.env.cookieSecret
+  store: new MySQLStore({
+    host: db.host,
+    port: db.port,
+    user: db.username,
+    password: db.password, 
+    database: db.database,
+    clearExpired: true,
+    // How frequently expired sessions will be cleared; milliseconds:
+    checkExpirationInterval: 90000,
+    // The maximum age of a valid session; milliseconds:
+    expiration: 90000
+  }),
   resave: false,
   saveUninitialized: false
 }))
@@ -93,6 +94,12 @@ app.use(session({
 // Initilize Passport middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
+// Global cookies
+app.use(function (req, res, next) {
+	res.locals.user = req.user || null;
+	next();
+})
 
 // Routes
 app.use('/', mainRoute)
@@ -151,5 +158,5 @@ https.createServer(
   options,
   app
 ).listen(port, () => {
-  console.log(`HTTPS Web Server started at ${port}`)
+  console.log(`HTTPS Web Server started at port ${port}`)
 })

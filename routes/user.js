@@ -155,7 +155,7 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
 // Logout Route
 // Redirect user to home page
 router.get('/logout', (req, res) => {
-  req.logOut()
+  req.logout()
   res.redirect('/')
 })
 
