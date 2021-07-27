@@ -156,7 +156,7 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" href="/property/viewPublicResaleList">HDB Resale Properties
               </a>
-            <a class="dropdown-item" href="#">Private Resale Properties</a>
+            <a class="dropdown-item" href="/property/viewPrivateResaleList">Private Resale Properties</a>
             <a class="dropdown-item" href="#">Private Rental Properties</a>
           </div>
         </li>
@@ -164,6 +164,9 @@
           <a class="nav-link {{activeNavContact}}" href="/contact">Contact</a>
         </li>
         {{#if user}}
+        <li class="nav-item">
+          <a class="nav-link" href="/user/userProfile">Profile</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="/user/logout">Logout</a>
         </li>
