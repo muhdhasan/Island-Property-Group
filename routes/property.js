@@ -11,16 +11,16 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 
 // Base URL String
-const baseAPIUrl = 'http://localhost:8000/api/'
+const baseAPIUrl = 'http://localhost:8000/api/' // process.env.baseAPIUrl
 
 // Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
 const { ensureUserAuthenticated } = require('../helpers/auth')
 
-// Call predict resale API
-async function predictPublicResale (dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartDate) {
-  // router.get('/getResalePrediction', (req, res) => {
+// Call predict resale API for HDB properties
+async function predictPublicResale (dateOfSale, town, flatType,
+  floorRange, floorSqm, flatModel, leaseStartDate) {
   const body = {
     type: 'public',
     resale_date: dateOfSale,
@@ -45,17 +45,25 @@ async function predictPublicResale (dateOfSale, town, flatType, floorRange, floo
       .catch((err) => {
         console.log('Error:', err)
       })
-  // })
   })
 }
 
-// Predict resale value for private housing
-async function predictPrivateResale (dateOfSale, floorRange, floorSqm) {
+// Call predict resale API for private properties
+async function predictPrivateResale (houseType, postalDistrict,
+  marketSegement, typeOfArea, floorRange, dateOfSale, floorSqm,
+  isFreehold, leaseDuration, leaseCommenceDate) {
   const body = {
     type: 'private',
+    house_type: houseType,
+    postal_district: postalDistrict,
+    market_segment: marketSegement,
+    type_of_area: typeOfArea,
+    floor_level: floorRange,
     resale_date: dateOfSale,
-    storey_range: floorRange,
-    floor_area_sqm: floorSqm
+    floor_area_sqm: floorSqm,
+    is_freehold: isFreehold,
+    lease_duration: leaseDuration,
+    lease_commence_date: leaseCommenceDate
   }
   return new Promise((result, err) => {
     fetch(baseAPIUrl + 'predictResale', {
@@ -136,7 +144,7 @@ router.post('/createPublicResaleListing', ensureUserAuthenticated, (req, res) =>
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  // Call predicting api for public housing
+  // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
     console.log('Resale Value', response)
@@ -448,25 +456,29 @@ router.post('/createPrivateResaleListing', (req, res) => {
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
+  // Call predicting api for private resale housing
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
+  resaleValue.then((response) => {
   // Create private resale listing
-  privateResale.create({
-    id: privateResaleId,
-    address: address,
-    description: description,
-    resalePrice: 2000000,
-    houseType: houseType,
-    typeOfArea: typeOfArea,
-    marketSegment: marketSegment,
-    postalDistrict: postalDistrict,
-    floorSqm: floorSqm,
-    floorLevel: floorLevel,
-    leaseCommenceDate: leaseStartDate,
-    resaleDate: dateOfSale,
-    isViewable: false
-  }).then(() => {
-    console.log('Created private resale listing')
-    res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-  }).catch((err) => { console.log('Error: ', err) })
+    privateResale.create({
+      id: privateResaleId,
+      address: address,
+      description: description,
+      resalePrice: response,
+      houseType: houseType,
+      typeOfArea: typeOfArea,
+      marketSegment: marketSegment,
+      postalDistrict: postalDistrict,
+      floorSqm: floorSqm,
+      floorLevel: floorLevel,
+      leaseCommenceDate: leaseStartDate,
+      resaleDate: dateOfSale,
+      isViewable: false
+    }).then(() => {
+      console.log('Created private resale listing')
+      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
+    }).catch((err) => { console.log('Error: ', err) })
+  })
 })
 
 // View individual private Resale Page
