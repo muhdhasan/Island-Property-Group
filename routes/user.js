@@ -208,37 +208,38 @@ router.post('/chat', (req, res) => {
   const userid = '00000000-0000-0000-0000-000000000001'
   // var listingid = req.params.listing
   const listingid = '00000000-0000-0000-0000-000000000001'
-  // Chat.findOne({
-  //   where: {
-  //     userid: userid,
-  //     listingid: listingid
-  //   },
-  //   order: [
-  //     ['chatorder', 'DESC']
-  //   ]
-  // }).then((msg) => {
-  //   const msgid = uuid.v1()
-  //   let order = 0
-  //   if (!msg) {
-  //     order = 1
-  //   } else {
-  //     order = msg.chatorder + 1
-  //   }
-  //   const botorder = order + 1
+  Chat.findOne({
+     where: {
+       userid: userid,
+       listingid: listingid
+     },
+     order: [
+       ['chatorder', 'DESC']
+    ]
+  }).then((msg) => {
+    const msgid = uuid.v1()
+    let order = 0
+    if (!msg) {
+      order = 1
+    } else {
+      order = msg.chatorder + 1
+    }
+    const botorder = order + 1
 
-  const botmsg = getbotmsg('hello')
+  const botmsg = getbotmsg(message)
   botmsg.then((result) => {
     console.log('Hello2')
     console.log(result["result"])
-    // Create user message
-    // Chat.create(msgid, message, order, userid, listingid, false)
-    // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
-    // const botmsgid = uuid.v1()
-    // Chat.create(botmsgid, result, botorder, userid, listingid, true)
+    result = result.result
+    //Create user message
+    Chat.create({messageid:msgid,message: message,chatorder: order,userid: userid,listingid: listingid,isBot: false})
+    //Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
+    const botmsgid = uuid.v1()
+    Chat.create({messageid:botmsgid,message: result,chatorder: botorder,userid: userid,listingid: listingid,isBot: true})
     res.send(result["result"])
   })
-  // }).catch(err => console.log(err))
-  // res.redirect('/user/chat')
+  }).catch(err => console.log(err))
+  res.redirect('/user/chat')
 })
 
 // Logout Route
