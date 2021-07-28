@@ -22,4 +22,22 @@ const checkNotAuthenticated = (req, res, next) => {
   }
 }
 
-module.exports = { ensureUserAuthenticated, checkNotAuthenticated }
+// Check if user is admin
+const checkAgentAuthenticated = (req, res, next) => {
+  // Check if agent is authenticated first
+  if (req.isAuthenticated()) {
+    // If user is agent then continue to next statement
+    if(req.user.isAgent === true){
+      next()
+    }
+    else{
+      return res.redirect('/')
+    }
+  }
+  // Redirect to home apge
+  else{
+    return res.redirect('/')
+  }
+}
+
+module.exports = { ensureUserAuthenticated, checkNotAuthenticated, checkAgentAuthenticated }

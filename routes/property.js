@@ -16,7 +16,7 @@ const baseAPIUrl = 'http://localhost:8000/api/' // process.env.baseAPIUrl
 // Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
-const { ensureUserAuthenticated } = require('../helpers/auth')
+const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
 
 // Call predict resale API for HDB properties
 async function predictPublicResale (dateOfSale, town, flatType,
@@ -96,13 +96,13 @@ router.get('/propertylist', (req, res) => {
 })
 
 // Show create HDB Resale Page
-router.get('/createPublicResaleListing', ensureUserAuthenticated, (req, res) => {
+router.get('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
   const title = 'Create HDB Resale Listing'
   res.render('resale/createPublicResale', { title })
 })
 
 // Fixed data for testing
-router.post('/createPublicResaleListing', ensureUserAuthenticated, (req, res) => {
+router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const hdbResaleId = uuid.v4()
@@ -234,7 +234,7 @@ router.get('/viewPublicResaleList', (req, res) => {
 })
 
 // Unviewable property listings that customers cannot see
-router.get('/viewPreviewPublicList', (req, res) => {
+router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
   const title = 'HDB Preview Listings'
   const isViewable = true
   hdbResale.findAll({
@@ -246,7 +246,7 @@ router.get('/viewPreviewPublicList', (req, res) => {
 })
 
 // Edit Function for public resale listings
-router.get('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Edit HDB Resale Listing'
 
   // Get UUID from URL
@@ -283,7 +283,7 @@ router.get('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 })
 
 // Update public property information to database
-router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -348,7 +348,7 @@ router.put('/editPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 })
 
 // Confirmation Page for HDB properties
-router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Confirm Resale Listing - Public'
 
   // Probably need to modify this secondary title
@@ -395,7 +395,7 @@ router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublic
 })
 
 // Confirmation Page for hdb properties
-router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
   console.log(req.params.id)
@@ -415,7 +415,7 @@ router.get('/confirmPublicResaleListing/:id', checkUUIDFormat, checkResalePublic
 
 // Basic Delete Function
 // Delete hdb resale listing
-router.get('/deletePublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -428,13 +428,13 @@ router.get('/deletePublicResaleListing/:id', checkUUIDFormat, checkResalePublicL
 })
 
 // Display create resale listing page
-router.get('/createPrivateResaleListing', (req, res) => {
+router.get('/createPrivateResaleListing', checkAgentAuthenticated , (req, res) => {
   const title = 'Create Private Resale Listing'
   res.render('resale/createPrivateResale', { title })
 })
 
 // Create listing for private resale property
-router.post('/createPrivateResaleListing', (req, res) => {
+router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
   // Create UUID
   const privateResaleId = uuid.v4()
 
@@ -539,7 +539,7 @@ router.get('/viewPrivateResaleList', (req, res) => {
 })
 
 // Unviewable property listings that customers cannot see
-router.get('/viewPreviewPrivateResaleList', (req, res) => {
+router.get('/viewPreviewPrivateResaleList', checkAgentAuthenticated, (req, res) => {
   const title = 'Preview Private Resale Listings'
   privateResale.findAll({
     // Only agents can see all properties
@@ -550,7 +550,7 @@ router.get('/viewPreviewPrivateResaleList', (req, res) => {
 })
 
 // Edit Function for private resale listings
-router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Edit Private Resale Listing'
 
   // Get UUID from URL
@@ -590,7 +590,7 @@ router.get('/editPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
 })
 
 // Update private property information to database
-router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL
   const resalePrivateID = req.params.id
 
@@ -612,6 +612,7 @@ router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivate
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
+  // Update private property listings
   privateResale.update({
     address,
     description,
@@ -632,7 +633,7 @@ router.put('/editPrivateResaleListings/:id', checkUUIDFormat, checkResalePrivate
 })
 
 // Confirmation Page for private properties
-router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Confirm Resale Listing - Private'
 
   // Probably need to modify this secondary title
@@ -677,7 +678,7 @@ router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePriva
 })
 
 // Confirmation Page for private properties
-router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const privateResaleId = req.params.id
 
@@ -696,7 +697,7 @@ router.get('/confirmPrivateResaleListing/:id', checkUUIDFormat, checkResalePubli
 
 // Basic Delete Function
 // Delete private resale listing
-router.get('/deletePrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+router.get('/deletePrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const privateResaleId = req.params.id
   privateResale.destroy({
     where: { id: privateResaleId }
