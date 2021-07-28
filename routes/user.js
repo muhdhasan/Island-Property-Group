@@ -8,7 +8,7 @@ const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const user = require('../models/User')
 const secret = process.env.secret
-const { ensureUserAuthenticated } = require('../helpers/auth')
+const { ensureUserAuthenticated, checkNotAuthenticated } = require('../helpers/auth')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.googlemail.com',
@@ -20,18 +20,18 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated,  (req, res) => {
   const title = 'Register'
   res.render('user/register', { title })
 })
 
-router.get('/login', (req, res) => {
+router.get('/login', checkNotAuthenticated ,(req, res) => {
   const title = 'Login'
   const activeNavLogin = 'active'
   res.render('user/login', { title, activeNavLogin })
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', checkNotAuthenticated, (req, res) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
   const fullName = req.body.fullName
@@ -105,7 +105,7 @@ router.post('/register', (req, res) => {
 // })
 
 // Logs in user
-router.post('/login', (req, res, next) => {
+router.post('/login', checkNotAuthenticated, (req, res, next) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
   const password = req.body.password
@@ -139,7 +139,7 @@ router.post('/login', (req, res, next) => {
 //     res.redirect('')
 //   })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', {
     title
