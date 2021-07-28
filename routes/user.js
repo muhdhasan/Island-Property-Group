@@ -108,7 +108,6 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res, next) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
-  console.log(email)
   const password = req.body.password
 
   // let errors = []
