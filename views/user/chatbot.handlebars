@@ -106,6 +106,7 @@ body {
 
 .left-msg .msg-bubble {
   border-bottom-left-radius: 0;
+  background-color: #ececec;
 }
 
 .right-msg {
@@ -113,8 +114,9 @@ body {
 }
 .right-msg .msg-bubble {
   background: var(--right-msg-bg);
-  color: #fff;
   border-bottom-right-radius: 0;
+  background-color: #579ffb;
+  color: #fff;
 }
 .right-msg .msg-img {
   margin: 0 0 0 10px;
@@ -222,18 +224,24 @@ function botMessage(msgText) {
           <span><i class="fas fa-cog"></i></span>
         </header>
 
-        <main class="msger-chat">
-          {{#each messages}}
-            {{#if isBot }}
-              <div class="msg left-msg"></div>
-            {{else}}
-              <div class="msg right-msg"></div>
-            {{/if}}
-              <div class="msg-bubble">
+          <main class="msger-chat">
+            {{#each messages}}
+            {{#if isBot}}
+              <div class="msg left-msg">
+                <div class="msg-bubble">
                 <div class="msg-text">{{message}}</div>
               </div>
-          {{/each}}
-        </main>
+            </div>
+            {{else}}
+              <div class="msg right-msg">
+                <div class="msg-bubble">
+                <div class="msg-text">{{message}}</div>
+              </div>
+            </div>
+            {{/if}}
+            {{/each}}
+
+            </main>
 
         <form class="msger-inputarea" action="/user/chat" method="POST" role="form">
           <input type="text" class="msger-input" name="userinput" placeholder="Enter your message...">
