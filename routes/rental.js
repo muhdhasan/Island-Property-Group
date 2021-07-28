@@ -77,16 +77,16 @@ router.get('/rentalListing/:id', (req, res) => {
       }
     })
     // Will display more information regarding this property later
-    .then((RentalDetail) => {
-      const rentalPrice = Math.round(RentalDetail.rentValue)
-      const address = RentalDetail.address
-      const houseType = RentalDetail.type
-      const numberOfBedroom = RentalDetail.bedrooms
-      const floorSqm = RentalDetail.floorSqF
-      const leaseCommenceDate = RentalDetail.leaseDate
-      const description = RentalDetail.description
+    .then((PrivateRental) => {
+      const rentalPrice = PrivateRental.monthlyRent
+      const address = PrivateRental.address
+      const houseType = PrivateRental.houseType
+      const numberOfBedroom = PrivateRental.numberOfBedroom
+      const floorSqm = PrivateRental.floorSqm
+      const leaseCommenceDate = PrivateRental.leaseCommenceDate
+      const description = PrivateRental.description
 
-      res.render('property/viewPublicResaleListing', {
+      res.render('rental/rentalListing', {
         address,
         title,
         secondaryTitle,
