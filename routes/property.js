@@ -428,7 +428,7 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
 })
 
 // Display create resale listing page
-router.get('/createPrivateResaleListing', checkAgentAuthenticated , (req, res) => {
+router.get('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
   const title = 'Create Private Resale Listing'
   res.render('resale/createPrivateResale', { title })
 })

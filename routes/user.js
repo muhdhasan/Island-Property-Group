@@ -20,12 +20,12 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-router.get('/register', checkNotAuthenticated,  (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', { title })
 })
 
-router.get('/login', checkNotAuthenticated ,(req, res) => {
+router.get('/login', checkNotAuthenticated, (req, res) => {
   const title = 'Login'
   const activeNavLogin = 'active'
   res.render('user/login', { title, activeNavLogin })
@@ -92,17 +92,6 @@ router.post('/register', checkNotAuthenticated, (req, res) => {
     res.redirect('/user/login')
   }
 })
-
-// router.get('/confirmation/:token', async (req, res) => {
-//   const token = jwt.verify(req.params.token, SECRET)
-//   User.findOne({ where: { id: token.user } }).then((user) => {
-//     user.update({ confirmed: true })
-//     console.log('email verified')
-//   })
-//   // This function below is not defined
-//   alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
-//   res.redirect('https://localhost:8080/user/login')
-// })
 
 // Logs in user
 router.post('/login', checkNotAuthenticated, (req, res, next) => {

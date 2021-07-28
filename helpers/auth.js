@@ -27,15 +27,14 @@ const checkAgentAuthenticated = (req, res, next) => {
   // Check if agent is authenticated first
   if (req.isAuthenticated()) {
     // If user is agent then continue to next statement
-    if(req.user.isAgent === true){
+    if (req.user.isAgent === true) {
       next()
-    }
-    else{
+    } else {
       return res.redirect('/')
     }
   }
   // Redirect to home apge
-  else{
+  else {
     return res.redirect('/')
   }
 }
