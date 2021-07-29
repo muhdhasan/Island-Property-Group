@@ -138,6 +138,7 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 // Display User Profile Page
 router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const title = 'User Profile'
+  const activeNavProfile = 'active'
 
   // Retrieve user info
   const userInfo = req.user
@@ -145,7 +146,7 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const userEmail = userInfo.email
   const userPhoneNo = userInfo.phoneNo
 
-  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo })
+  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
 // Logout Route

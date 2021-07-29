@@ -27,15 +27,15 @@ module.exports = {
 
   // Check if user is admin or agent
   // So that we can set the appropriate navbar links respectively
-  checkSpecialUserType: (user) => {
+  checkSpecialUserType: (user, requiredUserType) => {
     // Check is user value exists or not
     if (user !== null && user !== undefined) {
       // Check if user is admin
-      if (user.isAdmin === true) {
+      if (user.isAdmin === true && requiredUserType === "Admin") {
         return true
       }
       // User is agent
-      else if (user.isAgent === true) {
+      else if (user.isAgent === true && requiredUserType === "Agent") {
         return true
       }
       // Reject the rest

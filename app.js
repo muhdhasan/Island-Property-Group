@@ -86,9 +86,9 @@ app.use(session({
     database: db.database,
     clearExpired: true,
     // How frequently expired sessions will be cleared; milliseconds:
-    checkExpirationInterval: 90000,
+    checkExpirationInterval: 900000,
     // The maximum age of a valid session; milliseconds:
-    expiration: 90000
+    expiration: 900000
   }),
   resave: false,
   saveUninitialized: false
