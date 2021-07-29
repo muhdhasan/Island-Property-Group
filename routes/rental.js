@@ -16,9 +16,9 @@ const PrivateRental = require('../models/PrivateRental')
 // Consolidate check regex for uuid
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
-// Call predict resale API
+// Call predict rental API
 async function predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate) {
-  // router.get('/getResalePrediction', (req, res) => {
+  
   const body = {
     Postal_District: postal_district,
     Type:type,
@@ -41,10 +41,9 @@ async function predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate
       .catch((err) => {
         console.log('Error:', err)
       })
-  // })
   })
 }
-// HDB Properties that are currently viewable to customers can be found here
+// Rental Properties that are currently viewable to customers can be found here
 router.get('/base', (req, res) => {
   const title = 'Rental Properties'
   privateRental.findAll({
@@ -57,7 +56,7 @@ router.get('/base', (req, res) => {
     res.render('rental/base', { title, privateRental: privateRental })
   })
 })
-// View individual HDB Resale Page
+// View individual Rental Properties Page
 router.get('/rentalListing/:id', (req, res) => {
   const title = 'Rental Properties'
   const secondaryTitle = '304 Blaster Up'
@@ -141,14 +140,8 @@ router.post('/createRental', (req, res) => {
   //   return console.log('Address contains special characters')
   // }
 
-  // // Check if resale date is at least 5 years from lease commence date
-  // const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
-  // const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
-  // if (yearDiff < 5) {
-  //   return console.log('Ensure that resale date is at least 5 years from lease date')
-  // }
 
-  // // Call predicting api for public housing
+  // // Call predicting api for rental
   const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
   rentValue.then((response) => {
     console.log('postal_district: ', postal_district)
@@ -172,7 +165,7 @@ router.post('/createRental', (req, res) => {
         isViewable: true
       })
       .then((result) => {
-        console.log('Testing')
+        console.log('Returning to homepage')
         // Redirect to confirming property page
         // res.redirect('/rental/createListing' + RentId)
         res.redirect('/rental/base')
