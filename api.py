@@ -259,12 +259,12 @@ def chatbot():
     text = request.get_json()
     sentence_labels = ["goodbye",
                    "greeting",
-                   "house_age",
-                   "house_area",
-                   "description",
-                   "price",
-                   "sale_period",
-                   "sale_reason",
+                   "lease_commencement",
+                   "rent_cost",
+                   "house_info",
+                   "resale_price",
+                   "resale_date",
+                   'address',
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
