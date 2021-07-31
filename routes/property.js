@@ -103,10 +103,12 @@ router.get('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => 
 
 // Fixed data for testing
 router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
+
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const hdbResaleId = uuid.v4()
-  const address = req.body.address1
+  const address = req.body.address
+  const blockNo = req.body.blockNo
   const description = req.body.description
   // Will add input validation here later
   const town = req.body.town
