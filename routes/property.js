@@ -116,6 +116,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   const flatType = req.body.flatType
   const flatModel = req.body.flatModel
   const flatLevel = req.body.flatLevel
+  const useAIOption = req.body.usePrediction
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.flatLevel)
@@ -151,33 +152,39 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
     console.log('Resale Value', response)
-    console.log(leaseStartDate)
-    console.log(dateOfSale)
-    console.log('Resale Value', resaleValue)
     const description = 'Sample Description'
+
+    // // If user wants to use prediction from AI
+    // if(useAIOption === "yesPredict"){
+    //   const resaleValue = response
+    //   return resaleValue
+    // }
+    // else{
+    //   const resaleValue = req.body.resaleValue
+    // }
 
     // Create public resale listing
     hdbResale
       .create({
         id: hdbResaleId,
-        address: address,
-        blockNo: blockNo,
-        description: description,
+        address,
+        blockNo,
+        description,
         resalePrice: Math.round(response),
-        town: town,
-        flatType: flatType,
-        flatModel: flatModel,
-        flatLevel: flatLevel,
-        floorSqm: floorSqm,
+        town,
+        flatType,
+        flatModel,
+        flatLevel,
+        floorSqm,
         leaseCommenceDate: leaseStartDate,
         resaleDate: dateOfSale,
-        postalCode: postalCode,
+        postalCode,
         isViewable: false
       })
       .then(() => {
         console.log('Created HDB Resale Listing')
         // Redirect to confirming property page
-        res.redirect('confirmPublicResaleListingPage/' + hdbResaleId)
+        res.redirect('confirmPublicResaleListing/' + hdbResaleId)
       })
       .catch((err) => console.log('Error: ' + err))
   })
@@ -206,6 +213,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
+      const postalCode = hdbResaleDetail.postalCode
       res.render('resale/viewPublicResaleListing', {
         address,
         title,
@@ -215,7 +223,8 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
         flatType,
         floorSqm,
         description,
-        leaseCommenceDate
+        leaseCommenceDate,
+        postalCode
       })
     })
     .catch((err) => {
@@ -374,15 +383,18 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
       const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const address = hdbResaleDetail.address
+      const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
       const flatType = hdbResaleDetail.flatType
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       const isViewable = hdbResaleDetail.isViewable
+      const postalCode = hdbResaleDetail.postalCode
       res.render('resale/confirmPublicListing', {
         id,
         address,
+        blockNo,
         title,
         secondaryTitle,
         resalePrice,
@@ -391,7 +403,8 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
         floorSqm,
         description,
         leaseCommenceDate,
-        isViewable
+        isViewable,
+        postalCode
       })
     })
     .catch((err) => {
@@ -467,15 +480,15 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   // Create private resale listing
     privateResale.create({
       id: privateResaleId,
-      address: address,
-      description: description,
+      address,
+      description,
       resalePrice: response,
-      houseType: houseType,
-      typeOfArea: typeOfArea,
-      marketSegment: marketSegment,
-      postalDistrict: postalDistrict,
-      floorSqm: floorSqm,
-      floorLevel: floorLevel,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      postalDistrict,
+      floorSqm,
+      floorLevel,
       leaseCommenceDate: leaseStartDate,
       resaleDate: dateOfSale,
       isViewable: false
