@@ -236,7 +236,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 
 // HDB Properties that are currently viewable to customers can be found here
 router.get('/viewPublicResaleList', (req, res) => {
-  const title = 'HDB Resale Listings'
+  const title = 'HDB Resale'
   const isViewable = true
   const isPublic = true
   hdbResale.findAll({
@@ -252,7 +252,7 @@ router.get('/viewPublicResaleList', (req, res) => {
 
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
-  const title = 'HDB Preview Resale Listings'
+  const title = 'HDB Preview Resale'
   const isPublic = false
   hdbResale.findAll({
     // Only agents can see all properties
@@ -275,6 +275,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     // Display result from database
     const id = result.id
     const address = result.address
+    const blockNo = result.blockNo
     const description = result.description
     const town = result.town
     const flatType = result.flatType
@@ -283,18 +284,21 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     const floorSqm = result.floorSqm
     const leaseCommenceDate = result.leaseCommenceDate
     const resaleDate = result.resaleDate
+    const postalCode = result.postalCode
     // Render property values from database
     res.render('resale/editPublicResale', {
       id,
       title,
       address,
+      blockNo,
       town,
       flatType,
       flatModel,
       floorLevel,
       floorSqm,
       leaseCommenceDate,
-      resaleDate
+      resaleDate,
+      postalCode
     })
   }).catch((err) => console.log('Error: ', err))
 })
@@ -306,7 +310,7 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
-  const address = req.body.address1
+  const address = req.body.address
   const description = req.body.description
   // Will add input validation here later
   const town = req.body.town
@@ -542,7 +546,7 @@ router.get('/viewPrivateResaleListing/:id', (req, res) => {
 
 // Private Properties that are currently viewable to customers can be found here
 router.get('/viewPrivateResaleList', (req, res) => {
-  const title = 'Private Resale Listings'
+  const title = 'Private Resale'
   const isViewable = true
   privateResale.findAll({
     // Only users can see viewable properties
@@ -557,7 +561,7 @@ router.get('/viewPrivateResaleList', (req, res) => {
 
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPrivateResaleList', checkAgentAuthenticated, (req, res) => {
-  const title = 'Preview Private Resale Listings'
+  const title = 'Private Preview Resale'
   privateResale.findAll({
     // Only agents can see all properties
     raw: true

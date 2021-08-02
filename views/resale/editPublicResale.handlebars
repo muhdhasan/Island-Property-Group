@@ -18,6 +18,9 @@
               <li class="breadcrumb-item">
                 <a href="#">Home</a>
               </li>
+              <li class="breadcrumb-item">
+                <a href="/property/confirmPublicResaleListing/{{id}}">Home</a>
+              </li>
               <li class="breadcrumb-item active" aria-current="page">
                 {{title}}
               </li>
@@ -40,11 +43,11 @@
         <input type="hidden" name="_method" value="PUT" />
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="address1" class="form-label">Address Line 1</label>
+            <label for="address" class="form-label">Address Line</label>
             <input
               type="text"
-              id="address1"
-              name="address1"
+              id="address"
+              name="address"
               class="form-control form-control-lg form-control-a"
               value="{{address}}"
               placeholder="Address 1"
