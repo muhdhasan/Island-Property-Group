@@ -11,13 +11,12 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 
 // Base URL String
-const baseAPIUrl = 'http://localhost:8000/api/' // process.env.baseAPIUrl
+const baseAPIUrl =  process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
 // Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
 const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
-const { response } = require('express')
 
 // Call predict resale API for HDB properties
 async function predictPublicResale (dateOfSale, town, flatType,
@@ -88,12 +87,12 @@ async function predictPrivateResale (houseType, postalDistrict,
 // Reference
 router.get('/propertysingle', (req, res) => {
   const title = 'Property Single'
-  res.render('resale/property-single', { title: title })
+  res.render('resale/property-single', { title })
 })
 
 router.get('/propertylist', (req, res) => {
   const title = 'List of Properties'
-  res.render('resale/property-grid', { title: title })
+  res.render('resale/property-grid', { title })
 })
 
 // Show create HDB Resale Page
