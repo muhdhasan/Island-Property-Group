@@ -121,9 +121,8 @@
       <span></span>
       <span></span>
     </button>
-    <a class="navbar-brand text-brand" href="/">Island Property <span
-        class="color-b"
-      >Group</span></a>
+    <a class="navbar-brand text-brand" href="/">Island Property
+      <span class="color-b">Group</span></a>
 
     <div
       class="navbar-collapse collapse justify-content-center"
@@ -139,14 +138,6 @@
           <a class="nav-link {{activeNavTwo}}" href="/about">About</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/property/propertylist">Property</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="blog-grid.html">Blog</a>
-        </li>
-
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
@@ -156,26 +147,76 @@
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-          >Pages</a>
+          >Properties</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/property/propertysingle">Property
-              Single</a>
-            <a class="dropdown-item" href="blog-single.html">Blog Single</a>
-            <a class="dropdown-item" href="agents-grid.html">Agents Grid</a>
-            <a class="dropdown-item" href="agent-single.html">Agent Single</a>
-            <a class="dropdown-item" href="/rental/base">Rental Properties</a>
-            <a class="dropdown-item" href="/rental/createRental">Rental Add</a>
+            <a class="dropdown-item" href="/property/viewPublicResaleList">HDB
+              Resale
+            </a>
+            <a
+              class="dropdown-item"
+              href="/property/viewPrivateResaleList"
+            >Private Resale</a>
+            <a class="dropdown-item" href="/rental/base">Private Rental</a>
           </div>
         </li>
-        <li class="nav-item">
+        {{#if (checkSpecialUserType user "Agent")}}
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >Manage Listings</a>
+            <div class="dropdown-menu">
+              <a
+                class="dropdown-item"
+                href="/property/createPublicResaleListing"
+              >Create HDB Resale
+              </a>
+              <a
+                class="dropdown-item"
+                href="/property/createPrivateResaleListing"
+              >Create Private Resale
+              </a>
+              <a
+                class="dropdown-item"
+                href="/rental/createRental"
+              >Create Private Rental
+              </a>
+              <a
+                class="dropdown-item"
+                href="/property/viewPreviewPublicList"
+              >HDB Resale
+              </a>
+              <a
+                class="dropdown-item"
+                href="/property/viewPreviewPrivateResaleList"
+              >Private Resale</a>
+              <a class="dropdown-item" href="#">Private Rental</a>
+            </div>
+          </li>
+        {{/if}}
+        {{!-- <li class="nav-item">
           <a class="nav-link {{activeNavContact}}" href="/contact">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/login">Login</a>
-        </li>
-        <li class="nav-item" style="display: none;">
-          <a class="nav-link" href="/logout">Logout</a>
-        </li>
+        </li> --}}
+        {{#if user}}
+          <li class="nav-item">
+            <a
+              class="nav-link {{activeNavProfile}}"
+              href="/user/userProfile"
+            >Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/logout">Logout</a>
+          </li>
+        {{else}}
+          <li class="nav-item">
+            <a class="nav-link {{activeNavLogin}}" href="/user/login">Login</a>
+          </li>
+        {{/if}}
       </ul>
     </div>
 

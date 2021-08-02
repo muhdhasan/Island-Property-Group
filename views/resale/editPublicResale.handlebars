@@ -1,0 +1,450 @@
+<main id="main">
+
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">{{title}}</h1>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="/property/confirmPublicResaleListing/{{id}}">
+                  {{town}}
+                  -
+                  {{postalCode}}</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                {{title}}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <form
+        action="/property/editPublicResaleListing/{{id}}?_method=PUT"
+        id="propertyForm"
+        class="form"
+        method="POST"
+        role="form"
+      >
+        <input type="hidden" name="_method" value="PUT" />
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="address" class="form-label">Address Line</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              class="form-control form-control-lg form-control-a"
+              value="{{address}}"
+              placeholder="Ang Mo Kio Avenue 5"
+              required
+            />
+            <div id="addressOneErrorMsg" class="form-text"></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="blockNo" class="form-label">Block No</label>
+            <input
+              type="text"
+              id="blockNo"
+              name="blockNo"
+              class="form-control form-control-lg form-control-a"
+              value="{{blockNo}}"
+              placeholder="Block 123"
+              required
+            />
+            <div id="addressTwoErrorMsg" class="form-text"></div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="town" class="form-label">Town</label>
+            <select
+              id="town"
+              name="town"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option
+                value="ANG MO KIO"
+                {{autoSelectDropDown town "ANG MO KIO"}}
+              >Ang Mo Kio</option>
+              <option
+                value="BEDOK"
+                {{autoSelectDropDown town "BEDOK"}}
+              >Bedok</option>
+              <option
+                value="BISHAN"
+                {{autoSelectDropDown town "BISHAN"}}
+              >Bishan</option>
+              <option
+                value="BUKIT BATOK"
+                {{autoSelectDropDown town "BUKIT BATOK"}}
+              >Bukit Batok</option>
+              <option
+                value="BUKIT MERAH"
+                {{autoSelectDropDown town "BUKIT MERAH"}}
+              >Bukit Merah</option>
+              <option
+                value="BUKIT PANJANG"
+                {{autoSelectDropDown town "BUKIT PANJANG"}}
+              >Bukit Panjang</option>
+              <option
+                value="BUKIT TIMAH"
+                {{autoSelectDropDown town "BUKIT TIMAH"}}
+              >Bukit Timah</option>
+              <option
+                value="CENTRAL AREA"
+                {{autoSelectDropDown town "CENTRAL AREA"}}
+              >Central Area</option>
+              <option
+                value="CHOA CHU KANG"
+                {{autoSelectDropDown town "CHOA CHU KANG"}}
+              >Choa Chu Kang</option>
+              <option
+                value="CLEMENTI"
+                {{autoSelectDropDown town "CLEMENTI"}}
+              >Clementi</option>
+              <option
+                value="GEYLANG"
+                {{autoSelectDropDown town "GEYLANG"}}
+              >Geylang</option>
+              <option
+                value="HOUGANG"
+                {{autoSelectDropDown town "HOUGANG"}}
+              >Hougang</option>
+              <option
+                value="JURONG EAST"
+                {{autoSelectDropDown town "JURONG EAST"}}
+              >Jurong East</option>
+              <option
+                value="JURONG WEST"
+                {{autoSelectDropDown town "JURONG WEST"}}
+              >Jurong West</option>
+              <option
+                value="KALLANG/WHAMPOA"
+                {{autoSelectDropDown town "KALLANG/WHAMPOA"}}
+              >Kallang/Whampoa</option>
+              <option
+                value="MARINE PARADE"
+                {{autoSelectDropDown town "MARINE PARADE"}}
+              >Marine Parade</option>
+              <option
+                value="PASIR RIS"
+                {{autoSelectDropDown town "PASIR RIS"}}
+              >Pasir Ris</option>
+              <option
+                value="PUNGGOL"
+                {{autoSelectDropDown town "PUNGGOL"}}
+              >Punggol</option>
+              <option
+                value="QUEENSTOWN"
+                {{autoSelectDropDown town "QUEENSTOWN"}}
+              >Queenstown</option>
+              <option
+                value="SEMBAWANG"
+                {{autoSelectDropDown town "SEMBAWANG"}}
+              >Sembawang</option>
+              <option
+                value="SENGKANG"
+                {{autoSelectDropDown town "SENGKANG"}}
+              >Sengkang</option>
+              <option
+                value="SERANGOON"
+                {{autoSelectDropDown town "SERANGOON"}}
+              >Serangoon</option>
+              <option
+                value="TAMPINES"
+                {{autoSelectDropDown town "TAMPINES"}}
+              >Tampines</option>
+              <option
+                value="TOA PAYOH"
+                {{autoSelectDropDown town "TOA PAYOH"}}
+              >Toa Payoh</option>
+              <option
+                value="WOODLANDS"
+                {{autoSelectDropDown town "WOODLANDS"}}
+              >Woodlands</option>
+              <option
+                value="YISHUN"
+                {{autoSelectDropDown town "YISHUN"}}
+              >Yishun</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="flatType" class="form-label">Flat Type</label>
+            <select
+              id="flatType"
+              name="flatType"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option
+                value="1 ROOM"
+                {{autoSelectDropDown flatType "1 ROOM"}}
+              >1-ROOM</option>
+              <option
+                value="2 ROOM"
+                {{autoSelectDropDown flatType "2 ROOM"}}
+              >2-ROOM</option>
+              <option
+                value="3 ROOM"
+                {{autoSelectDropDown flatType "3 ROOM"}}
+              >3-ROOM</option>
+              <option
+                value="4 ROOM"
+                {{autoSelectDropDown flatType "4 ROOM"}}
+              >4-ROOM</option>
+              <option
+                value="5 ROOM"
+                {{autoSelectDropDown flatType "5 ROOM"}}
+              >5-ROOM</option>
+              <option
+                value="EXECUTIVE"
+                {{autoSelectDropDown flatType "EXECUTIVE"}}
+              >EXECUTIVE</option>
+              <option
+                value="MULTI GENERATION"
+                {{autoSelectDropDown flatType "MULTI GENERATION"}}
+              >MULTI-GENERATION</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="flatModel" class="form-label">Flat Model</label>
+            <select
+              id="flatModel"
+              name="flatModel"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option
+                value="IMPROVED"
+                {{autoSelectDropDown flatModel "IMPROVED"}}
+              >Improved</option>
+              <option
+                value="NEW GENERATION"
+                {{autoSelectDropDown flatModel "NEW GENERATION"}}
+              >New Generation</option>
+              <option
+                value="DBSS"
+                {{autoSelectDropDown flatModel "DBSS"}}
+              >DBSS</option>
+              <option
+                value="STANDARD"
+                {{autoSelectDropDown flatModel "STANDARD"}}
+              >Standard</option>
+              <option
+                value="MODEL A"
+                {{autoSelectDropDown flatModel "MODEL A"}}
+              >Model A</option>
+              <option
+                value="MODEL A2"
+                {{autoSelectDropDown flatModel "MODEL A2"}}
+              >Model A2</option>
+              <option
+                value="APARTMENT"
+                {{autoSelectDropDown flatModel "APARTMENT"}}
+              >Apartment</option>
+              <option
+                value="SIMPLIFIED"
+                {{autoSelectDropDown flatModel "SIMPLIFIED"}}
+              >Simplified</option>
+              <option
+                value="PREMIUM APARTMENT"
+                {{autoSelectDropDown flatModel "PREMIUM APARTMENT"}}
+              >Premium Apartment</option>
+              <option
+                value="ADJOINED FLAT"
+                {{autoSelectDropDown flatModel "ADJOINED FLAT"}}
+              >Adjoined Flat</option>
+              <option
+                value="MODEL A-MAISONETTE"
+                {{autoSelectDropDown flatModel "MODEL A-MAISONETTE"}}
+              >Model A-Maisonette</option>
+              <option
+                value="MAISONETTE"
+                {{autoSelectDropDown flatModel "MAISONETTE"}}
+              >Maisonette</option>
+              <option
+                value="MULTI GENERATION"
+                {{autoSelectDropDown flatModel "MULTI GENERATION"}}
+              >Multi-Generation</option>
+              <option
+                value="TYPE S1"
+                {{autoSelectDropDown flatModel "TYPE S1"}}
+              >Type S1</option>
+              <option
+                value="TYPE S2"
+                {{autoSelectDropDown flatModel "TYPE S2"}}
+              >Type S2</option>
+              <option
+                value="TERRACE"
+                {{autoSelectDropDown flatModel "TERRACE"}}
+              >Terrace</option>
+              <option
+                value="2-ROOM"
+                {{autoSelectDropDown flatModel "2-ROOM"}}
+              >2-Room</option>
+              <option
+                value="PREMIUM MAISONETTE"
+                {{autoSelectDropDown flatModel "PREMIUM MAISONETTE"}}
+              >Premium Maisonette</option>
+              <option
+                value="IMPROVED-MAISONETTE"
+                {{autoSelectDropDown flatModel "IMPROVED-MAISONETTE"}}
+              >Improved Maisonette</option>
+              <option
+                value="PREMIUM APARTMENT LOFT"
+                {{autoSelectDropDown flatModel "PREMIUM APARTMENT LOFT"}}
+              >Premium Apartment Loft</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="flatLevel" class="form-label">Flat Level</label>
+            <input
+              id="flatLevel"
+              type="number"
+              name="flatLevel"
+              class="form-control form-control-lg form-control-a"
+              min="1"
+              max="51"
+              placeholder="20"
+              value="{{floorLevel}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="floorSqm" class="form-label">Floor Area (sqm)</label>
+            <input
+              id="floorSqm"
+              type="text"
+              name="floorSqm"
+              class="form-control form-control-lg form-control-a"
+              min="25"
+              max="400"
+              value="{{floorSqm}}"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              id="postalCode"
+              type="text"
+              name="postalCode"
+              class="form-control form-control-lg form-control-a"
+              value="{{postalCode}}"
+              placeholder="500123"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
+            <input
+              id="leaseCommenceDate"
+              type="date"
+              name="leaseCommenceDate"
+              class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
+              value="{{formatDate leaseCommenceDate "YYYY-MM-DD"}}"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="dateOfSale" class="form-label">Resale Date</label>
+            <input
+              id="dateOfSale"
+              type="date"
+              name="dateOfSale"
+              class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
+              value="{{formatDate resaleDate "YYYY-MM-DD"}}"
+              required
+            />
+            <div id="resaleDateErrorMsg" class="form-text"></div>
+          </div>
+        </div>
+        <h3 class="mb-3">Pricing</h3>
+        <div class="mb-3">
+          <p>Use AI Model Prediction?</p>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="yesRadio"
+              value="yesPredict"
+              onclick="useAImodel();"
+              required
+            />
+            <label class="form-check-label" for="yesRadio">
+              Yes
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="noRadio"
+              value="noPredict"
+              onclick="useAImodel();"
+            />
+            <label class="form-check-label" for="noRadio">
+              No
+            </label>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="currentResaleValue" class="form-label">Current Resale Price</label>
+            <input
+              id="currentResaleValue"
+              type="text"
+              name="currentResaleValue"
+              class="form-control form-control-lg form-control-a"
+              value="{{resalePrice}}"
+              disabled
+            />
+          </div>
+          <div id="resaleDiv" class="col-md-6 mb-3">
+            <label for="resaleValue" class="form-label">New Resale Price</label>
+            <input
+              id="resaleValue"
+              type="text"
+              name="resaleValue"
+              class="form-control form-control-lg form-control-a"
+            />
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-a">Save</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="/js/resalePublicPropertyInputValidation.js"></script>
+<script src="/js/useAIOption.js"></script>

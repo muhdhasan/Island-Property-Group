@@ -1,0 +1,281 @@
+<main id="main">
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">{{title}}</h1>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                {{title}}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <form
+        action="/property/createPrivateResaleListing"
+        id="privatePropertyForm"
+        class="form"
+        method="POST"
+        role="form"
+      >
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="address1" class="form-label">Address Line 1</label>
+            <input
+              type="text"
+              name="address1"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+            <div id="addressOneErrorMsg" class="form-text"></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="address2" class="form-label">Address Line 2</label>
+            <input
+              type="text"
+              name="address2"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+            <div id="addressTwoErrorMsg" class="form-text"></div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="postalDistrict" class="form-label">Postal District</label>
+            <select
+              id="postalDistrict"
+              name="postalDistrict"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
+              <option value="26">26</option>
+              <option value="27">27</option>
+              <option value="28">28</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="houseType" class="form-label">Type</label>
+            <select
+              id="houseType"
+              name="houseType"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="Condominium" selected>Condominium</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Detached">Detached</option>
+              <option value="Executive Condominium">Executive Condominium</option>
+              <option value="Semi-detached">Semi-detached</option>
+              <option value="Terrace">Terrace</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="typeOfArea" class="form-label">Type of Area</label>
+            <select
+              id="typeOfArea"
+              name="typeOfArea"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="Land" selected>Landed</option>
+              <option value="Strata">Strata</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="marketSegment" class="form-label">Market Segment</label>
+            <select
+              id="marketSegment"
+              name="marketSegment"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="RCR" selected>RCR</option>
+              <option value="CCR">CCR</option>
+              <option value="OCR">OCR</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="floorSqm" class="form-label">Floor Area (sqm)</label>
+            <input
+              id="floorSqm"
+              type="text"
+              name="floorSqm"
+              class="form-control form-control-lg form-control-a"
+              min="40"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="floorLevel" class="form-label">Floor Level</label>
+            <input
+              id="floorLevel"
+              type="number"
+              name="floorLevel"
+              class="form-control form-control-lg form-control-a"
+              min="1"
+              max="51"
+              required
+            />
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+              <label for="isFreehold" class="form-label">Freehold</label>
+              <div class="form-check form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isFreehold"
+                  id="isFreeholdYes"
+                  value="1"
+                  onclick="javascript:isFreeholdCheck();"
+                  required
+                />
+                <label class="form-check-label" for="isFreeholdYes">Yes</label>
+              </div>
+              <div class="form-check form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isFreehold"
+                  id="isFreeholdNo"
+                  value="0"
+                  onclick="javascript:isFreeholdCheck();"
+                  required
+                />
+                <label class="form-check-label" for="isFreeholdNo">No</label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="leaseCommenceDateDiv">
+                <label for="leaseCommenceDate" class="form-label">Lease Start
+                  Date</label>
+                <input
+                  id="leaseCommenceDate"
+                  type="date"
+                  name="leaseCommenceDate"
+                  class="form-control form-control-lg form-control-a"
+                  min="1952-01-01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+              <label for="dateOfSale" class="form-label">Resale Date</label>
+              <input
+                id="dateOfSale"
+                type="date"
+                name="dateOfSale"
+                class="form-control form-control-lg form-control-a"
+                min="1952-01-01"
+                required
+              />
+              <div id="resaleDateErrorMsg" class="form-text"></div>
+            </div>
+            <div class="col-md-6 mb-3">
+            </div>
+          </div>
+        </div>
+        <h3 class="mb-3">Pricing</h3>
+        <div class="mb-3">
+          <p>Use AI Model Prediction?</p>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="yesRadio"
+              value="yesPredict"
+              onclick="useAImodel();"
+              required
+            />
+            <label class="form-check-label" for="yesRadio">
+              Yes
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="noRadio"
+              value="noPredict"
+              onclick="useAImodel();"
+            />
+            <label class="form-check-label" for="noRadio">
+              No
+            </label>
+          </div>
+        </div>
+        <div id="resaleDiv" class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="resaleValue" class="form-label">Resale Price</label>
+            <input
+              id="resaleValue"
+              type="text"
+              name="resaleValue"
+              class="form-control form-control-lg form-control-a"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-a">Add Listing</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+{{! <script src="/js/resalePrivatePropertyInputValidation.js"></script> }}
+<script src="/js/showDateInput.js"></script>
+<script src="/js/useAIOption.js"></script>

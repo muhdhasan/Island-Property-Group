@@ -29,10 +29,24 @@
     </div>
   </section>
   <!-- End Intro Single-->
-  <section class="contact mt-5">
+  <section class="contact mt-2">
     <div class="container">
       <div class="row">
         <div class="col-md-6">
+          {{#if messages.error}}
+            <div
+              class="alert alert-danger alert-dismissible fade show mb-5"
+              role="alert"
+            >
+              {{messages.error}}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          {{/if}}
           <form method="POST" action="/user/login" role="form" class="form">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
@@ -44,7 +58,7 @@
                 required
               />
             </div>
-            <div class="mb-4">
+            <div class="mb-5">
               <label for="password" class="form-label">Password</label>
               <input
                 type="password"
