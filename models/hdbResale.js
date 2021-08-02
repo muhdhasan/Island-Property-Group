@@ -4,7 +4,7 @@ const db = require('../config/DBConfig')
 const HDBResale = db.define('hdb_resale', {
   id: { type: Sequelize.STRING, primaryKey: true },
   address: { type: Sequelize.STRING(500) },
-  blockNo: {type: Sequelize.STRING},
+  blockNo: { type: Sequelize.STRING },
   description: { type: Sequelize.STRING(2000) },
   resalePrice: { type: Sequelize.DECIMAL(12, 2) },
   town: { type: Sequelize.STRING },

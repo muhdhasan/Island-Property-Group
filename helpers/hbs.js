@@ -31,11 +31,11 @@ module.exports = {
     // Check is user value exists or not
     if (user !== null && user !== undefined) {
       // Check if user is admin
-      if (user.isAdmin === true && requiredUserType === "Admin") {
+      if (user.isAdmin === true && requiredUserType === 'Admin') {
         return true
       }
       // User is agent
-      else if (user.isAgent === true && requiredUserType === "Agent") {
+      else if (user.isAgent === true && requiredUserType === 'Agent') {
         return true
       }
       // Reject the rest

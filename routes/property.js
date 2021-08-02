@@ -17,6 +17,7 @@ const baseAPIUrl = 'http://localhost:8000/api/' // process.env.baseAPIUrl
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
 const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
+const { response } = require('express')
 
 // Call predict resale API for HDB properties
 async function predictPublicResale (dateOfSale, town, flatType,
@@ -103,7 +104,6 @@ router.get('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => 
 
 // Fixed data for testing
 router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
-
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const hdbResaleId = uuid.v4()
@@ -186,7 +186,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
         // Redirect to confirming property page
         res.redirect('confirmPublicResaleListing/' + hdbResaleId)
       })
-      .catch((err) => console.log('Error: ' + err))
+      .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
   })
 })
 
@@ -274,6 +274,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   }).then((result) => {
     // Display result from database
     const id = result.id
+    const resalePrice = result.resalePrice
     const address = result.address
     const blockNo = result.blockNo
     const description = result.description
@@ -289,6 +290,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     res.render('resale/editPublicResale', {
       id,
       title,
+      resalePrice,
       address,
       blockNo,
       town,
@@ -311,12 +313,15 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const address = req.body.address
+  const blockNo = req.body.blockNo
   const description = req.body.description
+  const postalCode = req.body.postalCode
   // Will add input validation here later
   const town = req.body.town
   const flatType = req.body.flatType
   const flatModel = req.body.flatModel
   const flatLevel = req.body.flatLevel
+  const useAIOption = req.body.usePrediction
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.flatLevel)
@@ -325,7 +330,7 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   // Date related inputs
   const leaseStartDate = new Date(req.body.leaseCommenceDate)
   const leaseStartYear = leaseStartDate.getFullYear()
-  const resaleDate = new Date(req.body.dateOfSale)
+  const dateOfSale = new Date(req.body.dateOfSale)
 
   // Input Validation
   // if (filterSpecialRegex.test(address) === false) {
@@ -343,29 +348,35 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
-  const yearDiff = ((resaleDate - leaseStartDate) / totalMilisecondsPerDay) / 365
+  const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
   if (yearDiff < 5) {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
+  // Call predicting api for public resale housing
+  const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+  resaleValue.then((response) => {
   // Update hdb resale listing according to UUID
-  hdbResale.update({
-    address,
-    description,
-    resalePrice: 500000,
-    town,
-    flatType,
-    flatModel,
-    flatLevel,
-    floorSqm,
-    leaseCommenceDate: leaseStartDate,
-    resaleDate
-  }, {
-    where: { id: resalePublicID }
-  }).then(() => {
+    hdbResale.update({
+      address,
+      blockNo,
+      description,
+      resalePrice: Math.round(response),
+      town,
+      flatType,
+      flatModel,
+      flatLevel,
+      floorSqm,
+      leaseCommenceDate: leaseStartDate,
+      resaleDate: dateOfSale,
+      postalCode
+    }, {
+      where: { id: resalePublicID }
+    }).then(() => {
     // Redirect to confirmation page
-    res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
-  }).catch((err) => { console.log('Error in updating hdb resale listing: ', err) })
+      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+    }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
+  })
 })
 
 // Confirmation Page for HDB properties
@@ -498,7 +509,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
     }).then(() => {
       console.log('Created private resale listing')
       res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-    }).catch((err) => { console.log('Error: ', err) })
+    }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
   })
 })
 
