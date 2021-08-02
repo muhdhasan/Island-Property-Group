@@ -20,7 +20,7 @@ const userRoute = require('./routes/user')
 const propertyRoute = require('./routes/property')
 
 // Bring in Handlebars helpers
-const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion } = require('./helpers/hbs')
+const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion, checkSpecialUserType } = require('./helpers/hbs')
 
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
@@ -29,7 +29,8 @@ app.engine('handlebars', exphbs({
     formatDate: formatDate,
     autoSelectDropDown: autoSelectDropDown,
     roundOffToThousand: roundOffToThousand,
-    roundOffToMillion: roundOffToMillion
+    roundOffToMillion: roundOffToMillion,
+    checkSpecialUserType: checkSpecialUserType
   }
 }))
 app.set('view engine', 'handlebars')
@@ -76,7 +77,7 @@ authenticate.localStrategy(passport)
 // Express session middleware - uses MySQL to store session
 app.use(session({
   key: 'iPG_session',
-  secret: process.env.cookieSecret || 'toGic',
+  secret: process.env.cookieSecret || 'toGiv',
   store: new MySQLStore({
     host: db.host,
     port: db.port,
@@ -85,9 +86,9 @@ app.use(session({
     database: db.database,
     clearExpired: true,
     // How frequently expired sessions will be cleared; milliseconds:
-    checkExpirationInterval: 90000,
+    checkExpirationInterval: 900000,
     // The maximum age of a valid session; milliseconds:
-    expiration: 90000
+    expiration: 900000
   }),
   resave: false,
   saveUninitialized: false

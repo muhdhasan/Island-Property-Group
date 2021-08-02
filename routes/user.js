@@ -8,7 +8,7 @@ const { v1: uuidv1 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const user = require('../models/User')
 const secret = process.env.secret
-const { ensureUserAuthenticated } = require('../helpers/auth')
+const { ensureUserAuthenticated, checkNotAuthenticated } = require('../helpers/auth')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.googlemail.com',
@@ -20,18 +20,18 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', { title })
 })
 
-router.get('/login', (req, res) => {
+router.get('/login', checkNotAuthenticated, (req, res) => {
   const title = 'Login'
   const activeNavLogin = 'active'
   res.render('user/login', { title, activeNavLogin })
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', checkNotAuthenticated, (req, res) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
   const fullName = req.body.fullName
@@ -93,22 +93,10 @@ router.post('/register', (req, res) => {
   }
 })
 
-// router.get('/confirmation/:token', async (req, res) => {
-//   const token = jwt.verify(req.params.token, SECRET)
-//   User.findOne({ where: { id: token.user } }).then((user) => {
-//     user.update({ confirmed: true })
-//     console.log('email verified')
-//   })
-//   // This function below is not defined
-//   alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
-//   res.redirect('https://localhost:8080/user/login')
-// })
-
 // Logs in user
-router.post('/login', (req, res, next) => {
+router.post('/login', checkNotAuthenticated, (req, res, next) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
-  console.log(email)
   const password = req.body.password
 
   // let errors = []
@@ -140,7 +128,7 @@ router.post('/login', (req, res, next) => {
 //     res.redirect('')
 //   })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', {
     title
@@ -150,6 +138,7 @@ router.get('/register', (req, res) => {
 // Display User Profile Page
 router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const title = 'User Profile'
+  const activeNavProfile = 'active'
 
   // Retrieve user info
   const userInfo = req.user
@@ -157,7 +146,7 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const userEmail = userInfo.email
   const userPhoneNo = userInfo.phoneNo
 
-  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo })
+  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
 // Logout Route

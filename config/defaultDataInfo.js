@@ -77,6 +77,7 @@ const DefaultUsersObjects = () => {
 const HDBResaleListingOne = {
   id: '00000000-0000-0000-0000-000000000000',
   address: 'Singapore Avenue 1',
+  blockNo: 'Block 123',
   description: 'A typical HDB flat located in Singapore.',
   resalePrice: 500000,
   town: 'JURONG EAST',
@@ -86,6 +87,7 @@ const HDBResaleListingOne = {
   floorSqm: 120,
   leaseCommenceDate: new Date('2000-01-01'),
   resaleDate: new Date('2021-07-08'),
+  postalCode: '580123',
   isViewable: false
 }
 
@@ -93,6 +95,7 @@ const HDBResaleListingOne = {
 const HDBResaleListingTwo = {
   id: '00000000-0000-0000-0000-000000000001',
   address: 'Singapore Avenue 5',
+  blockNo: 'Block 456',
   description: 'Another typical HDB flat located in Singapore.',
   resalePrice: 600000,
   town: 'SENGKANG',
@@ -102,6 +105,7 @@ const HDBResaleListingTwo = {
   floorSqm: 120,
   leaseCommenceDate: new Date('2000-01-01'),
   resaleDate: new Date('2021-07-08'),
+  postalCode: '580123',
   isViewable: true
 }
 

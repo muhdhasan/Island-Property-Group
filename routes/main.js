@@ -1,7 +1,11 @@
 const express = require('express')
 const router = express.Router()
+
+// Required node modules
 const fetch = require('node-fetch')
-const baseAPIUrl = 'http://localhost:8000/api/'
+
+// Base URL String
+const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
 router.get('/', (req, res) => {
   const title = 'Home'
@@ -18,7 +22,7 @@ router.get('/about', (req, res) => {
 router.get('/contact', (req, res) => {
   const title = 'Contact Us'
   const activeNavContact = 'active'
-  res.render('contact', { title, success_msg: 'Testing', activeNavContact })
+  res.render('contact', { title, activeNavContact })
 })
 
 // Call predict resale API

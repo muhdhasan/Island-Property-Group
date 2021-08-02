@@ -169,7 +169,7 @@ def predictHouseResale():
         categorical_cols = ['Type', 'Postal District', 'Market Segment', 'Type of Area', 'Floor Level']
 
         # Load encoder
-        with open('privateResaleEncoder.pickle', 'rb') as f:
+        with open('flask/privateResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
         
         # Read JSON response
@@ -204,7 +204,7 @@ def predictHouseResale():
         df_ohe_new = df_ohe_new.values
 
         # Load Model
-        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
+        resalePrivateModel = pickle.load(open('flask/xgb_private_resale.pickle', 'rb'))
 
         # Predict Model
         predictionResult = resalePrivateModel.predict(df_ohe_new)

@@ -23,5 +23,27 @@ module.exports = {
   // Basically converts 1000000 to 1m so its more eligible for users
   roundOffToMillion: (inputPrice) => {
     return Math.round(inputPrice / 1000000)
+  },
+
+  // Check if user is admin or agent
+  // So that we can set the appropriate navbar links respectively
+  checkSpecialUserType: (user, requiredUserType) => {
+    // Check is user value exists or not
+    if (user !== null && user !== undefined) {
+      // Check if user is admin
+      if (user.isAdmin === true && requiredUserType === 'Admin') {
+        return true
+      }
+      // User is agent
+      else if (user.isAgent === true && requiredUserType === 'Agent') {
+        return true
+      }
+      // Reject the rest
+      else {
+        return false
+      }
+    } else {
+      return false
+    }
   }
 }
