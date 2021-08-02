@@ -35,54 +35,75 @@ function createreturnmsg (intent, listingid,botmsgid,botorder,userid) {
   PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 1')
-      return createPrivateResaleMsg(intent,listing,botmsgid,botorder,userid)
+      createPrivateResaleMsg(intent,listingid,botmsgid,botmsgid,userid)
+      return 
     }
   })
   PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 2')
-      return createPrivateRentalMsg(intent, listing,botmsgid,botordr,userid)
+      createPrivateRentalMsg(intent,listingid,botmsgid,botmsgid,userid)
+      return 
     }
   })
   hdbResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 3')
-      return createhdbResaleMsg(intent, listing,botmsgid,botorder,userid)
+      createhdbResaleMsg(intent,listingid,botmsgid,botmsgid,userid)
+      return 
     }
   })
 }
 function createPrivateResaleMsg (intent, listingid,botmsgid,botorder,userid) {
   console.log('resale test')
+  var msg = "blank"
   PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
-    if (intent == "greeting"){
-      return "hello there"
-    }
     switch (intent) {
       case 'goodbye':
-        return 'thank you and good bye'
+        msg=  'thank you and good bye'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'greeting':
-        return 'hello there'
+        msg = 'hello there'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'lease_commencement':
-        return 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+        msg =  'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'house_info':
-        return 'Description: <br>' +
+        msg = 'Description: <br>' +
             listing.description.toString() + '<br>' +
             'House Type: ' + listing.houseType.toString() + '<br>' +
             'Postal District: ' + listing.postalDistrict.toString() + '<br>' +
             'Floor Square Meters: ' + listing.floorSqm.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'resale_price':
-        return 'The resale price is ' + listing.resalePrice.toString()
+        msg = 'The resale price is ' + listing.resalePrice.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'resale_date':
-        return 'The resale date is ' + listing.resaleDate.toString()
+        msg=  'The resale date is ' + listing.resaleDate.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'address':
-        return 'The address is ' + listing.address.toString()
+        msg =  'The address is ' + listing.address.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'rent_cost':
-        return 'This is not a rental listing '
+        msg = 'This is not a rental listing '
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'viewing':
         if (listing.viewing) {
-          return 'Listing is available for viewing'
+          msg = 'Listing is available for viewing'
+          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+          break;
         } else {
-          return 'Listing is not available for viewing'
+          msg =  'Listing is not available for viewing'
+          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+          break;
         }
     }
   })
@@ -90,35 +111,54 @@ function createPrivateResaleMsg (intent, listingid,botmsgid,botorder,userid) {
 function createPrivateRentalMsg (intent, listingid,botmsgid,botorder,userid) {
   console.log('rent test')
   PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
-    const msg = 'blank'
+    var msg = 'blank'
     switch (intent) {
       case 'goodbye':
-        return 'thank you and good bye'
+        msg = 'thank you and good bye'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'greeting':
-        return 'hello there'
+        msg = 'hello there'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'lease_commencement':
-        return 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
-
+        msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'house_info':
-        return 'Description: <br>' +
+        msg = 'Description: <br>' +
             listing.description.toString() + '<br>' +
             'House Type: ' + listing.houseType.toString() + '<br>' +
             'Number of Bedrooms: ' + listing.numberOfBedroom.toString() + '<br>' +
             'Postal District: ' + listing.postalDistrict.toString() + '<br>' +
             'Floor Square Meters: ' + listing.floorSqm.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'resale_price':
-        return 'This is not a sale listing'
+        msg =  'This is not a sale listing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'resale_date':
-        return 'This is not a sale listing'
+        msg= 'This is not a sale listing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'address':
-        return 'The address is ' + listing.address.toString()
+        msg = 'The address is ' + listing.address.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'rent_cost':
-        return 'The monthly cost is ' + listing.monthlyRent.toString()
+        msg = 'The monthly cost is ' + listing.monthlyRent.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break;
       case 'viewing':
         if (listing.viewing) {
-          return 'Listing is available for viewing'
+          msg = 'Listing is available for viewing'
+          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+          break;
         } else {
-          return 'Listing is not available for viewing'
+          msg =  'Listing is not available for viewing'
+          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+          break;
         }
     }
   })
@@ -343,14 +383,12 @@ router.get('/userProfile', (req, res) => {
 
 router.get('/chat', (req, res) => {
   const title = 'Chat'
-  // var user = User.userid;
-  const user = '00000000-0000-0000-0000-000000000001'
-  // var listingid = req.params.listing
-  const listing = '00000000-0000-0000-0000-000000000001'
+  var user = User.userid;
+  var listingid = req.params.listing
   Chat.findAll({
     where: {
       userid: user,
-      listingid: listing
+      listingid: listingid
     },
     order: [
       ['chatorder', 'ASC']
@@ -367,10 +405,8 @@ router.post('/chat', (req, res) => {
   if (message == '') {
     return
   }
-  // var userid = User.userid
-  const userid = '00000000-0000-0000-0000-000000000001'
-  // var listingid = req.params.listing
-  const listingid = '00000000-0000-0000-0000-000000000001'
+  var userid = User.userid
+  var listingid = req.params.listing
   Chat.findOne({
     where: {
       userid: userid,
