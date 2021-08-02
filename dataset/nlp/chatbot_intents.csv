@@ -12,159 +12,115 @@ greeting,Good evening
 greeting,Nice to meet you
 greeting,Hello how are you
 greeting,Hi how are you
-greeting,Its a pleasure to meet you
 greeting,Pleased to meet you
 greeting,Whats up
 greeting,How are you
 greeting,Nice to meet you
 greeting,Greetings
-greeting,Pleasure to meet you
-house_area,How big is the house
-house_area,How big is the estate
-house_area,How big is the property
-house_area,house size
-house_area,flat dimensions
-house_area,flat size
-house_area,what is the size of this hdb flat
-house_area,what is the size of this house
-house_area,what is the size of the flat
-house_area,What are the dimensions of the estate
-house_area,What are the dimensions of the flat
-house_area,What are the dimensions of the house
-house_area,What are the dimensions of the property
-house_area,What is the square footage of the house
-house_area,What is the square footage of the estate
-house_area,What is the square footage of the flat
-house_area,What is the square footage of the property
-house_area,How many square feet is the estate
-house_area,How many square feet is the property
-house_area,How many square feet is the flat
-house_area,How many square feet is the house 
-house_area,Can i inquire about the area of the house
-house_area,Can I inquire about the area of the property
-house_area,Can i inquire about the area of the estate
-house_area,Can i inquire about the area of the flat
-house_area,How big is the place
-house_area,square foot of the place
-house_area,area of the flat
-house_area,total area of the house
-house_area,amount of avaliable space 
-house_area,how much space is there
-house_area,whats the amount of space avaliable in the property
-sale_reason,Why is the seller selling the property
-sale_reason,Why is the seller selling the estate
-sale_reason,Why is the seller selling the place
-sale_reason,Why is the seller selling the flat
-sale_reason,Is there a reason the seller is selling the estate
-sale_reason,Is there a reason the seller is selling the flat
-sale_reason,Is there a reason the seller is selling the property
-sale_reason,Is there a reason the seller is selling the house
-sale_reason,Why is the estate being sold
-sale_reason,Why is the property being sold
-sale_reason,Why is the house being sold
-sale_reason,Why is the flat being sold
-sale_reason,Why is the seller leaving
-sale_reason,Is the seller downsizing his house
-sale_reason,Is the seller upsizing his home
-sale_reason,Is the owner selling the house due to a bad financial situation
-sale_reason,Does the owner have a reason for selling the property
-sale_reason,Are there reasons why the owner is selling the house
-sale_reason,sale reason
-sale_reason,reason why owner is selling
-sale_reason,Why is the house on sale
-sale_reason,any reasons why the owner is selling the property
-sale_reason,Can i know why the owner is selling the house
-sale_reason,how come seller is selling the flat
-sale_reason,can i know why the seller is selling
-sale_reason,is there a reason for the sale
-sale_period,How long has the property been on the market
-sale_period,How long has the estate been on the market
-sale_period,How long has the house been on the market
-sale_period,How long has the flat been on the market
-sale_period,How long has the estate been listed
-sale_period,How long has the house been listed
-sale_period,How long has the property been listed
-sale_period,How long has the flat been listed
-sale_period,What is the length of time the property has been on sale for
-sale_period,What is the length of time the flat has been on sale for
-sale_period,What is the length of time the estate has been on sale for
-sale_period,What is the length of time the house has been on sale for 
-sale_period,What is the list data of the house
-sale_period,What is the list date of the estate
-sale_period,What is the list date of the property
-sale_period,What is the list date of the flat
-sale_period,What date was the estate listed on
-sale_period,What date was the property listed on
-sale_period,What date was the house listed on
-sale_period,What date was the flat listed on
-sale_period,list date
-sale_period,duration of listing
-sale_period,whats the duration of the listing
-sale_period,how long has the listing been up
-sale_period,when was the listing first made
-sale_period,what is the date of the listing when it was first made
-sale_period,how long has this house been on sale
-sale_period,date it was listed
-sale_period,duration that the listing has been up for
-house_age,When was the estate built
-house_age,when was it built
-house_age,When was the flat built
-house_age,When was the property built
-house_age,When was the house built
-house_age,When was the place contructed
-house_age,When was the flat contructed
-house_age,When was the property contructed
-house_age,What year was the house contructed
-house_age,What year was the estate contructed 
-house_age,What year was the property contructed
-house_age,What year was the flat contructed
-house_age,How old is the property
-house_age,How old is the estate
-house_age,How old is the house
-house_age,How old is the flat
-house_age,What is the age of the property
-house_age,How is the condition of the house
-description,What are the notable feature of the house
-description,What are the notable features of the property
-description,What are the notable features of the flat
-description,Is there any features about the property I should know about
-description,Is there any features about the house I should know about the house
-description,Are there any interesting things that I should know about the place
-description,Are there any interesting things that I should know about the property
-description,Are there any interesting things that I should know about the flat
-description,Any noteworthy features that the property has
-description,Any noteworthy features that the flat has
-description,what does this house has
-description,Anything of note i should know about the flat
-description,Anything remarkable about the house
-description,Are there any distinguishing features of this property
-description,What does this place have that makes it stand out from the rest
-description,Notable features
-description,does the flat have any remarkable features
-description,Anything special that seperates this property from others
-description,Any remarkable features 
-description,Anything of the house u should take note of
-description,anything significant things to note about the property
-description,does the house have any well thought of features 
-description,What makes this house unique from the rest
-description,I am interested in taking a look at the place
-description,are there any schools in the area
-description,Is there any school nearby
-description,Schools near this house
-description,How many schools are there
-description,what are the schools in a 1 km distance from the property
-description,what are the schools in a 1 km distance from the place
-description,are there any education institutes nearby 
-description,is there any school that my son can attend to nearby
-description,is there any school that my child can attend to nearby
-description,how are is the nearest school from the house
-description,school in 1 km proximity
-description,any schools close by
-description,schools nearby
-description,any place for my child to attend nearby 
-description,schools within walking distance
-description,are there any schools in walking distance from the house
-description,schools
+house_info,How big is the house
+house_info,How big is the estate
+house_info,How big is the property
+house_info,house size
+house_info,flat dimensions
+house_info,flat size
+house_info,what is the size of this hdb flat
+house_info,what is the size of this house
+house_info,what is the size of the flat
+house_info,What are the dimensions of the estate
+house_info,What are the dimensions of the flat
+house_info,What are the dimensions of the house
+house_info,What are the dimensions of the property
+house_info,What is the square footage of the house
+house_info,What is the square footage of the estate
+house_info,What is the square footage of the flat
+house_info,What is the square footage of the property
+house_info,How many square feet is the estate
+house_info,How many square feet is the property
+house_info,How many square feet is the flat
+house_info,How many square feet is the house 
+house_info,house description
+house_info,I want to know about this house
+house_info,I want to know about this property
+house_info,property information
+house_info,How big is the place
+house_info,square foot of the place
+house_info,area of the flat
+house_info,total area of the house
+house_info,amount of avaliable space 
+house_info,how much space is there
+house_info,whats the amount of space avaliable in the property
+house_info,what is the house type
+house_info,house type
+house_info,what type of house is this
+house_info,which type of house is this
+house_info,what kind of housing is this
+house_info,can i know what sort of house this is
+house_info,what type of house is this classed as
+house_info,what sort of house is this
+house_info,what class of house is this
+house_info,what catergory of house is this
+house_info,house class
+house_info,what is the postal district
+house_info,postal district
+house_info,can i know the postal district
+house_info,is there a postal district
+house_info,whats the postal district
+house_info,how many bedrooms does the house have
+house_info,bedrooms
+house_info,how many rooms
+house_info,number of rooms
+house_info,what is the number of rooms that this house has
+house_info,room number
+house_info,can i know how many rooms does this unit have
+lease_commencement,when did the lease start
+lease_commencement,lease commencement
+lease_commencement,what is the start date of the lease
+lease_commencement,date of the starting of lease
+lease_commencement,when did the lease commence start
+lease_commencement,can i know what is the lease commencement date
+lease_commencement,when did lease start
+lease_commencement,start of lease of this house
+lease_commencement,lease information of this property
+lease_commencement,lease start date of this property
+lease_commencement,when was the lease start
+lease_commencement,lease date of the house
+lease_commencement,which year is the lease started
+lease_commencement,when was the lease of this property started
+lease_commencement,when was the lease started
+lease_commencement,information regarding the lease of this property
+lease_commencement,can i know about the lease start date
+address,whats is the address of the place
+address,can i know the address
+address,address
+address,location
+address,what is the location of the house
+address,where is the residence located
+address,where is the location
+address,can i know where the address is
+address,whats the address
+address,whats the location 
+address,where is the place
+address,location of the house
+address,address of the property
+address,location of the residence
+address,can i have the address of the house listed
+address,where is it located
+rent_cost,how much is rent
+rent_cost,rent
+rent_cost,how much does it cost to rent
+rent_cost,monthly rent
+rent_cost,rent cost
+rent_cost,what is the rent 
+rent_cost,rental costs
+rent_cost,how much does it cost per month
+rent_cost,cost of rent
+rent_cost,whats is the cost to rent the house
+rent_cost,cost of rent
+rent_cost,what are the cost of renting the place
+rent_cost,cost associated with rent
+rent_cost,price of rent
+rent_cost,monthly cost for rent
+rent_cost,tell me the rent cost
 viewing,I am interested in taking a look at the property
 viewing,Can I have a viewing to look at the place
 viewing,I would like to book a viewing
@@ -191,6 +147,33 @@ viewing,visiting hours to view the house
 viewing,what is a good time to view the house
 viewing,avaliable viewing times
 viewing,timeslot avaliable to view the property
+resale_date,How long has the estate been on the market
+resale_date,How long has the house been on the market
+resale_date,How long has the flat been on the market
+resale_date,How long has the estate been listed
+resale_date,How long has the house been listed
+resale_date,How long has the property been listed
+resale_date,How long has the flat been listed
+resale_date,What is the length of time the property has been on sale for
+resale_date,What is the length of time the flat has been on sale for
+resale_date,What is the length of time the estate has been on sale for
+resale_date,What is the length of time the house has been on sale for 
+resale_date,What is the list data of the house
+resale_date,What is the list date of the estate
+resale_date,What is the list date of the property
+resale_date,What is the list date of the flat
+resale_date,What date was the estate listed on
+resale_date,What date was the property listed on
+resale_date,What date was the house listed on
+resale_date,What date was the flat listed on
+resale_date,list date
+resale_date,duration of listing
+resale_date,whats the duration of the listing
+resale_date,how long has the listing been up
+resale_date,what is the date of the listing when it was first made
+resale_date,how long has this house been on sale
+resale_date,date it was listed
+resale_date,duration that the listing has been up for
 goodbye,Bye
 goodbye,Adios
 goodbye,See you later
@@ -219,20 +202,20 @@ goodbye,Catch you later
 goodbye,i gotta go
 goodbye,talk to you later
 goodbye,thank you for your time
-price,what is the price of the property
-price,what is the price of the house
-price,what is the price of the estate
-price,what is the price of this apartment
-price,how much is the asking price of the property
-price,how much is the asking price of the house
-price,how much is the asking price of the place
-price,what is the listed price of the property
-price,what is the listed price of the place
-price,what is the resale price of this house
-price,price of this flat
-price,how much does this flat cost
-price,what's the pricing of this house
-price,how much does this house cost
-price,price of this hdb flat
-price,give me the price of the house
-price,price
+resale_price,what is the resale_price of the property
+resale_price,what is the resale_price of the house
+resale_price,what is the resale_price of the estate
+resale_price,what is the resale_price of this apartment
+resale_price,how much is the asking resale_price of the property
+resale_price,how much is the asking resale_price of the house
+resale_price,how much is the asking resale_price of the place
+resale_price,what is the listed resale_price of the property
+resale_price,what is the listed resale_price of the place
+resale_price,what is the resale resale_price of this house
+resale_price,resale_price of this flat
+resale_price,how much does this flat cost
+resale_price,what's the pricing of this house
+resale_price,how much does this house cost
+resale_price,resale_price of this hdb flat
+resale_price,give me the resale_price of the house
+resale_price,resale_price

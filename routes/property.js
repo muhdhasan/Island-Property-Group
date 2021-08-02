@@ -37,7 +37,10 @@ async function predictPublicResale (dateOfSale, town, flatType,
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then(res => res.json())
+      .then(res => {
+        console.log(res)
+        res.json()
+      })
       .then((json) => {
         console.log(json)
         result(json)

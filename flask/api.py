@@ -81,6 +81,7 @@ def convertToDays(df):
     df['Lease_Commencement_Date'] = pd.to_datetime(df['Lease_Commencement_Date'])
     df['Lease_Commencement_Date'] = (now - df['Lease_Commencement_Date']).dt.days
 
+
 # 'Catch all error handling'
 @app.errorhandler(500)
 def handle_exception(err):
@@ -162,7 +163,7 @@ def predictHouseResale():
 
         # Predict Model
         predictionResult = resalePublicModel.predict(df_ohe_new)
-
+        print(predictionResult)
         return str(predictionResult)
     elif input["type"] == "private":
         # Categorical columns List
@@ -246,7 +247,7 @@ def predictHouseRent():
     ohe_df_new = pd.DataFrame(cat_ohe_new, columns = ohe.get_feature_names(input_features = categorical_cols))
     #concat with original data and drop original columns
     df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
-    print(df_ohe_new.info())
+    #print(df_ohe_new.info())
 
     RentalModel = pickle.load(open('flask/rental.pickle', 'rb'))
     
@@ -261,17 +262,17 @@ def chatbot():
     text = request.get_json()
     sentence_labels = ["goodbye",
                    "greeting",
-                   "house_age",
-                   "house_area",
-                   "description",
-                   "price",
-                   "sale_period",
-                   "sale_reason",
+                   "lease_commencement",
+                   "rent_cost",
+                   "house_info",
+                   "resale_price",
+                   "resale_date",
+                   'address',
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
     result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
-    return jsonify({"result": result})
+    return jsonify({"result":result})
     
 # Start at localhost:8000
 if __name__ == '__main__':
