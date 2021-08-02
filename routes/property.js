@@ -193,7 +193,6 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
 // View individual HDB Resale Page
 router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'HDB Resale Listing'
-  const secondaryTitle = '304 Blaster Up'
 
   // Refer to mysql workbench for all property id
   const resalePublicID = req.params.id
@@ -206,8 +205,10 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
     })
     // Will display more information regarding this property later
     .then((hdbResaleDetail) => {
+      const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const address = hdbResaleDetail.address
+      const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
       const flatType = hdbResaleDetail.flatType
       const floorSqm = hdbResaleDetail.floorSqm
@@ -215,9 +216,10 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       const postalCode = hdbResaleDetail.postalCode
       res.render('resale/viewPublicResaleListing', {
+        id,
         address,
+        blockNo,
         title,
-        secondaryTitle,
         resalePrice,
         town,
         flatType,
@@ -236,6 +238,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 router.get('/viewPublicResaleList', (req, res) => {
   const title = 'HDB Resale Listings'
   const isViewable = true
+  const isPublic = true
   hdbResale.findAll({
     // Only users can see viewable properties
     where: {
@@ -243,19 +246,19 @@ router.get('/viewPublicResaleList', (req, res) => {
     },
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale })
+    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale, isViewable, isPublic })
   })
 })
 
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
-  const title = 'HDB Preview Listings'
-  const isViewable = true
+  const title = 'HDB Preview Resale Listings'
+  const isPublic = false
   hdbResale.findAll({
     // Only agents can see all properties
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale })
+    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale, isPublic })
   })
 })
 
@@ -365,9 +368,6 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Confirm Resale Listing - Public'
 
-  // Probably need to modify this secondary title
-  const secondaryTitle = '304 Blaster Up'
-
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -396,7 +396,6 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
         address,
         blockNo,
         title,
-        secondaryTitle,
         resalePrice,
         town,
         flatType,

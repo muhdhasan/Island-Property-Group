@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-md-12 col-lg-8">
           <div class="title-single-box">
-            <h1 class="title-single">{{secondaryTitle}}</h1>
-            <span class="color-text-a">{{address}}</span>
+            <h1 class="title-single">{{blockNo}}, {{address}}</h1>
+            <span class="color-text-a">{{town}}, {{postalCode}}</span>
           </div>
         </div>
         <div class="col-md-12 col-lg-4">
@@ -19,10 +19,12 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="#">HDB Resale Listings</a>
+                <a href="/property/viewPublicResaleList">HDB Resale Listings</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                {{secondaryTitle}}
+                {{town}}
+                |
+                {{postalCode}}
               </li>
             </ol>
           </nav>
@@ -88,12 +90,12 @@
                 <div class="summary-list">
                   <ul class="list">
                     <li class="d-flex justify-content-between">
-                      <strong>Property ID:</strong>
-                      <span>1134</span>
+                      <strong>ID:</strong>
+                      <span>{{id}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Address:</strong>
-                      <span>{{address}}</span>
+                      <span>{{address}}, {{blockNo}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Town:</strong>
@@ -114,8 +116,12 @@
                       </span>
                     </li>
                     <li class="d-flex justify-content-between">
+                      <strong>Postal Code:</strong>
+                      <span>{{postalCode}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
                       <strong>Lease Commence Date:</strong>
-                      <span>{{formatDate leaseCommenceDate 'DD/MM/YYYY'}}</span>
+                      <span>{{formatDate leaseCommenceDate "DD/MM/YYYY"}}</span>
                     </li>
                   </ul>
                 </div>

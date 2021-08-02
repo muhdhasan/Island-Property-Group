@@ -22,7 +22,9 @@
                 <a href="#">HDB Resale Listings</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                {{secondaryTitle}}
+                {{town}}
+                |
+                {{postalCode}}
               </li>
             </ol>
           </nav>
@@ -62,12 +64,31 @@
         </div>
       </div>
       <div class="m-5 d-flex justify-content-center">
-        <button type="button" class="btn btn-lg btn-outline-danger mx-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-        <a href="/property/editPublicResaleListing/{{id}}" class="btn btn-lg btn-outline-dark mx-2">Edit</a>
+        <button
+          type="button"
+          class="btn btn-lg btn-outline-danger mx-2"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+        >Delete</button>
+        <a
+          href="/property/editPublicResaleListing/{{id}}"
+          class="btn btn-lg btn-outline-dark mx-2"
+        >Edit</a>
         {{#if isViewable}}
-        <button type="button" class="btn btn-lg btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#confirmModal" disabled>Confirm Listing</button>
+          <button
+            type="button"
+            class="btn btn-lg btn-outline-success mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmModal"
+            disabled
+          >Confirm Listing</button>
         {{else}}
-        <button type="button" class="btn btn-lg btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#confirmModal">Confirm Listing</button>
+          <button
+            type="button"
+            class="btn btn-lg btn-outline-success mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmModal"
+          >Confirm Listing</button>
         {{/if}}
       </div>
       <div class="row mt-5">
@@ -95,12 +116,12 @@
                 <div class="summary-list">
                   <ul class="list">
                     <li class="d-flex justify-content-between">
-                      <strong>Property ID:</strong>
-                      <span>1134</span>
+                      <strong>ID:</strong>
+                      <span>{{id}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Address:</strong>
-                      <span>{{address}}</span>
+                      <span>{{address}}, {{blockNo}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Town:</strong>
@@ -121,8 +142,12 @@
                       </span>
                     </li>
                     <li class="d-flex justify-content-between">
+                      <strong>Postal Code:</strong>
+                      <span>{{postalCode}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
                       <strong>Lease Commence Date:</strong>
-                      <span>{{formatDate leaseCommenceDate 'DD/MM/YYYY'}}</span>
+                      <span>{{formatDate leaseCommenceDate "DD/MM/YYYY"}}</span>
                     </li>
                   </ul>
                 </div>
@@ -366,37 +391,73 @@
   </section><!-- End Property Single-->
 </main>
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteModalLabel">Delete Property</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         Confirm Deletion?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="/property/deletePublicResaleListing/{{id}}" class="btn btn-outline-danger">Delete</a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <a
+          href="/property/deletePublicResaleListing/{{id}}"
+          class="btn btn-outline-danger"
+        >Delete</a>
       </div>
     </div>
   </div>
 </div>
 <!-- Confirm Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="confirmModal"
+  tabindex="-1"
+  aria-labelledby="confirmModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmModalLabel">Make Property Viewable</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         Confirm listing of this property?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="/property/confirmPublicResaleListing/{{id}}" class="btn btn-outline-success">Confirm</a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <a
+          href="/property/confirmPublicResaleListing/{{id}}"
+          class="btn btn-outline-success"
+        >Confirm</a>
       </div>
     </div>
   </div>
