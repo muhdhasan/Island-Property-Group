@@ -110,6 +110,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   const address = req.body.address
   const blockNo = req.body.blockNo
   const description = req.body.description
+  const postalCode = req.body.postalCode
   // Will add input validation here later
   const town = req.body.town
   const flatType = req.body.flatType
@@ -160,6 +161,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
       .create({
         id: hdbResaleId,
         address: address,
+        blockNo: blockNo,
         description: description,
         resalePrice: Math.round(response),
         town: town,
@@ -169,6 +171,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
         floorSqm: floorSqm,
         leaseCommenceDate: leaseStartDate,
         resaleDate: dateOfSale,
+        postalCode: postalCode,
         isViewable: false
       })
       .then(() => {
