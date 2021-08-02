@@ -39,20 +39,10 @@
           <div id="property-single-carousel" class="swiper-container">
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
-                <img
-                  src="/img/hdbFlat1.jpg"
-                  alt=""
-                  height="800px"
-                  width="800px"
-                />
+                <img src="/img/hdbFlat1.jpg" alt="" height="800px" width="800px"/>
               </div>
               <div class="carousel-item-b swiper-slide">
-                <img
-                  src="/img/hdbFlat2.jpg"
-                  alt=""
-                  height="800px"
-                  width="800px"
-                />
+                <img src="/img/hdbFlat2.jpg" alt="" height="800px" width="800px"/>
               </div>
             </div>
           </div>
@@ -61,13 +51,10 @@
           ></div>
         </div>
       </div>
-      <div class="m-5 d-flex justify-content-center">
-        <button type="button" class="btn btn-lg btn-outline-danger mx-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-        <a href="/property/editPublicResaleListing/{{id}}" class="btn btn-lg btn-outline-dark mx-2">Edit</a>
-        <button type="button" class="btn btn-lg btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#confirmModal">Confirm Listing</button>
-      </div>
+
       <div class="row mt-5">
         <div class="col-sm-12">
+
           <div class="row justify-content-between">
             <div class="col-md-5 col-lg-4">
               <div class="property-price d-flex justify-content-center foo">
@@ -76,7 +63,7 @@
                     <span class="bi bi-cash">$</span>
                   </div>
                   <div class="card-title-c align-self-center">
-                    <h5 class="title-c">{{resalePrice}}</h5>
+                    <h5 class="title-c">{{rentalPrice}}</h5>
                   </div>
                 </div>
               </div>
@@ -99,16 +86,16 @@
                       <span>{{address}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Town:</strong>
-                      <span>{{town}}</span>
+                      <strong>Type of flat:</strong>
+                      <span>{{houseType}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Flat Type:</strong>
-                      <span>{{flatType}}</span>
+                      <strong>No of bedrooms:</strong>
+                      <span>{{numberOfBedroom}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Status:</strong>
-                      <span>Resale</span>
+                      <strong>Number of days since start of lease:</strong>
+                      <span>{{leaseCommenceDate}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Area (sqm):</strong>
@@ -306,7 +293,7 @@
               </div>
             </div>
             <div class="col-md-12 col-lg-4">
-              {{! <div class="property-contact">
+              <div class="property-contact">
                 <form class="form-a">
                   <div class="row">
                     <div class="col-md-12 mb-1">
@@ -349,7 +336,7 @@
                     </div>
                   </div>
                 </form>
-              </div> }}
+              </div>
             </div>
           </div>
         </div>
@@ -357,39 +344,3 @@
     </div>
   </section><!-- End Property Single-->
 </main>
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete Property</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Confirm Deletion?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="/property/deletePublicResaleListing/{{id}}" class="btn btn-outline-danger">Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Confirm Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmModalLabel">Make Property Viewable</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Confirm listing of this property?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="/property/confirmPublicResaleListing/{{id}}" class="btn btn-outline-success">Confirm</a>
-      </div>
-    </div>
-  </div>
-</div>

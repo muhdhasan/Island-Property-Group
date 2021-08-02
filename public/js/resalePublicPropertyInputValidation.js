@@ -4,7 +4,7 @@
 const specialChar = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
 const form = document.getElementById('propertyForm')
 const addressOneInput = document.getElementById('address1')
-const addressTwoInput = document.getElementById('address2')
+const blockNoInput = document.getElementById('blockNo')
 const leaseStartYear = document.getElementById('leaseCommenceDate')
 const resaleDate = document.getElementById('dateOfSale')
 
@@ -18,7 +18,7 @@ form.addEventListener('submit', (e) => {
     errorMsg.push('Address field should not contain special characters')
   }
 
-  if (specialChar.test(addressTwoInput.value) === true) {
+  if (specialChar.test(blockNoInput.value) === true) {
     document.getElementById('addressTwoErrorMsg').innerHTML = 'Address field should not contain special characters'
     document.getElementById('addressTwoErrorMsg').style.color = 'Red'
     document.getElementById('address2').style.outline = '1px solid Red'

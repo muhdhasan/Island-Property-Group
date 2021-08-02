@@ -32,27 +32,30 @@
     <div class="container">
       <form
         action="/property/createPublicResaleListing"
+        id="propertyForm"
         class="form"
         method="POST"
         role="form"
       >
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="address1" class="form-label">Address Line 1</label>
+            <label for="address" class="form-label">Address</label>
             <input
               type="text"
-              name="address1"
+              name="address"
               class="form-control form-control-lg form-control-a"
+              placeholder="Ang Mo Kio Avenue 5"
               required
             />
             <div id="addressOneErrorMsg" class="form-text"></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="address2" class="form-label">Address Line 2</label>
+            <label for="blockNo" class="form-label">Block No</label>
             <input
               type="text"
-              name="address2"
+              name="blockNo"
               class="form-control form-control-lg form-control-a"
+              placeholder="Block 123"
               required
             />
             <div id="addressTwoErrorMsg" class="form-text"></div>
@@ -153,6 +156,7 @@
               class="form-control form-control-lg form-control-a"
               min="1"
               max="51"
+              placeholder="20"
               required
             />
           </div>
@@ -162,14 +166,28 @@
             <label for="floorSqm" class="form-label">Floor Area (sqm)</label>
             <input
               id="floorSqm"
-              type="text"
+              type="number"
               name="floorSqm"
               class="form-control form-control-lg form-control-a"
               min="25"
               max="400"
+              placeholder="100"
               required
             />
           </div>
+          <div class="col-md-6 mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              id="postalCode"
+              type="text"
+              name="postalCode"
+              class="form-control form-control-lg form-control-a"
+              placeholder="500123"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
             <input
@@ -181,8 +199,6 @@
               required
             />
           </div>
-        </div>
-        <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="dateOfSale" class="form-label">Resale Date</label>
             <input
@@ -195,16 +211,49 @@
             />
             <div id="resaleDateErrorMsg" class="form-text"></div>
           </div>
+        </div>
+        <h3 class="mb-3">Pricing</h3>
+        <div class="mb-3">
+          <p>Use AI Model Prediction?</p>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="yesRadio"
+              value="yesPredict"
+              onclick="useAImodel();"
+              required
+            />
+            <label class="form-check-label" for="yesRadio">
+              Yes
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="noRadio"
+              value="noPredict"
+              onclick="useAImodel();"
+            />
+            <label class="form-check-label" for="noRadio">
+              No
+            </label>
+          </div>
+        </div>
+        <div id="resaleDiv" class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="resaleValue" class="form-label">Resale Price</label>
-            <div class="input-group">
-              <input
-                id="resaleValue"
-                type="text"
-                name="resaleValue"
-                class="form-control form-control-lg form-control-a"
-              />
-            </div>
+            <input
+              id="resaleValue"
+              type="text"
+              name="resaleValue"
+              class="form-control form-control-lg form-control-a"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
           </div>
         </div>
         <div class="d-flex justify-content-end">
@@ -214,4 +263,5 @@
     </div>
   </section>
 </main>
-<script src="/js/propertyInputValidation.js"></script>
+<script src="/js/resalePublicPropertyInputValidation.js"></script>
+<script src="/js/useAIOption.js"></script>

@@ -7,7 +7,7 @@
         <div class="col-md-12 col-lg-8">
           <div class="title-single-box">
             <h1 class="title-single">{{title}}</h1>
-            <span class="color-text-a">All resale listings related to HDB properties</span>
+            <span class="color-text-a">All resale listings related to Rental properties</span>
           </div>
         </div>
         <div class="col-md-12 col-lg-4">
@@ -45,8 +45,8 @@
             </form>
           </div>
         </div>
-        {{#if hdbResale}}
-        {{#each hdbResale}}
+        {{#if privateRental}}
+        {{#each privateRental}}
         <div class="col-md-4">
           <div class="card-box-a card-shadow">
             <div class="img-box-a">
@@ -67,9 +67,9 @@
                 </div>
                 <div class="card-body-a">
                   <div class="price-box d-flex">
-                    <span class="price-a">Resale | $ {{roundOffToThousand resalePrice}}k</span>
+                    <span class="price-a">Resale | $ {{roundOffToThousand monthlyRent}}k</span>
                   </div>
-                  <a href="/property/viewPublicResaleListing/{{id}}" class="link-a">Click here to
+                  <a href="/rental/rentalListing/{{id}}" class="link-a">Click here to
                     view
                     <span class="bi bi-chevron-right"></span>
                   </a>
@@ -77,18 +77,18 @@
                 <div class="card-footer-a">
                   <ul class="card-info d-flex justify-content-around">
                     <li>
+                      <h4 class="card-info-title">Number of Bedroom</h4>
+                      <span class="center">{{numberOfBedroom}}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">House Type</h4>
+                      <span>{{houseType}}</span>
+                    </li>
+                    <li>
                       <h4 class="card-info-title">Area</h4>
                       <span>{{floorSqm}}m
                         <sup>2</sup>
                       </span>
-                    </li>
-                    <li>
-                      <h4 class="card-info-title">Flat Type</h4>
-                      <span>{{flatType}}</span>
-                    </li>
-                    <li>
-                      <h4 class="card-info-title">Floor Level</h4>
-                      <span>{{flatLevel}}</span>
                     </li>
                   </ul>
                 </div>

@@ -18,6 +18,12 @@
               <li class="breadcrumb-item">
                 <a href="#">Home</a>
               </li>
+              <li class="breadcrumb-item">
+                <a href="/property/confirmPublicResaleListing/{{id}}">
+                  {{town}}
+                  -
+                  {{postalCode}}</a>
+              </li>
               <li class="breadcrumb-item active" aria-current="page">
                 {{title}}
               </li>
@@ -31,7 +37,7 @@
   <section class="contact mt-5">
     <div class="container">
       <form
-        action="/property/editPublicResaleListing{{id}}?_method=PUT"
+        action="/property/editPublicResaleListing/{{id}}?_method=PUT"
         id="propertyForm"
         class="form"
         method="POST"
@@ -40,25 +46,27 @@
         <input type="hidden" name="_method" value="PUT" />
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="address1" class="form-label">Address Line 1</label>
+            <label for="address" class="form-label">Address Line</label>
             <input
               type="text"
-              id="address1"
-              name="address1"
+              id="address"
+              name="address"
               class="form-control form-control-lg form-control-a"
               value="{{address}}"
-              placeholder="Address 1"
+              placeholder="Ang Mo Kio Avenue 5"
               required
             />
             <div id="addressOneErrorMsg" class="form-text"></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="address2" class="form-label">Address Line 2</label>
+            <label for="blockNo" class="form-label">Block No</label>
             <input
               type="text"
-              id="address2"
-              name="address2"
+              id="blockNo"
+              name="blockNo"
               class="form-control form-control-lg form-control-a"
+              value="{{blockNo}}"
+              placeholder="Block 123"
               required
             />
             <div id="addressTwoErrorMsg" class="form-text"></div>
@@ -318,6 +326,7 @@
               class="form-control form-control-lg form-control-a"
               min="1"
               max="51"
+              placeholder="20"
               value="{{floorLevel}}"
               required
             />
@@ -338,6 +347,20 @@
             />
           </div>
           <div class="col-md-6 mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              id="postalCode"
+              type="text"
+              name="postalCode"
+              class="form-control form-control-lg form-control-a"
+              value="{{postalCode}}"
+              placeholder="500123"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
             <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
             <input
               id="leaseCommenceDate"
@@ -349,8 +372,6 @@
               required
             />
           </div>
-        </div>
-        <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="dateOfSale" class="form-label">Resale Date</label>
             <input
@@ -364,14 +385,66 @@
             />
             <div id="resaleDateErrorMsg" class="form-text"></div>
           </div>
+        </div>
+        <h3 class="mb-3">Pricing</h3>
+        <div class="mb-3">
+          <p>Use AI Model Prediction?</p>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="yesRadio"
+              value="yesPredict"
+              onclick="useAImodel();"
+              required
+            />
+            <label class="form-check-label" for="yesRadio">
+              Yes
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="noRadio"
+              value="noPredict"
+              onclick="useAImodel();"
+            />
+            <label class="form-check-label" for="noRadio">
+              No
+            </label>
+          </div>
+        </div>
+        <div class="row mb-3">
           <div class="col-md-6 mb-3">
+            <label for="currentResaleValue" class="form-label">Current Resale Price</label>
+            <input
+              id="currentResaleValue"
+              type="text"
+              name="currentResaleValue"
+              class="form-control form-control-lg form-control-a"
+              value="{{resalePrice}}"
+              disabled
+            />
+          </div>
+          <div id="resaleDiv" class="col-md-6 mb-3">
+            <label for="resaleValue" class="form-label">New Resale Price</label>
+            <input
+              id="resaleValue"
+              type="text"
+              name="resaleValue"
+              class="form-control form-control-lg form-control-a"
+            />
           </div>
         </div>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-a">Edit Listing</button>
+          <button type="submit" class="btn btn-a">Save</button>
         </div>
       </form>
     </div>
   </section>
 </main>
-<script src="/js/propertyInputValidation.js"></script>
+<script src="/js/resalePublicPropertyInputValidation.js"></script>
+<script src="/js/useAIOption.js"></script>

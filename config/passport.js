@@ -1,28 +1,32 @@
 const LocalStrategy = require('passport-local').Strategy
+
+// Encrypt password
 const bcrypt = require('bcryptjs')
-const passport = require('passport')
-const { v1: uuidv1 } = require('uuid')
+
+// Model
 const User = require('../models/User')
 
 function localStrategy (passport) {
-  passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password,
-    done) => {
-    User.findOne({ where: { email: email } })
-      .then(user => {
+  passport.use(
+    new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+      User.findOne({ where: { email: email } }).then((user) => {
+        // If user is not found
         if (!user) {
-          return done(null, false, { message: 'No User Found' })
+          return done(null, false, { message: 'Invalid Email' })
         }
         // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) throw err
+          // If password match
           if (isMatch) {
             return done(null, user)
           } else {
-            return done(null, false, { message: 'Password incorrect' })
+            return done(null, false, { message: 'Incorrect Passwoord' })
           }
         })
       })
-  }))
+    })
+  )
   // Serializes (stores) user id into session upon successful
   // authentication
   passport.serializeUser((user, done) => {
@@ -35,7 +39,8 @@ function localStrategy (passport) {
       .then((user) => {
         done(null, user) // user object saved in req.session
       })
-      .catch((done) => { // No user found, not stored in req.session
+      .catch((done) => {
+        // No user found, not stored in req.session
         console.log(done)
       })
   })

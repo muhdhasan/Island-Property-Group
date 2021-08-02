@@ -15,6 +15,10 @@ const setUpDB = (drop) => {
               In this case the primary key from user will be a foreign key
               in video.             */
 
+      // Map to what each agent is in charge of
+      // user.hasMany(hdbResale)
+      // user.hasMany(privateResale)
+      // user.hasMany(privateRental)
       mySQLDB.sync({ // Creates table if none exists
         force: drop
       })

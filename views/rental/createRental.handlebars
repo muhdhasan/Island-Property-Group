@@ -1,0 +1,163 @@
+<main id="main">
+
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">{{title}}</h1>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav
+            aria-label="breadcrumb"
+            class="breadcrumb-box d-flex justify-content-lg-end"
+          >
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                {{title}}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Intro Single-->
+  <section class="contact mt-5">
+    <div class="container">
+      <form
+        action="/rental/createRental"
+        class="form"
+        method="POST"
+        role="form"
+      >
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="address1" class="form-label">Address Line 1</label>
+            <input
+              type="text"
+              name="address1"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+            <div id="addressOneErrorMsg" class="form-text"></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="address2" class="form-label">Address Line 2</label>
+            <input
+              type="text"
+              name="address2"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+            <div id="addressTwoErrorMsg" class="form-text"></div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="Postal_District" class="form-label">Postal_District</label>
+            <select
+              id="postal_district"
+              name="postal_district"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="1" selected>Ang Mo Kio</option>
+              <option value="1">Bedok</option>
+              <option value="1">Bishan</option>
+              <option value="1">Bukit Batok</option>
+              <option value="1">Bukit Merah</option>
+              <option value="1">Bukit Panjang</option>
+              <option value="1">Bukit Timah</option>
+              <option value="1">Central Area</option>
+              <option value="1">Choa Chu Kang</option>
+              <option value="1">Clementi</option>
+              <option value="1">Geylang</option>
+              <option value="1">Hougang</option>
+              <option value="1">Jurong East</option>
+              <option value="1">Jurong West</option>
+              <option value="1">Kallang/Whampoa</option>
+              <option value="1">Marine Parade</option>
+              <option value="1">Pasir Ris</option>
+              <option value="1">Punggol</option>
+              <option value="1">Queenstown</option>
+              <option value="1">Sembawang</option>
+              <option value="1">Sengkang</option>
+              <option value="1">Serangoon</option>
+              <option value="1">Tampines</option>
+              <option value="1">Toa Payoh</option>
+              <option value="1">Woodlands</option>
+              <option value="1">Yishun</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="No_Bedroom" class="form-label">Bedrooms</label>
+            <select
+              id="No_Bedroom"
+              name="No_Bedroom"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="1" selected>1-ROOM</option>
+              <option value="2">2-ROOM</option>
+              <option value="3">3-ROOM</option>
+              <option value="4">4-ROOM</option>
+              <option value="5">5-ROOM</option>
+
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="Type" class="form-label">Flat Type</label>
+            <select
+              id="Type"
+              name="Type"
+              class="form-control form-control-lg form-control-a"
+              required
+            >
+              <option value="Executive Condominiums" selected>Executive Condominiums</option>
+              <option value="Landed Properties" selected>Landed Properties</option>
+              <option value="Non-Landed Housing" selected>Non-Landed Housing</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="floorFt" class="form-label">Floor Area (Sqf)</label>
+            <input
+              id="floorFt"
+              type="text"
+              name="floorFt"
+              class="form-control form-control-lg form-control-a"
+              min="25"
+              max="400"
+              required
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="Lease_Commencement_Date" class="form-label">Lease Start Date</label>
+            <input
+              id="Lease_Commencement_Date"
+              type="date"
+              name="Lease_Commencement_Date"
+              class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
+              required
+            />
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-a">Add Listing</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="/js/propertyInputValidation.js"></script>

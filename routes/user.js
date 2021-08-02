@@ -19,6 +19,7 @@ const { response } = require('express')
 const baseAPIUrl = 'http://localhost:8000/api/'
 
 const secret = process.env.secret
+const { ensureUserAuthenticated, checkNotAuthenticated } = require('../helpers/auth')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.googlemail.com',
@@ -243,17 +244,18 @@ async function getIntent (usermsg) {
   })
 }
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', { title })
 })
 
-router.get('/login', (req, res) => {
+router.get('/login', checkNotAuthenticated, (req, res) => {
   const title = 'Login'
-  res.render('user/login', { title })
+  const activeNavLogin = 'active'
+  res.render('user/login', { title, activeNavLogin })
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', checkNotAuthenticated, (req, res) => {
   // Inputs
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
   const fullName = req.body.fullName
@@ -294,69 +296,50 @@ router.post('/register', (req, res) => {
       bcrypt.hash(firstPassword, salt, function (err, hash) {
         password = hash
         userid = uuidv1()
-        User.create({ id: userid, name: fullName, email, password, isAgent: false, isAdmin: false }).then((user) => {
-          jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
-            (err, emailToken) => {
-              const url = `https://localhost:8080/user/confirmation/${emailToken}`
-              console.log(url)
-              transporter.sendMail({
-                to: req.body.email,
-                subject: 'Confirm Email',
-                html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
-              })
-                .catch((err) => {
-                  console.log(err)
-                })
-            })
-        })
+        User.create({ id: userid, fullName, email, password, isAgent: false, isAdmin: false })// .then((user) => {
+        //   jwt.sign({ user: userid }, secret, { expiresIn: '1d' },
+        //     (err, emailToken) => {
+        //       const url = `https://localhost:8080/user/confirmation/${emailToken}`
+        //       console.log(url)
+        //       transporter.sendMail({
+        //         to: req.body.email,
+        //         subject: 'Confirm Email',
+        //         html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+        //       })
+        //         .catch((err) => {
+        //           console.log(err)
+        //         })
+        //     })
+        // })
       })
     })
     res.redirect('/user/login')
   }
 })
 
-router.get('/confirmation/:token', async (req, res) => {
-  const token = jwt.verify(req.params.token, SECRET)
-  User.findOne({ where: { id: token.user } }).then((user) => {
-    user.update({ confirmed: true })
-    console.log('email verified')
-  })
-  // This function below is not defined
-  // alertMessage(res, 'success', 'account confirmed', 'fas fa-sign-in-alt', true)
-  res.redirect('https://localhost:8080/user/login')
-})
-
 // Logs in user
-router.post('/login', (req, res) => {
+router.post('/login', checkNotAuthenticated, (req, res, next) => {
   // Inputs
-  console.log(req.body)
   const email = req.body.email.toLowerCase().replace(/\s+/g, '')
-  console.log(email)
   const password = req.body.password
+
+  // let errors = []
 
   // Email Regex
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   // Input Validation
-  if (emailRegex.test(email) === false || password.length < 8) return console.log('It failed')
-
-  passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return next(err)
-    }
-    if (!user) {
-      return res.redirect('/login')
-    }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err)
-      } else if (user.isadmin == true) {
-        console.log('Admin has logged in')
-        return res.redirect('/')
-      }
-      return res.redirect('/')
-    })
-  })
+  if (emailRegex.test(email) === false || password.length < 8) {
+    // Flash the following message below to user
+    req.flash('error', 'Please enter valid credentials')
+    res.redirect('/user/login')
+  } else {
+    passport.authenticate('local', {
+      successRedirect: '/user/userProfile',
+      failureRedirect: '/user/login',
+      failureFlash: true
+    })(req, res, next)
+  }
 })
 
 // router.get('/forgetpassword', (req, res) => {
@@ -369,16 +352,25 @@ router.post('/login', (req, res) => {
 //     res.redirect('')
 //   })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkNotAuthenticated, (req, res) => {
   const title = 'Register'
   res.render('user/register', {
     title
   })
 })
 
-router.get('/userProfile', (req, res) => {
+// Display User Profile Page
+router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   const title = 'User Profile'
-  res.render('user/userProfile', { title })
+  const activeNavProfile = 'active'
+
+  // Retrieve user info
+  const userInfo = req.user
+  const userName = userInfo.name
+  const userEmail = userInfo.email
+  const userPhoneNo = userInfo.phoneNo
+
+  res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
 router.get('/chat', (req, res) => {
