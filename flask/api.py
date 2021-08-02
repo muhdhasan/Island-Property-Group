@@ -162,7 +162,7 @@ def predictHouseResale():
 
         # Predict Model
         predictionResult = resalePublicModel.predict(df_ohe_new)
-
+        print(predictionResult)
         return str(predictionResult)
     elif input["type"] == "private":
         # Categorical columns List
@@ -261,17 +261,21 @@ def chatbot():
     text = request.get_json()
     sentence_labels = ["goodbye",
                    "greeting",
-                   "house_age",
-                   "house_area",
-                   "description",
-                   "price",
-                   "sale_period",
-                   "sale_reason",
+                   "lease_commencement",
+                   "rent_cost",
+                   "house_info",
+                   "resale_price",
+                   "resale_date",
+                   'address',
                    "viewing"]
     # Get value from 'userInput' key
     userResponse = text["userInput"]
     result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
+<<<<<<< HEAD:flask/api.py
     return jsonify({"result": result})
+=======
+    return jsonify({"result":result})
+>>>>>>> chatbot:api.py
     
 # Start at localhost:8000
 if __name__ == '__main__':

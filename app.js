@@ -5,9 +5,14 @@ const path = require('path')
 const fs = require('fs')
 const https = require('https')
 const methodOverride = require('method-override')
+<<<<<<< HEAD
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const flash = require('express-flash')
+=======
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
+>>>>>>> chatbot
 
 // Create Express Server
 const app = express()
@@ -48,12 +53,39 @@ app.use(methodOverride('_method'))
 // Library to use MySQL to store session objects
 const MySQLStore = require('express-mysql-session')
 const db = require('./config/db.js')
+<<<<<<< HEAD
 
 // Enables session to be stored using browser's Cookie ID
 app.use(cookieParser())
 
 // Removed unused libraries later
 
+=======
+app.use(cookieParser())
+app.use(
+  session({
+    key: 'iPG_session',
+    secret: 'tojiv',
+    // store: new MySQLStore({
+    //   host: process.env.dbHost,
+    //   port: process.env.port,
+    //   username: process.env.dbUsername,
+    //   password: process.env.password,
+    //   database: process.env.dbName,
+    //   clearExpired: true,
+    //   // How frequently expired sessions will be cleared; milliseconds:
+    //   checkExpirationInterval: 900000,
+    //   // The maximum age of a valid session; milliseconds:
+    //   expiration: 900000
+    // }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true
+    }
+  })
+)
+>>>>>>> chatbot
 // Messaging libraries
 // const flash = require('connect-flash')
 // const FlashMessenger = require('flash-messenger')
@@ -70,6 +102,7 @@ const realEstateDB = require('./config/DBConnection')
 const restartDB = false
 realEstateDB.setUpDB(restartDB)
 
+<<<<<<< HEAD
 // Passport Config
 const authenticate = require('./config/passport')
 authenticate.localStrategy(passport)
@@ -105,11 +138,21 @@ app.use((req, res, next) => {
   next()
 })
 
+=======
+// passport
+const passport = require('passport')
+const authenticate = require('./config/passport')
+authenticate.localStrategy(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
+>>>>>>> chatbot
 // Routes
 app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)
 
+<<<<<<< HEAD
 // Catch all URL that is not valid and return 404 error
 app.get('*', (req, res) => {
   res.render('errorCodes', {
@@ -118,6 +161,8 @@ app.get('*', (req, res) => {
   })
 })
 
+=======
+>>>>>>> chatbot
 // Error Codes
 app.use((err, req, res, next) => {
   // Log Error
