@@ -11,7 +11,7 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 
 // Base URL String
-const baseAPIUrl =  process.env.baseAPIUrl || 'http://localhost:8000/api/'
+const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
 // Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
@@ -37,10 +37,9 @@ async function predictPublicResale (dateOfSale, town, flatType,
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then(res => {
-        console.log(res)
+      .then(res =>
         res.json()
-      })
+      )
       .then((json) => {
         console.log(json)
         result(json)
