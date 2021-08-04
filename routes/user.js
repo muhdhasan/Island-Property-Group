@@ -15,8 +15,7 @@ const Chat = require('../models/Chat')
 const hdbResale = require('../models/hdbResale')
 const PrivateResale = require('../models/PrivateResale')
 const PrivateRental = require('../models/PrivateRental')
-const { response } = require('express')
-const baseAPIUrl = 'http://localhost:8000/api/'
+const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
 const secret = process.env.secret
 const { ensureUserAuthenticated, checkNotAuthenticated } = require('../helpers/auth')
@@ -389,7 +388,7 @@ router.get('/chat/:listing', (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.post('/chat', (req, res) => {
+router.post('/chat/:listing', (req, res) => {
   message = req.body.userinput
   if (message == '') {
     return

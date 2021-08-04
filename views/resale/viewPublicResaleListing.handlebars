@@ -65,11 +65,13 @@
       </div>
       <!-- Chatbot -->
       <div class="m-5 d-flex justify-content-center">
-        <a class="btn btn-lg btn-outline-info" href="/user/chat/{{listingid}}">Chatbot</a>
+        <a
+          class="btn btn-lg btn-outline-info"
+          href="/user/chat/{{id}}"
+        >Chatbot</a>
       </div>
       <div class="row mt-5">
         <div class="col-sm-12">
-
           <div class="row justify-content-between">
             <div class="col-md-5 col-lg-4">
               <div class="property-price d-flex justify-content-center foo">
@@ -212,6 +214,17 @@
                 aria-selected="false"
               >Ubication</a>
             </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                id="pills-comparePredict-tab"
+                data-bs-toggle="pill"
+                href="#pills-comparePredict"
+                role="tab"
+                aria-controls="pills-comparePredict"
+                aria-selected="false"
+              >AI Price Comparison</a>
+            </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -252,6 +265,46 @@
                 style="border:0"
                 allowfullscreen
               ></iframe>
+            </div>
+            <div
+              class="tab-pane fade text-center"
+              id="pills-comparePredict"
+              role="tabpanel"
+              aria-labelledby="pills-comparePredict-tab"
+            >
+              <h2 class="mb-3">AI Price Comparison</h2>
+              <hr />
+              <h5 class="mb-3">Comparing resale value with our AI prediction</h5>
+              <div class="row my-5">
+                <div class="col-md-4">
+                  <h4 class="mt-5">Resale Price</h4>
+                  <h3>{{roundOffToThousand resalePrice}}k</h3>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Percentage Difference</h4>
+                  <div class="d-flex justify-content-center">
+                    <h3 title="We calculated this price difference by subtracting predicted value from resale value divided by resale value multiplied by 100.">{{percentagePriceDifference}}%</h3>
+                    {{!-- <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      fill="currentColor"
+                      class="bi bi-chevron-down"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      ></path>
+                    </svg> --}}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Predicted Price</h4>
+                  <h3>{{roundOffToThousand predictedValue}}k</h3>
+                </div>
+              </div>
+              <br />
             </div>
           </div>
         </div>

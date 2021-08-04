@@ -85,6 +85,22 @@ async function predictPrivateResale (houseType, postalDistrict,
   })
 }
 
+
+// TESTING
+// function displayPriceDiff (perDiff) {
+//   // If percentage diff is more than 2%
+//   if (perDiff > 2) {
+//     return "positive"
+//   } 
+//   // If percentage diff is more than -2%
+//   else if (perDiff < -2) {
+//     return "negative"
+//   }
+//   else{
+//     return "equal"
+//   }
+// }
+
 // Router is placed according to CRUD order where you'll see create function then followed by retrieve and etc
 
 // Reference
@@ -246,6 +262,11 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       const usePrediction = hdbResaleDetail.usePrediction
       const postalCode = hdbResaleDetail.postalCode
+
+      // Calculate percentage differences and
+      // round off to 2 decimal places
+      const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
+
       res.render('resale/viewPublicResaleListing', {
         id,
         address,
@@ -253,6 +274,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
         title,
         resalePrice,
         predictedValue,
+        percentagePriceDifference,
         town,
         flatType,
         floorSqm,
@@ -477,6 +499,11 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
       const isViewable = hdbResaleDetail.isViewable
       const usePrediction = hdbResaleDetail.usePrediction
       const postalCode = hdbResaleDetail.postalCode
+
+      // Calculate percentage differences and
+      // round off to 2 decimal places
+      const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
+
       res.render('resale/confirmPublicListing', {
         id,
         address,
@@ -484,6 +511,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
         title,
         resalePrice,
         predictedValue,
+        percentagePriceDifference,
         town,
         flatType,
         floorSqm,
@@ -503,7 +531,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
 router.get('/showPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
-  console.log(resalePublicID)
+
   hdbResale.update({
     // Make this property visible to users from agent
     isViewable: true
@@ -523,7 +551,7 @@ router.get('/hidePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   const resalePublicID = req.params.id
 
   hdbResale.update({
-    // Make this property visible to users from agent
+    // Make this property invisible to users from agent
     isViewable: false
   }, {
     where: {
@@ -561,7 +589,8 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   const privateResaleId = uuid.v4()
 
   // Inputs
-  const address = req.body.address1
+  const address = req.body.address
+  const propertyName = req.body.propertyName
   const description = 'Sample Description'
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType

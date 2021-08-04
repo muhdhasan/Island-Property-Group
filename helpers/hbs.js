@@ -66,4 +66,11 @@ module.exports = {
       return resaleValue
     }
   }
+
+  // // Display percentage difference in property listings pages
+  // displayPercentageTab: (inputData, typeDisplay) => {
+  //   if(inputData === typeDisplay && typeDisplay === "positive"){
+  //     return true
+  //   }
+  // }
 }
