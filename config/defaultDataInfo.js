@@ -5,7 +5,7 @@ const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-// Salt User password with bcrypt so its unreable in database
+// Salt User password with bcrypt so its unreadable in database
 function saltPassword (password) {
   const hash = bcrypt.hashSync(password, saltRounds)
   return hash
@@ -80,6 +80,7 @@ const HDBResaleListingOne = {
   blockNo: 'Block 123',
   description: 'A typical HDB flat located in Singapore.',
   resalePrice: 500000,
+  predictedValue: 600000,
   town: 'JURONG EAST',
   flatType: '5-ROOM',
   flatModel: 'NEW GENERATION',
@@ -98,6 +99,7 @@ const HDBResaleListingTwo = {
   blockNo: 'Block 456',
   description: 'Another typical HDB flat located in Singapore.',
   resalePrice: 600000,
+  predictedValue: 600000,
   town: 'SENGKANG',
   flatType: '5-ROOM',
   flatModel: 'NEW GENERATION',
