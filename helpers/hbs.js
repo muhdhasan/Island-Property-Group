@@ -15,6 +15,15 @@ module.exports = {
     return inputData === dropDown ? 'selected' : ''
   },
 
+  autoCheckRadioBtn: (inputData, radioValue) => {
+    if (inputData === radioValue){
+      return 'checked'
+    }
+    else{
+      return ''
+    }
+  },
+
   // Basically converts 1000 to 1k so its more eligible for users
   roundOffToThousand: (inputPrice) => {
     return Math.round(inputPrice / 1000)
