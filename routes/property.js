@@ -245,7 +245,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
     .findOne({
       where: {
         id: resalePublicID,
-        isViewable: true
+        // isViewable: true
       }
     })
     // Will display more information regarding this property later
@@ -633,7 +633,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
 })
 
 // View individual private Resale Page
-router.get('/viewPrivateResaleListing/:id', (req, res) => {
+router.get('/viewPrivateResaleListing/:id', checkUUIDFormat ,checkResalePrivateListingId, (req, res) => {
   const title = 'Private Resale Listing'
   const secondaryTitle = '304 Blaster Up'
   // Get UUID from URL
@@ -678,6 +678,7 @@ router.get('/viewPrivateResaleListing/:id', (req, res) => {
 router.get('/viewPrivateResaleList', (req, res) => {
   const title = 'Private Resale'
   const isViewable = true
+  const isPublic = true
   privateResale.findAll({
     // Only users can see viewable properties
     where: {
@@ -685,18 +686,19 @@ router.get('/viewPrivateResaleList', (req, res) => {
     },
     raw: true
   }).then((privateResale) => {
-    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale })
+    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale, isPublic })
   })
 })
 
 // Unviewable property listings that customers cannot see
 router.get('/viewPreviewPrivateResaleList', checkAgentAuthenticated, (req, res) => {
   const title = 'Private Preview Resale'
+  const isPublic = false
   privateResale.findAll({
     // Only agents can see all properties
     raw: true
   }).then((privateResale) => {
-    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale })
+    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale, isPublic })
   })
 })
 
@@ -828,10 +830,11 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
   }).catch((err) => console.log('Error: ', err))
 })
 
-// Confirmation Page for private properties
-router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+// Make private resale listing public
+router.get('/showPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL
   const privateResaleId = req.params.id
+  console.log(privateResaleId)
 
   privateResale.update({
     // Make this property visible to users from agent
@@ -843,7 +846,25 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
   })
     .then(() => {
       res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-    }).catch((err) => { console.log('Error: ', err) })
+    }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
+})
+
+// Make private resale listing private
+router.get('/hidePrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+  console.log(privateResaleId)
+  privateResale.update({
+    // Make this property visible to users from agent
+    isViewable: false
+  }, {
+    where: {
+      id: privateResaleId
+    }
+  })
+    .then(() => {
+      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
+    }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
 })
 
 // Basic Delete Function
