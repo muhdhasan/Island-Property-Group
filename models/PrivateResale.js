@@ -6,6 +6,7 @@ const PrivateResale = db.define('privateResale', {
   address: { type: Sequelize.STRING(500) },
   description: { type: Sequelize.STRING(2000) },
   resalePrice: { type: Sequelize.DECIMAL(12, 2) },
+  predictedValue: { type: Sequelize.DECIMAL(12, 2) },
   houseType: { type: Sequelize.STRING },
   typeOfArea: { type: Sequelize.STRING },
   marketSegment: { type: Sequelize.STRING },
@@ -14,11 +15,12 @@ const PrivateResale = db.define('privateResale', {
   floorLevel: { type: Sequelize.STRING },
   leaseCommenceDate: { type: Sequelize.DATEONLY },
   resaleDate: { type: Sequelize.DATEONLY },
-  isViewable: { type: Sequelize.BOOLEAN }
+  postalCode: { type: Sequelize.STRING },
+  isViewable: { type: Sequelize.BOOLEAN },
+  usePrediction: { type: Sequelize.BOOLEAN }
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },
-  // postalCode: { type: Sequelize.STRING },
 })
 
 module.exports = PrivateResale

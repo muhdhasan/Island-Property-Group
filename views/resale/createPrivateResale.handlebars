@@ -165,64 +165,72 @@
               required
             />
           </div>
-          <div class="row mb-3">
-            <div class="col-md-6 mb-3">
-              <label for="isFreehold" class="form-label">Freehold</label>
-              <div class="form-check form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFreehold"
-                  id="isFreeholdYes"
-                  value="1"
-                  onclick="javascript:isFreeholdCheck();"
-                  required
-                />
-                <label class="form-check-label" for="isFreeholdYes">Yes</label>
-              </div>
-              <div class="form-check form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFreehold"
-                  id="isFreeholdNo"
-                  value="0"
-                  onclick="javascript:isFreeholdCheck();"
-                  required
-                />
-                <label class="form-check-label" for="isFreeholdNo">No</label>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="leaseCommenceDateDiv">
-                <label for="leaseCommenceDate" class="form-label">Lease Start
-                  Date</label>
-                <input
-                  id="leaseCommenceDate"
-                  type="date"
-                  name="leaseCommenceDate"
-                  class="form-control form-control-lg form-control-a"
-                  min="1952-01-01"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6 mb-3">
-              <label for="dateOfSale" class="form-label">Resale Date</label>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="isFreehold" class="form-label">Freehold</label>
+            <div class="form-check form-check">
               <input
-                id="dateOfSale"
-                type="date"
-                name="dateOfSale"
-                class="form-control form-control-lg form-control-a"
-                min="1952-01-01"
+                class="form-check-input"
+                type="radio"
+                name="isFreehold"
+                id="isFreeholdYes"
+                value="1"
+                onclick="javascript:isFreeholdCheck();"
                 required
               />
-              <div id="resaleDateErrorMsg" class="form-text"></div>
+              <label class="form-check-label" for="isFreeholdYes">Yes</label>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="form-check form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isFreehold"
+                id="isFreeholdNo"
+                value="0"
+                onclick="javascript:isFreeholdCheck();"
+                required
+              />
+              <label class="form-check-label" for="isFreeholdNo">No</label>
             </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              id="postalCode"
+              type="text"
+              name="postalCode"
+              class="form-control form-control-lg form-control-a"
+              placeholder="500123"
+              required
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            {{! <div class="leaseCommenceDateDiv"> }}
+            <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
+            <input
+              id="leaseCommenceDate"
+              type="date"
+              name="leaseCommenceDate"
+              class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
+              required
+            />
+            {{! </div> }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="dateOfSale" class="form-label">Resale Date</label>
+            <input
+              id="dateOfSale"
+              type="date"
+              name="dateOfSale"
+              class="form-control form-control-lg form-control-a"
+              min="1952-01-01"
+              required
+            />
+            <div id="resaleDateErrorMsg" class="form-text"></div>
           </div>
         </div>
         <h3 class="mb-3">Pricing</h3>
