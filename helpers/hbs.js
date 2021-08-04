@@ -47,9 +47,11 @@ module.exports = {
     }
   },
 
-  // 
+  // This function checks if the listing uses resaleValue or predictedValue
+  // If we want to display predictedValue, usePrediction has to be true
+  // Otherwise, false
   displayPredictedValue: (resaleValue, predictedValue, usePrediction) => {
-    if (usePrediction === true){
+    if (usePrediction === true || usePrediction === 1){
       return predictedValue
     }
     else{

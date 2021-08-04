@@ -67,7 +67,7 @@
                       </div>
                       <div class="card-body-a">
                         <div class="price-box d-flex">
-                          <span class="price-a">Resale | $ {{roundOffToThousand resalePrice}}K</span>
+                          <span class="price-a">Resale | $ {{ roundOffToThousand (displayPredictedValue resalePrice predictedValue usePrediction) }}K</span>
                         </div>
                         <a href="/property/viewPublicResaleListing/{{id}}" class="link-a">Click here to
                           view
@@ -124,7 +124,7 @@
                       {{#if isViewable}}
                       <div class="card-body-a">
                         <div class="price-box d-flex">
-                          <span class="price-a">Resale | $ {{roundOffToThousand resalePrice}}K</span>
+                          <span class="price-a">Resale | $ {{ roundOffToThousand (displayPredictedValue resalePrice predictedValue usePrediction)}}K</span>
                         </div>
                         <a href="/property/confirmPublicResaleListing/{{id}}" class="link-a">Click here to
                           view
@@ -152,7 +152,7 @@
                       {{else}}
                       <div class="card-body-a">
                         <div class="price-box d-flex">
-                          <span class="price-unViewable">Resale | $ {{roundOffToThousand resalePrice}}K</span>
+                          <span class="price-unViewable">Resale | $ {{ roundOffToThousand (displayPredictedValue resalePrice predictedValue usePrediction)}}K</span>
                         </div>
                         <a href="/property/confirmPublicResaleListing/{{id}}" class="link-a">Click here to
                           view

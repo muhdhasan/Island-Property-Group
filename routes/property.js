@@ -13,8 +13,9 @@ const fetch = require('node-fetch')
 // Base URL String
 const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
-// Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
+
+// Middlewares
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
 const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
 
@@ -211,6 +212,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
     .then((hdbResaleDetail) => {
       const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const predictedValue = Math.round(hdbResaleDetail.predictedValue)
       const address = hdbResaleDetail.address
       const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
@@ -218,6 +220,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
+      const usePrediction = hdbResaleDetail.usePrediction
       const postalCode = hdbResaleDetail.postalCode
       res.render('resale/viewPublicResaleListing', {
         id,
@@ -225,11 +228,13 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
         blockNo,
         title,
         resalePrice,
+        predictedValue,
         town,
         flatType,
         floorSqm,
         description,
         leaseCommenceDate,
+        usePrediction,
         postalCode
       })
     })
