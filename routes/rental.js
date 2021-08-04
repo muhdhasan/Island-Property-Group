@@ -10,6 +10,7 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 
 const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
+//const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const PrivateRental = require('../models/PrivateRental')
 
@@ -53,7 +54,7 @@ router.get('/base', (req, res) => {
     },
     raw: true
   }).then((privateRental) => {
-    res.render('rental/base', { title, privateRental: privateRental })
+    res.render('rental/base', { title, privateRental: privateRental})
   })
 })
 // View individual Rental Properties Page
@@ -94,7 +95,8 @@ router.get('/rentalListing/:id', (req, res) => {
         numberOfBedroom,
         leaseCommenceDate,
         floorSqm,
-        description
+        description,
+        rentID
       })
     })
     .catch((err) => {
@@ -173,5 +175,98 @@ router.post('/createRental', (req, res) => {
       .catch((err) => console.log('Error: ' + err))
   })
 })
+// Edit Function for public resale listings
+router.get('/editRentalListing/:id', (req, res) => {
+  const title = 'Edit Rental Listing'
 
+  // Get UUID from URL
+  const rentID = req.params.id
+  // Find hdb property by id
+  PrivateRental.findOne({
+    where: { id: rentID }
+  }).then((result) => {
+    // Display result from database
+    const rentalPrice = PrivateRental.monthlyRent
+    const address = PrivateRental.address
+    const houseType = PrivateRental.houseType
+    const numberOfBedroom = PrivateRental.numberOfBedroom
+    const floorSqm = PrivateRental.floorSqm
+    const leaseCommenceDate = PrivateRental.leaseCommenceDate
+    const postalDistrict = PrivateRental.postal_district
+    const description = PrivateRental.description
+    // Render property values from database
+    res.render('rental/editRentalListing', {
+      address,
+      title,
+      rentalPrice,
+      houseType,
+      numberOfBedroom,
+      leaseCommenceDate,
+      postalDistrict,
+      floorSqm,
+      description,
+      rentID
+    })
+  }).catch((err) => console.log('Error: ', err))
+})
+// Update public property information to database
+router.put('/editRentalListing/:id',(req, res) => {
+  // Get UUID from URL
+  const rentID = req.params.id
+
+  const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
+
+  // Inputs
+  const address = req.body.address
+  const postal_district = req.body.postal_district
+  const description = req.body.description
+  // Will add input validation here later
+  const bedrooms = req.body.No_Bedroom
+  const type = req.body.Type
+  const floorSqF = req.body.floorFt
+
+  // Date related inputs
+  const leaseDate = req.body.leaseCommenceDate
+
+  // Call predicting api for public resale housing
+  const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
+  rentValue.then((response) => {
+    console.log('postal_district: ', postal_district)
+    console.log('type: ', type)
+    console.log('bedrooms: ', bedrooms)
+    console.log('floorSqF: ', floorSqF)
+    console.log('leaseDate: ', leaseDate)
+    console.log('Resale Value', rentValue)
+    const description = 'Sample Description'
+    // Update rental listing according to UUID
+    PrivateRental.update({
+      address: address,
+      description: description,
+      monthlyRent: Math.round(response),
+      houseType:type,
+      numberOfBedroom: bedrooms,
+      postalDistrict: postal_district,
+      floorSqm:floorSqF,
+      leaseCommenceDate:leaseDate,
+    }, {
+      where: { id: rentID }
+    }).then(() => {
+    // Redirect to confirmation page
+    res.redirect('/rental/base')
+    }).catch((err) => { console.log('Error in updating Rental Listing: ', err) })
+  })
+})
+
+// Basic Delete Function
+// Delete private resale listing
+router.get('/deleteRentalListing/:id',(req, res) => {
+  const rentID = req.params.id
+  PrivateRental.destroy({
+    where: { id: rentID }
+  }).then(() => {
+    console.log('Deleted rental listing')
+    // Redirect to preview resale list page for private properties
+    res.redirect('/rental/base')
+  }).catch((err) => { console.log('Error: ', err) })
+})
 module.exports = router
