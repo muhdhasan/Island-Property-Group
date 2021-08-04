@@ -79,16 +79,15 @@
             type="button"
             class="btn btn-lg btn-outline-success mx-2"
             data-bs-toggle="modal"
-            data-bs-target="#confirmModal"
-            disabled
-          >Confirm Listing</button>
+            data-bs-target="#makePrivateModal"
+          >Make Private</button>
         {{else}}
           <button
             type="button"
             class="btn btn-lg btn-outline-success mx-2"
             data-bs-toggle="modal"
-            data-bs-target="#confirmModal"
-          >Confirm Listing</button>
+            data-bs-target="#makePublicModal"
+          >Make Public</button>
         {{/if}}
       </div>
       <div class="row mt-5">
@@ -426,18 +425,18 @@
     </div>
   </div>
 </div>
-<!-- Confirm Modal -->
+<!-- Make Public Modal -->
 <div
   class="modal fade"
-  id="confirmModal"
+  id="makePublicModal"
   tabindex="-1"
-  aria-labelledby="confirmModalLabel"
+  aria-labelledby="makePublicModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="confirmModalLabel">Make Property Viewable</h5>
+        <h5 class="modal-title" id="makePublicModalLabel">Make Listing Public?</h5>
         <button
           type="button"
           class="btn-close"
@@ -446,7 +445,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        Confirm listing of this property?
+        Do you want to make this listing public?
       </div>
       <div class="modal-footer">
         <button
@@ -455,9 +454,45 @@
           data-bs-dismiss="modal"
         >Close</button>
         <a
-          href="/property/confirmPublicResaleListing/{{id}}"
+          href="/property/showPublicResaleListing/{{id}}"
           class="btn btn-outline-success"
-        >Confirm</a>
+        >Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Make Private Modal -->
+<div
+  class="modal fade"
+  id="makePrivateModal"
+  tabindex="-1"
+  aria-labelledby="makePrivateModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="makePrivateModalLabel">Make Listing Private?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Do you want to make this listing private?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <a
+          href="/property/hidePublicResaleListing/{{id}}"
+          class="btn btn-outline-success"
+        >Yes</a>
       </div>
     </div>
   </div>

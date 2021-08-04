@@ -427,12 +427,11 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
     })
 })
 
-// Confirmation Page for hdb properties
-router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+// Make HDB Resale Listing Public to Customer
+router.get('/showPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
-  console.log(req.params.id)
-
+  console.log(resalePublicID)
   hdbResale.update({
     // Make this property visible to users from agent
     isViewable: true
@@ -442,8 +441,26 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
     }
   })
     .then(() => {
-      res.send('/property/confirmPublicResaleListing/' + resalePublicID)
-    }).catch((err) => { console.log('Error: ', err) })
+      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+    }).catch((err) => { console.log('Error in making HDB Resale Listing Public: ', err) })
+})
+
+// Make HDB Resale Listing Private
+router.get('/hidePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+  // Get UUID from URL
+  const resalePublicID = req.params.id
+
+  hdbResale.update({
+    // Make this property visible to users from agent
+    isViewable: false
+  }, {
+    where: {
+      id: resalePublicID
+    }
+  })
+    .then(() => {
+      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+    }).catch((err) => { console.log('Error in making HDB Resale Listing Private: ', err) })
 })
 
 // Basic Delete Function
