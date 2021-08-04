@@ -159,7 +159,7 @@ const options = {
 // should we intend to reset the database whenever we want
 const checkDefaultData = require('./config/defaultDataInfo')
 checkDefaultData.check().catch((err) => {
-  // log error
+  // log error here
   console.log(err)
 })
 
