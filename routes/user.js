@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
 const fetch = require('node-fetch')
+const bodyParser = require('body-parser')
 
 // Models
 const User = require('../models/User')
@@ -16,7 +17,7 @@ const hdbResale = require('../models/hdbResale')
 const PrivateResale = require('../models/PrivateResale')
 const PrivateRental = require('../models/PrivateRental')
 const { response } = require('express')
-const baseAPIUrl = 'http://localhost:8000/api/'
+const baseAPIUrl = process.env.baseAPIUrl
 
 const secret = process.env.secret
 const { ensureUserAuthenticated, checkNotAuthenticated } = require('../helpers/auth')
@@ -36,29 +37,29 @@ function createreturnmsg (intent, listingid,botmsgid,botorder,userid) {
   PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 1')
-      createPrivateResaleMsg(intent,listingid,botmsgid,botmsgid,userid)
+      createPrivateResaleMsg(intent,listing,botmsgid,botorder,userid)
       return 
     }
   })
   PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 2')
-      createPrivateRentalMsg(intent,listingid,botmsgid,botmsgid,userid)
+      createPrivateRentalMsg(intent,listing,botmsgid,botorder,userid)
       return 
     }
   })
   hdbResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 3')
-      createhdbResaleMsg(intent,listingid,botmsgid,botmsgid,userid)
+      createhdbResaleMsg(intent,listing,botmsgid,botorder,userid)
       return 
     }
   })
 }
-function createPrivateResaleMsg (intent, listingid,botmsgid,botorder,userid) {
+function createPrivateResaleMsg (intent, listing,botmsgid,botorder,userid) {
   console.log('resale test')
+  var listingid = listing.id
   var msg = "blank"
-  PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     switch (intent) {
       case 'goodbye':
         msg=  'thank you and good bye'
@@ -73,10 +74,10 @@ function createPrivateResaleMsg (intent, listingid,botmsgid,botorder,userid) {
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
       case 'house_info':
-        msg = 'Description: <br>' +
-            listing.description.toString() + '<br>' +
-            'House Type: ' + listing.houseType.toString() + '<br>' +
-            'Postal District: ' + listing.postalDistrict.toString() + '<br>' +
+        msg = 'Description: ' +
+            listing.description.toString() + 
+            'House Type: ' + listing.houseType.toString() + 
+            'Postal District: ' + listing.postalDistrict.toString() + 
             'Floor Square Meters: ' + listing.floorSqm.toString()
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
@@ -107,11 +108,10 @@ function createPrivateResaleMsg (intent, listingid,botmsgid,botorder,userid) {
           break;
         }
     }
-  })
 }
 function createPrivateRentalMsg (intent, listingid,botmsgid,botorder,userid) {
   console.log('rent test')
-  PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
+  var listingid = listing.id
     var msg = 'blank'
     switch (intent) {
       case 'goodbye':
@@ -127,11 +127,11 @@ function createPrivateRentalMsg (intent, listingid,botmsgid,botorder,userid) {
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
       case 'house_info':
-        msg = 'Description: <br>' +
-            listing.description.toString() + '<br>' +
-            'House Type: ' + listing.houseType.toString() + '<br>' +
-            'Number of Bedrooms: ' + listing.numberOfBedroom.toString() + '<br>' +
-            'Postal District: ' + listing.postalDistrict.toString() + '<br>' +
+        msg = 'Description:' +
+            listing.description.toString() + 
+            'House Type: ' + listing.houseType.toString() + 
+            'Number of Bedrooms: ' + listing.numberOfBedroom.toString() + 
+            'Postal District: ' + listing.postalDistrict.toString() + 
             'Floor Square Meters: ' + listing.floorSqm.toString()
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
@@ -162,7 +162,6 @@ function createPrivateRentalMsg (intent, listingid,botmsgid,botorder,userid) {
           break;
         }
     }
-  })
 }
 function createhdbResaleMsg (intent,listing,botmsgid,botorder,userid) {
   console.log('hdb test')
@@ -183,14 +182,14 @@ function createhdbResaleMsg (intent,listing,botmsgid,botorder,userid) {
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
       case 'house_info':
-        msg = 'Description: <br>' +
-            listing.description.toString() + '<br>' +
-            'Town: ' + listing.town.toString() + '<br>' +
-            'Flat Type: ' + listing.flatType.toString() + '<br>' +
-            'Flat Model: ' + listing.flatModel.toString() + '<br>' +
-            'Flat Level: ' + listing.flatLevel.toString() + '<br>' +
-            'Postal District: ' + listing.postalDistrict.toString() + '<br>' +
-            'Floor Square Meters: ' + listing.floorSqm.toString()
+        msg = 'Description:'
+        +listing.description.toString()
+        +'Town: '+listing.town.toString()
+        +'Flat Type: '+listing.flatType.toString() 
+        +'Flat Model: '+listing.flatModel.toString()
+        +'Flat Level: '+listing.flatLevel.toString()
+        +'Postal District: '+listing.postalCode.toString()
+        +'Floor Square Meters: '+listing.floorSqm.toString()
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break;
       case 'resale_price':
@@ -373,9 +372,9 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
-router.get('/chat', (req, res) => {
+router.get('/chat/:listing',ensureUserAuthenticated, (req, res) => {
   const title = 'Chat'
-  var user = User.userid;
+  var user = req.user.id;
   var listingid = req.params.listing
   Chat.findAll({
     where: {
@@ -387,18 +386,19 @@ router.get('/chat', (req, res) => {
     ],
     raw: true
   }).then((messages) => {
-    res.render('user/chatbot', { messages: messages, title })
+    res.render('user/chatbot', { messages: messages, title, listingid: listingid })
   })
     .catch(err => console.log(err))
 })
 
 router.post('/chat', (req, res) => {
   message = req.body.userinput
+  listingid = req.body.listingid
+  console.log(listingid)
   if (message == '') {
     return
   }
-  var userid = User.userid
-  var listingid = req.params.listing
+  var userid = req.user.id
   Chat.findOne({
     where: {
       userid: userid,
@@ -419,17 +419,18 @@ router.post('/chat', (req, res) => {
 
     const intent = getIntent(message)
     intent.then((result) => {
-      console.log('Hello2')
+      console.log(result)
       const theIntent = result.result.toString()
       console.log(theIntent)
       console.log("CREATED USER MESSAGE")
       // Create user message
       Chat.create({ messageid: msgid, message: message, chatorder: order, userid: userid, listingid: listingid, isBot: false })
-      // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
-      const botmsgid = uuid.v1()
-      createreturnmsg(theIntent,listingid,botmsgid,botorder,userid)
-      res.redirect("chat")
       // Create bot message
+      const botmsgid = uuid.v1()
+      console.log(listingid)
+      console.log(botorder)
+      createreturnmsg(theIntent,listingid,botmsgid,botorder,userid)
+      res.redirect('back')
     })
   }).catch(err => console.log(err))
 })
