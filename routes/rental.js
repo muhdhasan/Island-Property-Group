@@ -9,7 +9,7 @@ const uuid = require('uuid')
 const moment = require('moment')
 const fetch = require('node-fetch')
 
-const baseAPIUrl = 'http://localhost:8000/api/'
+const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const PrivateRental = require('../models/PrivateRental')
 
