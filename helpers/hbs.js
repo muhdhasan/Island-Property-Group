@@ -45,5 +45,15 @@ module.exports = {
     } else {
       return false
     }
+  },
+
+  // 
+  displayPredictedValue: (resaleValue, predictedValue, usePrediction) => {
+    if (usePrediction === true){
+      return predictedValue
+    }
+    else{
+      return resaleValue
+    }
   }
 }

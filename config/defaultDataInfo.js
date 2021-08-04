@@ -89,7 +89,8 @@ const HDBResaleListingOne = {
   leaseCommenceDate: new Date('2000-01-01'),
   resaleDate: new Date('2021-07-08'),
   postalCode: '580123',
-  isViewable: false
+  isViewable: false,
+  usePrediction: true
 }
 
 // HDB Listing Two Schema
@@ -108,7 +109,8 @@ const HDBResaleListingTwo = {
   leaseCommenceDate: new Date('2000-01-01'),
   resaleDate: new Date('2021-07-08'),
   postalCode: '580123',
-  isViewable: true
+  isViewable: true,
+  usePrediction: true
 }
 
 // Create default HDB properties

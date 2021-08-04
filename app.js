@@ -21,7 +21,7 @@ const propertyRoute = require('./routes/property')
 const rentalRoute = require('./routes/rental')
 
 // Bring in Handlebars helpers
-const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion, checkSpecialUserType } = require('./helpers/hbs')
+const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion, checkSpecialUserType, displayPredictedValue } = require('./helpers/hbs')
 
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
@@ -31,7 +31,8 @@ app.engine('handlebars', exphbs({
     autoSelectDropDown: autoSelectDropDown,
     roundOffToThousand: roundOffToThousand,
     roundOffToMillion: roundOffToMillion,
-    checkSpecialUserType: checkSpecialUserType
+    checkSpecialUserType: checkSpecialUserType,
+    displayPredictedValue: displayPredictedValue
   }
 }))
 app.set('view engine', 'handlebars')

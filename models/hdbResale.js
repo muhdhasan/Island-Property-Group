@@ -16,7 +16,8 @@ const HDBResale = db.define('hdb_resale', {
   leaseCommenceDate: { type: Sequelize.DATEONLY },
   resaleDate: { type: Sequelize.DATEONLY },
   postalCode: { type: Sequelize.STRING },
-  isViewable: { type: Sequelize.BOOLEAN }
+  isViewable: { type: Sequelize.BOOLEAN },
+  usePrediction: {type: Sequelize.BOOLEAN }
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },

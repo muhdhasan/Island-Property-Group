@@ -118,6 +118,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   const flatModel = req.body.flatModel
   const flatLevel = req.body.flatLevel
   const useAIOption = req.body.usePrediction
+  console.log("Use AI: ",useAIOption)
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.flatLevel)
@@ -172,6 +173,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
         blockNo,
         description,
         resalePrice: Math.round(response),
+        predictedValue: Math.round(response),
         town,
         flatType,
         flatModel,
@@ -180,7 +182,8 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
         leaseCommenceDate: leaseStartDate,
         resaleDate: dateOfSale,
         postalCode,
-        isViewable: false
+        isViewable: false,
+        usePrediction: useAIOption
       })
       .then(() => {
         console.log('Created HDB Resale Listing')
@@ -363,6 +366,7 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
       blockNo,
       description,
       resalePrice: Math.round(response),
+      predictedValue: Math.round(response),
       town,
       flatType,
       flatModel,
@@ -370,7 +374,8 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
       floorSqm,
       leaseCommenceDate: leaseStartDate,
       resaleDate: dateOfSale,
-      postalCode
+      postalCode,
+      usePrediction: useAIOption
     }, {
       where: { id: resalePublicID }
     }).then(() => {
@@ -398,6 +403,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
     .then((hdbResaleDetail) => {
       const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
+      const predictedValue = Math.round(hdbResaleDetail.predictedValue)
       const address = hdbResaleDetail.address
       const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
@@ -406,6 +412,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
       const isViewable = hdbResaleDetail.isViewable
+      const usePrediction = hdbResaleDetail.usePrediction
       const postalCode = hdbResaleDetail.postalCode
       res.render('resale/confirmPublicListing', {
         id,
@@ -413,12 +420,14 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
         blockNo,
         title,
         resalePrice,
+        predictedValue,
         town,
         flatType,
         floorSqm,
         description,
         leaseCommenceDate,
         isViewable,
+        usePrediction,
         postalCode
       })
     })
