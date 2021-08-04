@@ -617,6 +617,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
       privateResale.create({
         id: privateResaleId,
         address,
+        propertyName,
         description,
         resalePrice: Math.round(response),
         predictedValue: Math.round(response),
@@ -760,8 +761,10 @@ router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFo
     // Display result from database
     const id = result.id
     const address = result.address
+    const propertyName = result.propertyName
     const description = result.description
     const resalePrice = result.resalePrice
+    const predictedValue = result.predictedValue
     const houseType = result.houseType
     const typeOfArea = result.typeOfArea
     const marketSegment = result.marketSegment
@@ -770,10 +773,14 @@ router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFo
     const floorLevel = result.floorLevel
     const leaseCommenceDate = result.leaseCommenceDate
     const resaleDate = result.resaleDate
+
+    const usePrediction = result.usePrediction
+    const postalCode = result.postalCode
     res.render('resale/editPrivateResale', {
       id,
       title,
       address,
+      propertyName,
       resalePrice,
       houseType,
       typeOfArea,
@@ -782,7 +789,9 @@ router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFo
       floorSqm,
       floorLevel,
       leaseCommenceDate,
-      resaleDate
+      resaleDate,
+      usePrediction,
+      postalCode
     })
   }).catch((err) => console.log('Error: ', err))
 })
@@ -793,7 +802,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   const resalePrivateID = req.params.id
 
   // Inputs
-  const address = req.body.address1
+  const address = req.body.address
   const description = 'Sample Description'
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType
@@ -847,7 +856,8 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
     const id = result.id
     const address = result.address
     const description = result.description
-    const resalePrice = result.resalePrice
+    const resalePrice = Math.round(result.resalePrice)
+    const predictedValue = Math.round(result.predictedValue)
     const houseType = result.houseType
     const typeOfArea = result.typeOfArea
     const marketSegment = result.marketSegment
@@ -855,13 +865,23 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
     const floorSqm = result.floorSqm
     const floorLevel = result.floorLevel
     const leaseCommenceDate = result.leaseCommenceDate
-    const resaleDate = result.resaleDate
+    // const resaleDate = result.resaleDate
+
+    const usePrediction = result.usePrediction
+    const postalCode = result.postalCode
+
+    // Calculate percentage differences and
+    // round off to 2 decimal places
+    const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
+
     res.render('resale/confirmPrivateListing', {
       id,
       title,
       secondaryTitle,
       address,
       resalePrice,
+      predictedValue,
+      percentagePriceDifference,
       houseType,
       typeOfArea,
       marketSegment,
@@ -870,7 +890,8 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
       floorLevel,
       description,
       leaseCommenceDate,
-      resaleDate
+      usePrediction,
+      postalCode
     })
   }).catch((err) => console.log('Error: ', err))
 })
