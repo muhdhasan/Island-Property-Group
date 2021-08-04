@@ -397,7 +397,7 @@
               id="yesRadio"
               value="true"
               onclick="useAImodel();"
-              
+              {{autoCheckRadioBtn usePrediction true}}
               required
             />
             <label class="form-check-label" for="yesRadio">
@@ -412,6 +412,7 @@
               id="noRadio"
               value="false"
               onclick="useAImodel();"
+              {{autoCheckRadioBtn usePrediction false}}
             />
             <label class="form-check-label" for="noRadio">
               No

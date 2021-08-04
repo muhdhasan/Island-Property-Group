@@ -15,6 +15,7 @@ module.exports = {
     return inputData === dropDown ? 'selected' : ''
   },
 
+  // Automatically checks radio button should radio value and input value are similar
   autoCheckRadioBtn: (inputData, radioValue) => {
     if (inputData === radioValue){
       return 'checked'

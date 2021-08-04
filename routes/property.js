@@ -284,6 +284,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     // Display result from database
     const id = result.id
     const resalePrice = result.resalePrice
+    const predictedValue = result.predictedValue
     const address = result.address
     const blockNo = result.blockNo
     const description = result.description
@@ -294,12 +295,14 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     const floorSqm = result.floorSqm
     const leaseCommenceDate = result.leaseCommenceDate
     const resaleDate = result.resaleDate
+    const usePrediction = result.usePrediction
     const postalCode = result.postalCode
     // Render property values from database
     res.render('resale/editPublicResale', {
       id,
       title,
       resalePrice,
+      predictedValue,
       address,
       blockNo,
       town,
@@ -309,6 +312,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
       floorSqm,
       leaseCommenceDate,
       resaleDate,
+      usePrediction,
       postalCode
     })
   }).catch((err) => console.log('Error: ', err))
