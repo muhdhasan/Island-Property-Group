@@ -17,10 +17,9 @@ module.exports = {
 
   // Automatically checks radio button should radio value and input value are similar
   autoCheckRadioBtn: (inputData, radioValue) => {
-    if (inputData === radioValue){
+    if (inputData === radioValue) {
       return 'checked'
-    }
-    else{
+    } else {
       return ''
     }
   },
@@ -61,10 +60,9 @@ module.exports = {
   // If we want to display predictedValue, usePrediction has to be true
   // Otherwise, false
   displayPredictedValue: (resaleValue, predictedValue, usePrediction) => {
-    if (usePrediction === true || usePrediction === 1){
+    if (usePrediction === true || usePrediction === 1) {
       return predictedValue
-    }
-    else{
+    } else {
       return resaleValue
     }
   }

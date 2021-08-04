@@ -370,7 +370,7 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
-router.get('/chat', (req, res) => {
+router.get('/chat/:listing', (req, res) => {
   const title = 'Chat'
   const user = req.user.id
   const listingid = req.params.listing
@@ -384,7 +384,7 @@ router.get('/chat', (req, res) => {
     ],
     raw: true
   }).then((messages) => {
-    res.render('user/chatbot', { messages: messages, title })
+    res.render('user/chatbot', { messages: messages, title, listingid })
   })
     .catch(err => console.log(err))
 })
@@ -394,7 +394,7 @@ router.post('/chat', (req, res) => {
   if (message == '') {
     return
   }
-  const userid = User.userid
+  const userid = req.user.id
   const listingid = req.params.listing
   Chat.findOne({
     where: {
