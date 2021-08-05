@@ -852,7 +852,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
       privateResale.update({
         address,
         description,
-        resalePrice: Math.round(resaleValue),
+        resalePrice: Math.round(response),
         predictedValue: Math.round(response),
         postalDistrict,
         houseType,
