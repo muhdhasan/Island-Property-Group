@@ -51,7 +51,20 @@
           ></div>
         </div>
       </div>
-
+            {{#if (checkSpecialUserType user "Agent")}}
+            <div class="m-5 d-flex justify-content-center">
+              <button
+                type="button"
+                class="btn btn-lg btn-outline-danger mx-2"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+              ><a href="/rental/deleteRentalListing/{{rentID}}">Delete Property</a></button>
+              <a
+                href="/rental/editRentalListing/{{rentID}}"
+                class="btn btn-lg btn-outline-dark mx-2"
+              >Edit Property</a>
+            </div>
+            {{/if}}
       <div class="row mt-5">
         <div class="col-sm-12">
 
@@ -104,13 +117,7 @@
               </div>
             </div>
             
-            <div class="col-md-7 col-lg-7 section-md-t3">
-              <div class="title-box-d">
-              <h1><a href="/rental/editRentalListing/{{rentID}}">Edit Property</a></h1>
-              </div>
-              <div class="title-box-d">
-              <h1><a href="/rental/deleteRentalListing/{{rentID}}">Delete Property</a></h1>
-              </div>
+            <div class="col-md-7 col-lg-7 section-md-t3">              
               <div class="row">
                 <div class="col-sm-12">
                   <div class="title-box-d">
