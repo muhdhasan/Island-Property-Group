@@ -804,12 +804,14 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   // Inputs
   const address = req.body.address
   const description = 'Sample Description'
+  const postalCode = req.body.postalCode
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType
   const typeOfArea = req.body.typeOfArea
   const marketSegment = req.body.marketSegment
   const floorSqm = req.body.floorSqm
   const floorLevel = req.body.floorLevel
+  const useAIOption = req.body.usePrediction
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.floorLevel)
@@ -819,23 +821,56 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
-  // Update private property listings
-  privateResale.update({
-    address,
-    description,
-    postalDistrict,
-    houseType,
-    typeOfArea,
-    marketSegment,
-    floorSqm,
-    floorLevel,
-    leaseCommenceDate: leaseStartDate,
-    resaleDate: dateOfSale
-  }, {
-    where: { id: resalePrivateID }
-  }).then(() => {
-    console.log('Successfully edited private resale listing')
-    res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
+  resaleValue.then((response)=> {
+    if (Boolean(useAIOption) === true) {
+      // Update private property listings
+      privateResale.update({
+        address,
+        description,
+        resalePrice: Math.round(response),
+        predictedValue: Math.round(response),
+        postalDistrict,
+        houseType,
+        typeOfArea,
+        marketSegment,
+        floorSqm,
+        floorLevel,
+        leaseCommenceDate: leaseStartDate,
+        resaleDate: dateOfSale,
+        postalCode,
+        usePrediction: useAIOption
+      }, {
+        where: { id: resalePrivateID }
+      }).then(() => {
+        console.log('Successfully edited private resale listing')
+        res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+      })
+    } else {
+      const resaleValue = req.body.resaleValue
+      // Update private property listings
+      privateResale.update({
+        address,
+        description,
+        resalePrice: Math.round(resaleValue),
+        predictedValue: Math.round(response),
+        postalDistrict,
+        houseType,
+        typeOfArea,
+        marketSegment,
+        floorSqm,
+        floorLevel,
+        leaseCommenceDate: leaseStartDate,
+        resaleDate: dateOfSale,
+        postalCode,
+        usePrediction: useAIOption
+      }, {
+        where: { id: resalePrivateID }
+      }).then(() => {
+        console.log('Successfully edited private resale listing')
+        res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+      })
+    }
   })
 })
 

@@ -4,7 +4,7 @@ const db = require('../config/DBConfig')
 const PrivateResale = db.define('privateResale', {
   id: { type: Sequelize.STRING, primaryKey: true },
   address: { type: Sequelize.STRING(500) },
-  propertyName: {type: Sequelize.STRING },
+  propertyName: { type: Sequelize.STRING },
   description: { type: Sequelize.STRING(2000) },
   resalePrice: { type: Sequelize.DECIMAL(12, 2) },
   predictedValue: { type: Sequelize.DECIMAL(12, 2) },
