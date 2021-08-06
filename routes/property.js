@@ -576,6 +576,11 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
   }).catch((err) => { console.log('Error: ', err) })
 })
 
+
+// Shift all codes here to privateResale.js
+
+
+
 // Display create resale listing page
 router.get('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
   const title = 'Create Private Resale Listing'
@@ -822,7 +827,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   const dateOfSale = new Date(req.body.dateOfSale)
 
   const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
-  resaleValue.then((response)=> {
+  resaleValue.then((response) => {
     if (Boolean(useAIOption) === true) {
       // Update private property listings
       privateResale.update({

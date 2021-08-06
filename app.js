@@ -17,7 +17,10 @@ require('dotenv').config()
 
 const mainRoute = require('./routes/main')
 const userRoute = require('./routes/user')
+
+// Rename Property route later
 const propertyRoute = require('./routes/property')
+const privateResaleRoute = require('./routes/privateResale')
 const rentalRoute = require('./routes/rental')
 
 // Bring in Handlebars helpers
@@ -114,7 +117,12 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', mainRoute)
 app.use('/user', userRoute)
+
+// Rename property route here later
 app.use('/property', propertyRoute)
+app.use('/privateResale', privateResaleRoute)
+
+app.use('/rental', rentalRoute)
 
 // Catch all URL that is not valid and return 404 error
 app.get('*', (req, res) => {
