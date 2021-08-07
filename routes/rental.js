@@ -128,21 +128,6 @@ router.post('/createRental', (req, res) => {
   // Date related inputs
   const leaseDate = req.body.Lease_Commencement_Date
   
-  // Input Validation
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // // if (filterSpecialRegex.test(description) === false) {
-  // //   return console.log('Description contains special characters')
-  // // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-
-
   // // Call predicting api for rental
   const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
   rentValue.then((response) => {
