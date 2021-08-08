@@ -167,6 +167,17 @@
             <li class="nav-item">
               <a
                 class="nav-link active"
+                id="pills-map-tab"
+                data-bs-toggle="pill"
+                href="#pills-map"
+                role="tab"
+                aria-controls="pills-map"
+                aria-selected="false"
+              >Price Information</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
                 id="pills-video-tab"
                 data-bs-toggle="pill"
                 href="#pills-video"
@@ -186,21 +197,37 @@
                 aria-selected="false"
               >Floor Plans</a>
             </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                id="pills-map-tab"
-                data-bs-toggle="pill"
-                href="#pills-map"
-                role="tab"
-                aria-controls="pills-map"
-                aria-selected="false"
-              >Price Projections</a>
-            </li>
+            
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
               class="tab-pane fade show active"
+              id="pills-map"
+              role="tabpanel"
+              aria-labelledby="pills-map-tab"
+            >
+              <h2 class="mb-3">Price Rental For 12 Months</h2>
+              <hr />
+              <h5 class="mb-3">Showing rental price for 12 months rental</h5>
+              <div class="row my-5">
+                <div class="col-md-4">
+                  <h4 class="mt-5">Monthly Rental</h4>
+                  <h3>${{rentalPrice}}</h3>
+                </div>
+                
+                <div class="col-md-4">
+                  <h4 class="mt-5">Annual Rental</h4>
+                  <h3>${{annualprice}}</h3>
+                </div>
+
+                <div class="col-md-4">
+                  <h4 class="mt-5">Downpayment for Rental <br>(3 months worth of rental)</h4>
+                  <h3>${{downpayment}}</h3>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
               id="pills-video"
               role="tabpanel"
               aria-labelledby="pills-video-tab"
@@ -223,32 +250,7 @@
             >
               <img src="/img/plan2.jpg" alt="" class="img-fluid" />
             </div>
-            <div
-              class="tab-pane fade"
-              id="pills-map"
-              role="tabpanel"
-              aria-labelledby="pills-map-tab"
-            >
-              <h2 class="mb-3">Price Rental For 12 Months</h2>
-              <hr />
-              <h5 class="mb-3">Showing rental price for 12 months rental</h5>
-              <div class="row my-5">
-                <div class="col-md-4">
-                  <h4 class="mt-5">Monthly Rental</h4>
-                  <h3>${{rentalPrice}}</h3>
-                </div>
-                
-                <div class="col-md-4">
-                  <h4 class="mt-5">Annual Rental</h4>
-                  <h3>${{annualprice}}.00</h3>
-                </div>
-
-                <div class="col-md-4">
-                  <h4 class="mt-5">Downpayment for Rental <br>(3 months worth of rental)</h4>
-                  <h3>${{downpayment}}.00</h3>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
         <div class="col-md-12">

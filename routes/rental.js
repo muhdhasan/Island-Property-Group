@@ -87,8 +87,8 @@ router.get('/rentalListing/:id', (req, res) => {
       const leaseCommenceDate = PrivateRental.leaseCommenceDate
       const description = PrivateRental.description
 
-      const annualprice = Math.round(rentalPrice*12)
-      const downpayment = Math.round(rentalPrice*3)
+      const annualprice = Math.round(rentalPrice*12).toFixed(2)
+      const downpayment = Math.round(rentalPrice*3).toFixed(2)
       res.render('rental/rentalListing', {
         address,
         title,
