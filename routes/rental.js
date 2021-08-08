@@ -87,6 +87,7 @@ router.get('/rentalListing/:id', (req, res) => {
       const description = PrivateRental.description
 
       res.render('rental/rentalListing', {
+        rentID,
         address,
         title,
         secondaryTitle,

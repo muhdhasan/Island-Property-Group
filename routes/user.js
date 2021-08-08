@@ -109,7 +109,7 @@ function createPrivateResaleMsg (intent, listing,botmsgid,botorder,userid) {
         }
     }
 }
-function createPrivateRentalMsg (intent, listingid,botmsgid,botorder,userid) {
+function createPrivateRentalMsg (intent, listing,botmsgid,botorder,userid) {
   console.log('rent test')
   var listingid = listing.id
     var msg = 'blank'

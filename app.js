@@ -110,6 +110,7 @@ app.use((req, res, next) => {
 app.use('/', mainRoute)
 app.use('/user', userRoute)
 app.use('/property', propertyRoute)
+app.use('/rental', rentalRoute)
 
 // Catch all URL that is not valid and return 404 error
 app.get('*', (req, res) => {
