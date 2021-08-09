@@ -7,7 +7,6 @@ const privateResale = require('../models/PrivateResale')
 
 // Required node modules
 const uuid = require('uuid')
-const moment = require('moment')
 const fetch = require('node-fetch')
 
 // Base URL String
@@ -17,7 +16,7 @@ const floorRangeSelector = require('../helpers/floorRangeSelector')
 
 // Middlewares
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
-const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
+const { checkAgentAuthenticated } = require('../helpers/auth')
 
 // Call predict resale API for HDB properties
 async function predictPublicResale (dateOfSale, town, flatType,
@@ -123,12 +122,11 @@ router.get('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => 
 router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
-  const hdbResaleId = uuid.v4()
+  const id = uuid.v4()
   const address = req.body.address
   const blockNo = req.body.blockNo
   const description = req.body.description
   const postalCode = req.body.postalCode
-  // Will add input validation here later
   const town = req.body.town
   const flatType = req.body.flatType
   const flatModel = req.body.flatModel
@@ -141,10 +139,11 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   const floorSqm = req.body.floorSqm
 
   // Date related inputs
-  const leaseStartDate = new Date(req.body.leaseCommenceDate)
-  const leaseStartYear = leaseStartDate.getFullYear()
+  const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseCommenceDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
+  // Will add input validation here later
   // Input Validation
   // if (filterSpecialRegex.test(address) === false) {
   //   return console.log('Address contains special characters')
@@ -161,7 +160,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
-  const yearDiff = ((dateOfSale - leaseStartDate) / totalMilisecondsPerDay) / 365
+  const yearDiff = ((dateOfSale - leaseCommenceDate) / totalMilisecondsPerDay) / 365
   if (yearDiff < 5) {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
@@ -179,7 +178,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
       // Create public resale listing
       hdbResale
         .create({
-          id: hdbResaleId,
+          id,
           address,
           blockNo,
           description,
@@ -190,7 +189,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
           flatModel,
           flatLevel,
           floorSqm,
-          leaseCommenceDate: leaseStartDate,
+          leaseCommenceDate,
           resaleDate: dateOfSale,
           postalCode,
           isViewable: false,
@@ -207,7 +206,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
       const resaleValue = req.body.resaleValue
       hdbResale
         .create({
-          id: hdbResaleId,
+          id,
           address,
           blockNo,
           description,
@@ -218,7 +217,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
           flatModel,
           flatLevel,
           floorSqm,
-          leaseCommenceDate: leaseStartDate,
+          leaseCommenceDate,
           resaleDate: dateOfSale,
           postalCode,
           isViewable: false,
@@ -247,7 +246,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
         // isViewable: true
       }
     })
-    // Will display more information regarding this property later
+    // Display information regarding this HDB property
     .then((hdbResaleDetail) => {
       const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
@@ -284,7 +283,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       })
     })
     .catch((err) => {
-      console.log('Error', err)
+      console.log('Error in displaying HDB Resale Listing: ', err)
     })
 })
 
@@ -300,7 +299,7 @@ router.get('/viewPublicResaleList', (req, res) => {
     },
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale, isViewable, isPublic })
+    res.render('resale/viewPublicResaleList', { title, hdbResale, isViewable, isPublic })
   })
 })
 
@@ -312,7 +311,7 @@ router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
     // Only agents can see all properties
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale: hdbResale, isPublic })
+    res.render('resale/viewPublicResaleList', { title, hdbResale, isPublic })
   })
 })
 
@@ -410,8 +409,6 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   if (yearDiff < 5) {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
-
-  // TODO TEST UPDATE FUNCTION
 
   // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
@@ -576,10 +573,7 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
   }).catch((err) => { console.log('Error: ', err) })
 })
 
-
 // Shift all codes here to privateResale.js
-
-
 
 // Display create resale listing page
 router.get('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
@@ -590,7 +584,7 @@ router.get('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =>
 // Create listing for private resale property
 router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
   // Create UUID
-  const privateResaleId = uuid.v4()
+  const id = uuid.v4()
 
   // Inputs
   const address = req.body.address
@@ -609,18 +603,18 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   const floorRange = floorRangeSelector(req.body.floorLevel)
 
   // Date related inputs
-  const leaseStartDate = new Date(req.body.leaseCommenceDate)
-  const leaseStartYear = leaseStartDate.getFullYear()
+  const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseCommenceDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
   // Call predicting api for private resale housing
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseCommenceDate)
   resaleValue.then((response) => {
     // If user wants to display prediction from AI
     if (Boolean(useAIOption) === true) {
       // Create private resale listing
       privateResale.create({
-        id: privateResaleId,
+        id,
         address,
         propertyName,
         description,
@@ -632,7 +626,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
         postalDistrict,
         floorSqm,
         floorLevel,
-        leaseCommenceDate: leaseStartDate,
+        leaseCommenceDate,
         resaleDate: dateOfSale,
         postalCode,
         isViewable: false,
@@ -647,7 +641,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
       // Create private resale listing
       const resaleValue = req.body.resaleValue
       privateResale.create({
-        id: privateResaleId,
+        id,
         address,
         description,
         resalePrice: Math.round(resaleValue),
@@ -658,7 +652,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
         postalDistrict,
         floorSqm,
         floorLevel,
-        leaseCommenceDate: leaseStartDate,
+        leaseCommenceDate,
         resaleDate: dateOfSale,
         postalCode,
         isViewable: false,
@@ -733,11 +727,11 @@ router.get('/viewPrivateResaleList', (req, res) => {
   privateResale.findAll({
     // Only users can see viewable properties
     where: {
-      isViewable: isViewable
+      isViewable
     },
     raw: true
   }).then((privateResale) => {
-    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale, isPublic })
+    res.render('resale/viewPrivateResaleList', { title, privateResale, isPublic })
   })
 })
 
@@ -749,7 +743,7 @@ router.get('/viewPreviewPrivateResaleList', checkAgentAuthenticated, (req, res) 
     // Only agents can see all properties
     raw: true
   }).then((privateResale) => {
-    res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale, isPublic })
+    res.render('resale/viewPrivateResaleList', { title, privateResale, isPublic })
   })
 })
 
@@ -798,7 +792,7 @@ router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFo
       usePrediction,
       postalCode
     })
-  }).catch((err) => console.log('Error: ', err))
+  }).catch((err) => console.log('Error in rendering private resale edit page: ', err))
 })
 
 // Update private property information to database
@@ -822,11 +816,11 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   const floorRange = floorRangeSelector(req.body.floorLevel)
 
   // Date related inputs
-  const leaseStartDate = new Date(req.body.leaseCommenceDate)
-  const leaseStartYear = leaseStartDate.getFullYear()
+  const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseCommenceDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseCommenceDate)
   resaleValue.then((response) => {
     if (Boolean(useAIOption) === true) {
       // Update private property listings
@@ -841,7 +835,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
         marketSegment,
         floorSqm,
         floorLevel,
-        leaseCommenceDate: leaseStartDate,
+        leaseCommenceDate,
         resaleDate: dateOfSale,
         postalCode,
         usePrediction: useAIOption
@@ -865,7 +859,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
         marketSegment,
         floorSqm,
         floorLevel,
-        leaseCommenceDate: leaseStartDate,
+        leaseCommenceDate,
         resaleDate: dateOfSale,
         postalCode,
         usePrediction: useAIOption
@@ -940,7 +934,6 @@ router.get('/confirmPrivateResaleListing/:id', checkAgentAuthenticated, checkUUI
 router.get('/showPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL
   const privateResaleId = req.params.id
-  console.log(privateResaleId)
 
   privateResale.update({
     // Make this property visible to users from agent
