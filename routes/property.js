@@ -70,18 +70,18 @@ async function predictPublicResale (dateOfSale, town, flatType,
 // Reference
 router.get('/propertysingle', (req, res) => {
   const title = 'Property Single'
-  res.render('resale/property-single', { title })
+  res.render('publicResale/property-single', { title })
 })
 
 router.get('/propertylist', (req, res) => {
   const title = 'List of Properties'
-  res.render('resale/property-grid', { title })
+  res.render('publicResale/property-grid', { title })
 })
 
 // Show create HDB Resale Page
 router.get('/create', checkAgentAuthenticated, (req, res) => {
   const title = 'Create HDB Resale Listing'
-  res.render('resale/createPublicResale', { title })
+  res.render('publicResale/createListing', { title })
 })
 
 // Fixed data for testing
@@ -230,7 +230,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
       // round off to 2 decimal places
       const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
 
-      res.render('resale/viewPublicResaleListing', {
+      res.render('publicResale/viewListing', {
         id,
         address,
         blockNo,
@@ -264,7 +264,7 @@ router.get('/viewPublicResaleList', (req, res) => {
     },
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale, isViewable, isPublic })
+    res.render('publicResale/list', { title, hdbResale, isViewable, isPublic })
   })
 })
 
@@ -276,7 +276,7 @@ router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
     // Only agents can see all properties
     raw: true
   }).then((hdbResale) => {
-    res.render('resale/viewPublicResaleList', { title, hdbResale, isPublic })
+    res.render('publicResale/list', { title, hdbResale, isPublic })
   })
 })
 
@@ -306,7 +306,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     const usePrediction = result.usePrediction
     const postalCode = result.postalCode
     // Render property values from database
-    res.render('resale/editPublicResale', {
+    res.render('publicResale/editListing', {
       id,
       title,
       resalePrice,
@@ -465,7 +465,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
       // round off to 2 decimal places
       const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
 
-      res.render('resale/confirmPublicListing', {
+      res.render('publicResale/previewListing', {
         id,
         address,
         blockNo,
