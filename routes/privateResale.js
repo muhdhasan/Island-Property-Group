@@ -23,8 +23,7 @@ const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers
 // Display create resale listing page
 router.get('/create', checkAgentAuthenticated, (req, res) => {
   const title = 'Create Private Resale Listing'
-  res.render('resale/createPrivateResale', { title })
-    .catch((err) => { console.log('Error in displaying create private resale page: ', err) })
+  res.render('privateResale/createListing', { title })
 })
 
 module.exports = router

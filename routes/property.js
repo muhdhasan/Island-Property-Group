@@ -575,12 +575,6 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
 
 // Shift all codes here to privateResale.js
 
-// Display create resale listing page
-router.get('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
-  const title = 'Create Private Resale Listing'
-  res.render('resale/createPrivateResale', { title })
-})
-
 // Create listing for private resale property
 router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
   // Create UUID
@@ -597,7 +591,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   const marketSegment = req.body.marketSegment
   const floorSqm = req.body.floorSqm
   const floorLevel = req.body.floorLevel
-  const useAIOption = req.body.usePrediction
+  const usePrediction = req.body.usePrediction
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.floorLevel)
@@ -605,11 +599,14 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   // Date related inputs
   const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
   const leaseStartYear = leaseCommenceDate.getFullYear()
-  const dateOfSale = new Date(req.body.dateOfSale)
+  const resaleDate = new Date(req.body.dateOfSale)
 
   // Call predicting api for private resale housing
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseCommenceDate)
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
   resaleValue.then((response) => {
+
+    const predictedValue = Math.round(response)
+
     // If user wants to display prediction from AI
     if (Boolean(useAIOption) === true) {
       // Create private resale listing
@@ -618,8 +615,8 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
         address,
         propertyName,
         description,
-        resalePrice: Math.round(response),
-        predictedValue: Math.round(response),
+        resalePrice: predictedValue,
+        predictedValue,
         houseType,
         typeOfArea,
         marketSegment,
@@ -627,10 +624,10 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
         floorSqm,
         floorLevel,
         leaseCommenceDate,
-        resaleDate: dateOfSale,
+        resaleDate,
         postalCode,
         isViewable: false,
-        usePrediction: useAIOption
+        usePrediction
       }).then(() => {
         console.log('Created private resale listing')
         res.redirect('/property/confirmPrivateResaleListing/' + id)
@@ -640,13 +637,13 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
     // Save resale value input and display it
     else {
       // Create private resale listing
-      const resaleValue = req.body.resaleValue
+      const resalePrice = Math.round(req.body.resaleValue)
       privateResale.create({
         id,
         address,
         description,
-        resalePrice: Math.round(resaleValue),
-        predictedValue: Math.round(response),
+        resalePrice,
+        predictedValue,
         houseType,
         typeOfArea,
         marketSegment,
@@ -654,10 +651,10 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
         floorSqm,
         floorLevel,
         leaseCommenceDate,
-        resaleDate: dateOfSale,
+        resaleDate,
         postalCode,
         isViewable: false,
-        usePrediction: useAIOption
+        usePrediction
       }).then(() => {
         console.log('Created private resale listing')
         res.redirect('/property/confirmPrivateResaleListing/' + id)
@@ -671,13 +668,12 @@ router.get('/viewPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateL
   const title = 'Private Resale Listing'
   const secondaryTitle = '304 Blaster Up'
   // Get UUID from URL
-  const privateResaleId = req.params.id
+  const id = req.params.id
 
   privateResale.findOne({
-    where: { id: privateResaleId }
+    where: { id }
   }).then((result) => {
     // Display result from database
-    const id = result.id
     const address = result.address
     const description = result.description
     const resalePrice = Math.round(result.resalePrice)
