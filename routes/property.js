@@ -85,7 +85,7 @@ router.get('/create', checkAgentAuthenticated, (req, res) => {
 })
 
 // Fixed data for testing
-router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
+router.post('/create', checkAgentAuthenticated, (req, res) => {
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const id = uuid.v4()
@@ -281,7 +281,7 @@ router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
 })
 
 // Edit Function for public resale listings
-router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Edit HDB Resale Listing'
 
   // Get UUID from URL
@@ -327,7 +327,7 @@ router.get('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 })
 
 // Update public property information to database
-router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -489,7 +489,7 @@ router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUID
 })
 
 // Make HDB Resale Listing Public to Customer
-router.get('/showPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/showListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -507,7 +507,7 @@ router.get('/showPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 })
 
 // Make HDB Resale Listing Private
-router.get('/hidePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/hideListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
@@ -526,7 +526,7 @@ router.get('/hidePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 
 // Basic Delete Function
 // Delete hdb resale listing
-router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/delete/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   // Get UUID from URL
   const resalePublicID = req.params.id
 
