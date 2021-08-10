@@ -575,55 +575,6 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
 
 // Shift all codes here to privateResale.js
 
-
-// Edit Function for private resale listings
-router.get('/editPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
-  const title = 'Edit Private Resale Listing'
-
-  // Get UUID from URL
-  const privateResaleId = req.params.id
-
-  privateResale.findOne({
-    where: { id: privateResaleId }
-  }).then((result) => {
-    // Display result from database
-    const id = result.id
-    const address = result.address
-    const propertyName = result.propertyName
-    const description = result.description
-    const resalePrice = result.resalePrice
-    const predictedValue = result.predictedValue
-    const houseType = result.houseType
-    const typeOfArea = result.typeOfArea
-    const marketSegment = result.marketSegment
-    const postalDistrict = result.postalDistrict
-    const floorSqm = result.floorSqm
-    const floorLevel = result.floorLevel
-    const leaseCommenceDate = result.leaseCommenceDate
-    const resaleDate = result.resaleDate
-
-    const usePrediction = result.usePrediction
-    const postalCode = result.postalCode
-    res.render('resale/editPrivateResale', {
-      id,
-      title,
-      address,
-      propertyName,
-      resalePrice,
-      houseType,
-      typeOfArea,
-      marketSegment,
-      postalDistrict,
-      floorSqm,
-      floorLevel,
-      leaseCommenceDate,
-      resaleDate,
-      usePrediction,
-      postalCode
-    })
-  }).catch((err) => console.log('Error in rendering private resale edit page: ', err))
-})
-
 // Update private property information to database
 router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL

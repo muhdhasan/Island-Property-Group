@@ -229,4 +229,52 @@ router.get('/previewList', checkAgentAuthenticated, (req, res) => {
   })
 })
 
+// Display edit page for private resale listings
+router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  const title = 'Edit Private Resale Listing'
+
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+
+  privateResale.findOne({
+    where: { id: privateResaleId }
+  }).then((result) => {
+    // Display result from database
+    const id = result.id
+    const address = result.address
+    const propertyName = result.propertyName
+    const description = result.description
+    const resalePrice = result.resalePrice
+    const predictedValue = result.predictedValue
+    const houseType = result.houseType
+    const typeOfArea = result.typeOfArea
+    const marketSegment = result.marketSegment
+    const postalDistrict = result.postalDistrict
+    const floorSqm = result.floorSqm
+    const floorLevel = result.floorLevel
+    const leaseCommenceDate = result.leaseCommenceDate
+    const resaleDate = result.resaleDate
+
+    const usePrediction = result.usePrediction
+    const postalCode = result.postalCode
+    res.render('privateResale/editListing', {
+      id,
+      title,
+      address,
+      propertyName,
+      resalePrice,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      postalDistrict,
+      floorSqm,
+      floorLevel,
+      leaseCommenceDate,
+      resaleDate,
+      usePrediction,
+      postalCode
+    })
+  }).catch((err) => console.log('Error in rendering private resale edit page: ', err))
+})
+
 module.exports = router
