@@ -15,7 +15,7 @@ const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 
 // Middlewares
-const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
+const { checkUUIDFormat, checkResalePublicListingId } = require('../helpers/checkURL')
 const { checkAgentAuthenticated } = require('../helpers/auth')
 
 // Call predict resale API for HDB properties
@@ -40,40 +40,6 @@ async function predictPublicResale (dateOfSale, town, flatType,
       .then(res =>
         res.json()
       )
-      .then((json) => {
-        console.log(json)
-        result(json)
-      })
-      .catch((err) => {
-        console.log('Error:', err)
-      })
-  })
-}
-
-// Call predict resale API for private properties
-async function predictPrivateResale (houseType, postalDistrict,
-  marketSegement, typeOfArea, floorRange, dateOfSale, floorSqm,
-  isFreehold, leaseDuration, leaseCommenceDate) {
-  const body = {
-    type: 'private',
-    house_type: houseType,
-    postal_district: postalDistrict,
-    market_segment: marketSegement,
-    type_of_area: typeOfArea,
-    floor_level: floorRange,
-    resale_date: dateOfSale,
-    floor_area_sqm: floorSqm,
-    is_freehold: isFreehold,
-    lease_duration: leaseDuration,
-    lease_commence_date: leaseCommenceDate
-  }
-  return new Promise((result, err) => {
-    fetch(baseAPIUrl + 'predictResale', {
-      method: 'post',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(res => res.json())
       .then((json) => {
         console.log(json)
         result(json)
@@ -113,7 +79,7 @@ router.get('/propertylist', (req, res) => {
 })
 
 // Show create HDB Resale Page
-router.get('/createPublicResaleListing', checkAgentAuthenticated, (req, res) => {
+router.get('/create', checkAgentAuthenticated, (req, res) => {
   const title = 'Create HDB Resale Listing'
   res.render('resale/createPublicResale', { title })
 })
@@ -411,7 +377,6 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
   // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
-
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
     if (Boolean(usePrediction) === true) {
@@ -570,57 +535,6 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
   }).then(() => {
     // Redirect to preview resale list page for private properties
     res.redirect('/property/viewPreviewPublicList')
-  }).catch((err) => { console.log('Error: ', err) })
-})
-
-// Shift all codes here to privateResale.js
-
-// Make private resale listing public
-router.get('/showPrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
-  // Get UUID from URL
-  const privateResaleId = req.params.id
-
-  privateResale.update({
-    // Make this property visible to users from agent
-    isViewable: true
-  }, {
-    where: {
-      id: privateResaleId
-    }
-  })
-    .then(() => {
-      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-    }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
-})
-
-// Make private resale listing private
-router.get('/hidePrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
-  // Get UUID from URL
-  const privateResaleId = req.params.id
-  console.log(privateResaleId)
-  privateResale.update({
-    // Make this property visible to users from agent
-    isViewable: false
-  }, {
-    where: {
-      id: privateResaleId
-    }
-  })
-    .then(() => {
-      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-    }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
-})
-
-// Basic Delete Function
-// Delete private resale listing
-router.get('/deletePrivateResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
-  const privateResaleId = req.params.id
-  privateResale.destroy({
-    where: { id: privateResaleId }
-  }).then(() => {
-    console.log('Deleted private property resale listing')
-    // Redirect to preview resale list page for private properties
-    res.redirect('/property/viewPreviewPrivateResaleList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
