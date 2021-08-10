@@ -17,9 +17,7 @@ require('dotenv').config()
 
 const mainRoute = require('./routes/main')
 const userRoute = require('./routes/user')
-
-// Rename Property route later
-const propertyRoute = require('./routes/property')
+const propertyRoute = require('./routes/publicResale')
 const privateResaleRoute = require('./routes/privateResale')
 const rentalRoute = require('./routes/rental')
 

@@ -201,7 +201,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
 })
 
 // View individual HDB Resale Page
-router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'HDB Resale Listing'
 
   // Refer to mysql workbench for all property id
@@ -253,7 +253,7 @@ router.get('/viewPublicResaleListing/:id', checkUUIDFormat, checkResalePublicLis
 })
 
 // HDB Properties that are currently viewable to customers can be found here
-router.get('/viewPublicResaleList', (req, res) => {
+router.get('/viewList', (req, res) => {
   const title = 'HDB Resale'
   const isViewable = true
   const isPublic = true
@@ -269,7 +269,7 @@ router.get('/viewPublicResaleList', (req, res) => {
 })
 
 // Unviewable property listings that customers cannot see
-router.get('/viewPreviewPublicList', checkAgentAuthenticated, (req, res) => {
+router.get('/previewList', checkAgentAuthenticated, (req, res) => {
   const title = 'HDB Preview Resale'
   const isPublic = false
   hdbResale.findAll({
