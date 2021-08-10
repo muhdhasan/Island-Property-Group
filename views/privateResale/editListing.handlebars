@@ -31,7 +31,7 @@
   <section class="contact mt-5">
     <div class="container">
       <form
-        action="/property/editPublicResaleListing{{id}}?_method=PUT"
+        action="/privateResale/edit/{{id}}?_method=PUT"
         class="form"
         method="POST"
         role="form"
@@ -209,39 +209,39 @@
               name="postalCode"
               class="form-control form-control-lg form-control-a"
               placeholder="500123"
+              value="{{postalCode}}"
               required
             />
           </div>
         </div>
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
-                          <div class="leaseCommenceDateDiv">
-
-              <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
-              <input
-                id="leaseCommenceDate"
-                type="date"
-                name="leaseCommenceDate"
-                class="form-control form-control-lg form-control-a"
-                min="1952-01-01"
-                value="{{formatDate leaseCommenceDate "YYYY-MM-DD"}}"
-                required
-              />
-          </div>
+              <div class="leaseCommenceDateDiv">
+                <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
+                <input
+                  id="leaseCommenceDate"
+                  type="date"
+                  name="leaseCommenceDate"
+                  class="form-control form-control-lg form-control-a"
+                  min="1952-01-01"
+                  value="{{formatDate leaseCommenceDate "YYYY-MM-DD"}}"
+                  required
+                />
+              </div>
             </div>
             <div class="col-md-6 mb-3">
-            <label for="dateOfSale" class="form-label">Resale Date</label>
-            <input
-              id="dateOfSale"
-              type="date"
-              name="dateOfSale"
-              class="form-control form-control-lg form-control-a"
-              min="1952-01-01"
-              value="{{formatDate resaleDate "YYYY-MM-DD"}}"
-              required
-            />
-            <div id="resaleDateErrorMsg" class="form-text"></div>
-          </div>
+              <label for="dateOfSale" class="form-label">Resale Date</label>
+              <input
+                id="dateOfSale"
+                type="date"
+                name="dateOfSale"
+                class="form-control form-control-lg form-control-a"
+                min="1952-01-01"
+                value="{{formatDate resaleDate "YYYY-MM-DD"}}"
+                required
+              />
+              <div id="resaleDateErrorMsg" class="form-text"></div>
+            </div>
           </div>
         <h3 class="mb-3">Pricing</h3>
         <div class="mb-3">

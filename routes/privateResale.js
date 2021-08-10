@@ -142,7 +142,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         usePrediction
       }).then(() => {
         console.log('Created private resale listing')
-        res.redirect('/property/confirmPrivateResaleListing/' + id)
+        res.redirect('/privateResale/previewListing/' + id)
       }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
     }
   })
@@ -275,6 +275,146 @@ router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
       postalCode
     })
   }).catch((err) => console.log('Error in rendering private resale edit page: ', err))
+})
+
+// Update private property information to database
+router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  // Get UUID from URL
+  const resalePrivateID = req.params.id
+
+  // Inputs
+  const address = req.body.address
+  const propertyName = req.body.propertyName
+  const description = 'Sample Description'
+  const postalCode = req.body.postalCode
+  const postalDistrict = req.body.postalDistrict
+  const houseType = req.body.houseType
+  const typeOfArea = req.body.typeOfArea
+  const marketSegment = req.body.marketSegment
+  const floorSqm = req.body.floorSqm
+  const floorLevel = req.body.floorLevel
+  const usePrediction = req.body.usePrediction
+
+  // Call floor range selector to select floor range from floor level accordingly
+  const floorRange = floorRangeSelector(req.body.floorLevel)
+
+  // Date related inputs
+  const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
+  const leaseStartYear = leaseCommenceDate.getFullYear()
+  const resaleDate = new Date(req.body.dateOfSale)
+
+  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
+  resaleValue.then((response) => {
+
+    const predictedValue = Math.round(response)
+    if (Boolean(usePrediction) === true) {
+      // Update private property listings
+      privateResale.update({
+        address,
+        propertyName,
+        description,
+        resalePrice: predictedValue,
+        predictedValue,
+        postalDistrict,
+        houseType,
+        typeOfArea,
+        marketSegment,
+        floorSqm,
+        floorLevel,
+        leaseCommenceDate,
+        resaleDate,
+        postalCode,
+        usePrediction
+      }, {
+        where: { id: resalePrivateID }
+      }).then(() => {
+        console.log('Successfully edited private resale listing')
+        res.redirect('/privateResale/previewListing/' + resalePrivateID)
+      })
+    } else {
+      const resalePrice = Math.round(req.body.resaleValue)
+      // Update private property listings
+      privateResale.update({
+        address,
+        propertyName,
+        description,
+        resalePrice,
+        predictedValue,
+        postalDistrict,
+        houseType,
+        typeOfArea,
+        marketSegment,
+        floorSqm,
+        floorLevel,
+        leaseCommenceDate,
+        resaleDate,
+        postalCode,
+        usePrediction
+      }, {
+        where: { id: resalePrivateID }
+      }).then(() => {
+        console.log('Successfully edited private resale listing')
+        res.redirect('/privateResale/previewListing/' + resalePrivateID)
+      })
+    }
+  })
+})
+
+// Preview Page for private properties
+router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  const title = 'Confirm Private Resale Listing'
+
+  // Probably need to modify this secondary title
+  const secondaryTitle = '304 Blaster Up'
+
+  // Get UUID from URL
+  const privateResaleId = req.params.id
+
+  privateResale.findOne({
+    where: { id: privateResaleId }
+  }).then((result) => {
+    // Display result from database
+    const id = result.id
+    const address = result.address
+    const description = result.description
+    const resalePrice = Math.round(result.resalePrice)
+    const predictedValue = Math.round(result.predictedValue)
+    const houseType = result.houseType
+    const typeOfArea = result.typeOfArea
+    const marketSegment = result.marketSegment
+    const postalDistrict = result.postalDistrict
+    const floorSqm = result.floorSqm
+    const floorLevel = result.floorLevel
+    const leaseCommenceDate = result.leaseCommenceDate
+    // const resaleDate = result.resaleDate
+
+    const usePrediction = result.usePrediction
+    const postalCode = result.postalCode
+
+    // Calculate percentage differences and
+    // round off to 2 decimal places
+    const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
+
+    res.render('privateResale/previewListing', {
+      id,
+      title,
+      secondaryTitle,
+      address,
+      resalePrice,
+      predictedValue,
+      percentagePriceDifference,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      postalDistrict,
+      floorSqm,
+      floorLevel,
+      description,
+      leaseCommenceDate,
+      usePrediction,
+      postalCode
+    })
+  }).catch((err) => console.log('Error in displaying preview private resale listing page: ', err))
 })
 
 module.exports = router
