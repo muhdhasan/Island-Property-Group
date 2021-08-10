@@ -534,7 +534,7 @@ router.get('/delete/:id', checkAgentAuthenticated, checkUUIDFormat, checkResaleP
     where: { id: resalePublicID }
   }).then(() => {
     // Redirect to preview resale list page for private properties
-    res.redirect('/property/viewPreviewPublicList')
+    res.redirect('/property/previewList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
