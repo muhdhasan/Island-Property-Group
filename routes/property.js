@@ -174,7 +174,7 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
     const description = 'Sample Description'
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
-    if (Boolean(useAIOption) === true) {
+    if (Boolean(usePrediction) === true) {
       // Create public resale listing
       hdbResale
         .create({
@@ -414,7 +414,7 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
 
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
-    if (Boolean(useAIOption) === true) {
+    if (Boolean(usePrediction) === true) {
       // Update hdb resale listing according to UUID
       hdbResale.update({
         address,
@@ -575,94 +575,6 @@ router.get('/deletePublicResaleListing/:id', checkAgentAuthenticated, checkUUIDF
 
 // Shift all codes here to privateResale.js
 
-// Create listing for private resale property
-router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) => {
-  // Create UUID
-  const id = uuid.v4()
-
-  // Inputs
-  const address = req.body.address
-  const propertyName = req.body.propertyName
-  const description = 'Sample Description'
-  const postalCode = req.body.postalCode
-  const postalDistrict = req.body.postalDistrict
-  const houseType = req.body.houseType
-  const typeOfArea = req.body.typeOfArea
-  const marketSegment = req.body.marketSegment
-  const floorSqm = req.body.floorSqm
-  const floorLevel = req.body.floorLevel
-  const usePrediction = req.body.usePrediction
-
-  // Call floor range selector to select floor range from floor level accordingly
-  const floorRange = floorRangeSelector(req.body.floorLevel)
-
-  // Date related inputs
-  const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
-  const leaseStartYear = leaseCommenceDate.getFullYear()
-  const resaleDate = new Date(req.body.dateOfSale)
-
-  // Call predicting api for private resale housing
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
-  resaleValue.then((response) => {
-
-    const predictedValue = Math.round(response)
-
-    // If user wants to display prediction from AI
-    if (Boolean(useAIOption) === true) {
-      // Create private resale listing
-      privateResale.create({
-        id,
-        address,
-        propertyName,
-        description,
-        resalePrice: predictedValue,
-        predictedValue,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        postalDistrict,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        isViewable: false,
-        usePrediction
-      }).then(() => {
-        console.log('Created private resale listing')
-        res.redirect('/property/confirmPrivateResaleListing/' + id)
-      }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
-    }
-    // If we want to display entered resale value instead of predicted value
-    // Save resale value input and display it
-    else {
-      // Create private resale listing
-      const resalePrice = Math.round(req.body.resaleValue)
-      privateResale.create({
-        id,
-        address,
-        description,
-        resalePrice,
-        predictedValue,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        postalDistrict,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        isViewable: false,
-        usePrediction
-      }).then(() => {
-        console.log('Created private resale listing')
-        res.redirect('/property/confirmPrivateResaleListing/' + id)
-      }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
-    }
-  })
-})
-
 // View individual private Resale Page
 router.get('/viewPrivateResaleListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Private Resale Listing'
@@ -821,7 +733,7 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   resaleValue.then((response) => {
 
     const predictedValue = Math.round(response)
-    if (Boolean(useAIOption) === true) {
+    if (Boolean(usePrediction) === true) {
       // Update private property listings
       privateResale.update({
         address,
