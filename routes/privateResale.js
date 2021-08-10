@@ -148,4 +148,85 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   })
 })
 
+// View individual private Resale Page
+router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
+  const title = 'Private Resale Listing'
+  const secondaryTitle = '304 Blaster Up'
+  // Get UUID from URL
+  const id = req.params.id
+
+  privateResale.findOne({
+    where: { id }
+  }).then((result) => {
+    // Display result from database
+    const address = result.address
+    const description = result.description
+    const resalePrice = Math.round(result.resalePrice)
+    const predictedValue = Math.round(result.predictedValue)
+    const houseType = result.houseType
+    const typeOfArea = result.typeOfArea
+    const marketSegment = result.marketSegment
+    const postalDistrict = result.postalDistrict
+    const floorSqm = result.floorSqm
+    const floorLevel = result.floorLevel
+    const leaseCommenceDate = result.leaseCommenceDate
+    // const resaleDate = result.resaleDate
+
+    const usePrediction = result.usePrediction
+    const postalCode = result.postalCode
+
+    // Calculate percentage differences and
+    // round off to 2 decimal places
+    const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)
+
+    res.render('resale/viewPrivateResaleListing', {
+      id,
+      title,
+      secondaryTitle,
+      address,
+      resalePrice,
+      predictedValue,
+      percentagePriceDifference,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      postalDistrict,
+      floorSqm,
+      floorLevel,
+      description,
+      leaseCommenceDate,
+      usePrediction,
+      postalCode
+    })
+  }).catch((err) => console.log('Error in displaying private resale listing page: ', err))
+})
+
+// Private Properties that are currently viewable to customers can be found here
+router.get('/viewList', (req, res) => {
+  const title = 'Private Resale'
+  const isViewable = true
+  const isPublic = true
+  privateResale.findAll({
+    // Only users can see viewable properties
+    where: {
+      isViewable
+    },
+    raw: true
+  }).then((privateResale) => {
+    res.render('privateResale/list', { title, privateResale, isPublic })
+  })
+})
+
+// Unviewable property listings that customers cannot see
+router.get('/previewList', checkAgentAuthenticated, (req, res) => {
+  const title = 'Private Preview Resale'
+  const isPublic = false
+  privateResale.findAll({
+    // Only agents can see all properties
+    raw: true
+  }).then((privateResale) => {
+    res.render('privateResale/list', { title, privateResale, isPublic })
+  })
+})
+
 module.exports = router
