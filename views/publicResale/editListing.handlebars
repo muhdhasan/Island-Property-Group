@@ -16,10 +16,10 @@
           >
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="/property/confirmPublicResaleListing/{{id}}">
+                <a href="/publicResale/previewListing/{{id}}">
                   {{town}}
                   -
                   {{postalCode}}</a>
@@ -37,7 +37,7 @@
   <section class="contact mt-5">
     <div class="container">
       <form
-        action="/property/edit/{{id}}?_method=PUT"
+        action="/publicResale/edit/{{id}}?_method=PUT"
         id="propertyForm"
         class="form"
         method="POST"

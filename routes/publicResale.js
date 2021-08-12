@@ -164,7 +164,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         .then(() => {
           console.log('Created HDB Resale Listing')
           // Redirect to confirming property page
-          res.redirect('confirmPublicResaleListing/' + id)
+          res.redirect('previewListing/' + id)
         })
         .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
     } else {
@@ -193,7 +193,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         .then(() => {
           console.log('Created HDB Resale Listing')
           // Redirect to confirming property page
-          res.redirect('confirmPublicResaleListing/' + id)
+          res.redirect('previewListing/' + id)
         })
         .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
     }
@@ -400,7 +400,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
         where: { id: resalePublicID }
       }).then(() => {
         // Redirect to confirmation page
-        res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+        res.redirect('/publicResale/previewListing/' + resalePublicID)
       }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
     } else {
       // If we want to display entered resale value instead of predicted value
@@ -425,14 +425,14 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
         where: { id: resalePublicID }
       }).then(() => {
         // Redirect to confirmation page
-        res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+        res.redirect('/publicResale/previewListing/' + resalePublicID)
       }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
     }
   })
 })
 
 // Confirmation Page for HDB properties
-router.get('/confirmPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
+router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'Confirm HDB Resale Listing'
 
   // Get UUID from URL
@@ -502,7 +502,7 @@ router.get('/showListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkRe
     }
   })
     .then(() => {
-      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+      res.redirect('/publicResale/previewListing/' + resalePublicID)
     }).catch((err) => { console.log('Error in making HDB Resale Listing Public: ', err) })
 })
 
@@ -520,7 +520,7 @@ router.get('/hideListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkRe
     }
   })
     .then(() => {
-      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+      res.redirect('/publicResale/previewListing/' + resalePublicID)
     }).catch((err) => { console.log('Error in making HDB Resale Listing Private: ', err) })
 })
 
@@ -534,7 +534,7 @@ router.get('/delete/:id', checkAgentAuthenticated, checkUUIDFormat, checkResaleP
     where: { id: resalePublicID }
   }).then(() => {
     // Redirect to preview resale list page for private properties
-    res.redirect('/property/previewList')
+    res.redirect('/publicResale/previewList')
   }).catch((err) => { console.log('Error: ', err) })
 })
 
