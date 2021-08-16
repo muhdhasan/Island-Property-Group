@@ -18,8 +18,8 @@ const HDBResale = db.define('hdb_resale', {
   postalCode: { type: Sequelize.STRING },
   isViewable: { type: Sequelize.BOOLEAN },
   usePrediction: { type: Sequelize.BOOLEAN },
-  longitude : {type: Sequelize.FLOAT },
-  latitude: {type: Sequelize.FLOAT },
+  longitude: { type: Sequelize.FLOAT },
+  latitude: { type: Sequelize.FLOAT }
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },

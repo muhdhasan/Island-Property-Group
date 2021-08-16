@@ -258,17 +258,17 @@ router.post('/register', checkNotAuthenticated, (req, res) => {
   const firstPassword = req.body.firstPassword
   const secondPassword = req.body.secondPassword
   // Name Regex
-  const nameRegex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  // const nameRegex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
   // Email Regex
-  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  // const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   // Input Validation
-  error = []
+  // error = []
   // Remember to add error messages later
-  if (emailRegex.test(email) === false) {
-    error.push({ text: 'Email fail' })
-    return console.log('It email regex failed')
-  }
+  // if (emailRegex.test(email) === false) {
+  //   error.push({ text: 'Email fail' })
+  //   return console.log('It email regex failed')
+  // }
   // if (nameRegex.test(fullName) === false) {
   //  console.log(nameRegex.test(fullName))
   //   console.log(fullName)
@@ -389,8 +389,8 @@ router.get('/chat/:listing', (req, res) => {
 })
 
 router.post('/chat/:listing', (req, res) => {
-  message = req.body.userinput
-  if (message == '') {
+  const message = req.body.userinput
+  if (message === '') {
     return
   }
   const userid = req.user.id

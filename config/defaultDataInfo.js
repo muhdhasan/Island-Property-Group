@@ -91,8 +91,8 @@ const HDBResaleListingOne = {
   postalCode: '580123',
   isViewable: false,
   usePrediction: true,
-  longitude : 0,
-  latitude: 0,
+  longitude: 0,
+  latitude: 0
 }
 
 // HDB Listing Two Schema
@@ -113,8 +113,8 @@ const HDBResaleListingTwo = {
   postalCode: '580123',
   isViewable: true,
   usePrediction: true,
-  longitude : 0,
-  latitude: 0,
+  longitude: 0,
+  latitude: 0
 }
 
 // Create default HDB properties

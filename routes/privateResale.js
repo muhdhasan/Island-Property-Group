@@ -155,22 +155,17 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
     where: { id }
   }).then((result) => {
     // Display result from database
-    const address = result.address
-    const propertyName = result.propertyName
-    const description = result.description
+
+    const {
+      address, propertyName, description,
+      houseType, typeOfArea, marketSegment,
+      postalDistrict, floorSqm, floorLevel,
+       leaseCommenceDate, usePrediction, postalCode
+    } = result
+    
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
-    const houseType = result.houseType
-    const typeOfArea = result.typeOfArea
-    const marketSegment = result.marketSegment
-    const postalDistrict = result.postalDistrict
-    const floorSqm = result.floorSqm
-    const floorLevel = result.floorLevel
-    const leaseCommenceDate = result.leaseCommenceDate
-    // const resaleDate = result.resaleDate
-
-    const usePrediction = result.usePrediction
-    const postalCode = result.postalCode
+    console.log(address)
 
     // Calculate percentage differences and
     // round off to 2 decimal places

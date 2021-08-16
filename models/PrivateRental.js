@@ -12,8 +12,8 @@ const PrivateRental = db.define('privateRental', {
   floorSqm: { type: Sequelize.DECIMAL(10, 2) },
   leaseCommenceDate: { type: Sequelize.DATEONLY },
   isViewable: { type: Sequelize.BOOLEAN },
-  longitude : {type: Sequelize.FLOAT },
-  latitude: {type: Sequelize.FLOAT },
+  longitude: { type: Sequelize.FLOAT },
+  latitude: { type: Sequelize.FLOAT }
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },
