@@ -162,7 +162,7 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
       postalDistrict, floorSqm, floorLevel,
        leaseCommenceDate, usePrediction, postalCode
     } = result
-    
+
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
     console.log(address)
@@ -226,13 +226,12 @@ router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
   const title = 'Edit Private Resale Listing'
 
   // Get UUID from URL
-  const privateResaleId = req.params.id
+  const id = req.params.id
 
   privateResale.findOne({
-    where: { id: privateResaleId }
+    where: { id }
   }).then((result) => {
     // Display result from database
-    const id = result.id
     const address = result.address
     const propertyName = result.propertyName
     const description = result.description

@@ -204,6 +204,8 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
 router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'HDB Resale Listing'
 
+  const callGraph = true
+
   // Refer to mysql workbench for all property id
   const id = req.params.id
   hdbResale
@@ -220,6 +222,8 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req
       const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
       const flatType = hdbResaleDetail.flatType
+      const flatModel = hdbResaleDetail.flatModel
+      const flatLevel = hdbResaleDetail.flatLevel
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
@@ -240,11 +244,14 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req
         percentagePriceDifference,
         town,
         flatType,
+        flatModel,
+        flatLevel,
         floorSqm,
         description,
         leaseCommenceDate,
         usePrediction,
-        postalCode
+        postalCode,
+        callGraph
       })
     })
     .catch((err) => {
