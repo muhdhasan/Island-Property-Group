@@ -6,7 +6,6 @@ const privateResale = require('../models/PrivateResale')
 
 // Required node modules
 const uuid = require('uuid')
-const moment = require('moment')
 const fetch = require('node-fetch')
 
 // Base URL String
@@ -150,7 +149,7 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
   const title = 'Private Resale Listing'
 
   const displayPrivateResaleGraph = true
-  
+
   // Get UUID from URL
   const id = req.params.id
 
@@ -163,12 +162,11 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
       address, propertyName, description,
       houseType, typeOfArea, marketSegment,
       postalDistrict, floorSqm, floorLevel,
-       leaseCommenceDate, usePrediction, postalCode
+      leaseCommenceDate, usePrediction, postalCode
     } = result
 
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
-    console.log(address)
 
     // Calculate percentage differences and
     // round off to 2 decimal places
@@ -367,24 +365,18 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
     where: { id }
   }).then((result) => {
     // Display result from database
-    const address = result.address
-    const propertyName = result.propertyName
-    const description = result.description
+
+    const {
+      address, propertyName, description,
+      houseType, typeOfArea, marketSegment,
+      postalDistrict, floorSqm, floorLevel,
+      leaseCommenceDate, isViewable, usePrediction,
+      postalCode } = result
+
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
-    const houseType = result.houseType
-    const typeOfArea = result.typeOfArea
-    const marketSegment = result.marketSegment
-    const postalDistrict = result.postalDistrict
-    const floorSqm = result.floorSqm
-    const floorLevel = result.floorLevel
-    const leaseCommenceDate = result.leaseCommenceDate
-    const isViewable = result.isViewable
+    
     // const resaleDate = result.resaleDate
-
-    const usePrediction = result.usePrediction
-    const postalCode = result.postalCode
-
     // Calculate percentage differences and
     // round off to 2 decimal places
     const percentagePriceDifference = (((resalePrice - predictedValue) / predictedValue) * 100).toFixed(2)

@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-// Models
+// Model
 const hdbResale = require('../models/hdbResale')
-const privateResale = require('../models/PrivateResale')
 
 // Required node modules
 const uuid = require('uuid')
@@ -50,21 +49,6 @@ async function predictPublicResale (dateOfSale, town, flatType,
   })
 }
 
-// TESTING
-// function displayPriceDiff (perDiff) {
-//   // If percentage diff is more than 2%
-//   if (perDiff > 2) {
-//     return "positive"
-//   }
-//   // If percentage diff is more than -2%
-//   else if (perDiff < -2) {
-//     return "negative"
-//   }
-//   else{
-//     return "equal"
-//   }
-// }
-
 // Router is placed according to CRUD order where you'll see create function then followed by retrieve and etc
 
 // Reference
@@ -98,7 +82,6 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   const flatModel = req.body.flatModel
   const flatLevel = req.body.flatLevel
   const usePrediction = req.body.usePrediction
-  console.log('Use AI: ', usePrediction)
 
   // Call floor range selector to select floor range from floor level accordingly
   const floorRange = floorRangeSelector(req.body.flatLevel)
@@ -117,12 +100,6 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
@@ -134,7 +111,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
-    console.log('Resale Value', response)
+    // console.log('Resale Value', response)
 
     // Replace fixed value of sample description
     const description = 'Sample Description'
@@ -164,7 +141,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         .then(() => {
           console.log('Created HDB Resale Listing')
           // Redirect to confirming property page
-          res.redirect('previewListing/' + id)
+          res.redirect('edit/' + id)
         })
         .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
     } else {
@@ -193,7 +170,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         .then(() => {
           console.log('Created HDB Resale Listing')
           // Redirect to confirming property page
-          res.redirect('previewListing/' + id)
+          res.redirect('edit/' + id)
         })
         .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
     }
@@ -218,17 +195,10 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req
     .then((hdbResaleDetail) => {
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const predictedValue = Math.round(hdbResaleDetail.predictedValue)
-      const address = hdbResaleDetail.address
-      const blockNo = hdbResaleDetail.blockNo
-      const town = hdbResaleDetail.town
-      const flatType = hdbResaleDetail.flatType
-      const flatModel = hdbResaleDetail.flatModel
-      const flatLevel = hdbResaleDetail.flatLevel
-      const floorSqm = hdbResaleDetail.floorSqm
-      const description = hdbResaleDetail.description
-      const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
-      const usePrediction = hdbResaleDetail.usePrediction
-      const postalCode = hdbResaleDetail.postalCode
+
+      const { address , blockNo, town, flatType,
+        flatModel, flatLevel, floorSqm, description,
+        leaseCommenceDate, usePrediction, postalCode} = hdbResaleDetail
 
       // Calculate percentage differences and
       // round off to 2 decimal places
@@ -298,20 +268,14 @@ router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
     where: { id }
   }).then((result) => {
     // Display result from database
-    const resalePrice = result.resalePrice
-    const predictedValue = result.predictedValue
-    const address = result.address
-    const blockNo = result.blockNo
-    const description = result.description
-    const town = result.town
-    const flatType = result.flatType
-    const flatModel = result.flatModel
+
+    const { resalePrice, predictedValue, address,
+            blockNo, description, town, flatType,
+            flatModel, floorSqm, leaseCommenceDate,
+            resaleDate, usePrediction, postalCode} = result
+
     const floorLevel = parseInt(result.flatLevel)
-    const floorSqm = result.floorSqm
-    const leaseCommenceDate = result.leaseCommenceDate
-    const resaleDate = result.resaleDate
-    const usePrediction = result.usePrediction
-    const postalCode = result.postalCode
+
     // Render property values from database
     res.render('publicResale/editListing', {
       id,
@@ -358,7 +322,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
   // Date related inputs
   const leaseCommenceDate = new Date(req.body.leaseCommenceDate)
   const leaseStartYear = leaseCommenceDate.getFullYear()
-  const dateOfSale = new Date(req.body.dateOfSale)
+  const resaleDate = new Date(req.body.dateOfSale)
 
   // Input Validation
   // if (filterSpecialRegex.test(address) === false) {
@@ -367,22 +331,16 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
-  const yearDiff = ((dateOfSale - leaseCommenceDate) / totalMilisecondsPerDay) / 365
+  const yearDiff = ((resaleDate - leaseCommenceDate) / totalMilisecondsPerDay) / 365
   if (yearDiff < 5) {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
   // Call predicting api for public resale housing
-  const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+  const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
@@ -400,7 +358,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
         flatLevel,
         floorSqm,
         leaseCommenceDate,
-        resaleDate: dateOfSale,
+        resaleDate,
         postalCode,
         usePrediction
       }, {
@@ -425,7 +383,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
         flatLevel,
         floorSqm,
         leaseCommenceDate,
-        resaleDate: dateOfSale,
+        resaleDate,
         postalCode,
         usePrediction
       }, {
@@ -458,18 +416,10 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
     .then((hdbResaleDetail) => {
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const predictedValue = Math.round(hdbResaleDetail.predictedValue)
-      const address = hdbResaleDetail.address
-      const blockNo = hdbResaleDetail.blockNo
-      const town = hdbResaleDetail.town
-      const flatType = hdbResaleDetail.flatType
-      const flatModel = hdbResaleDetail.flatModel
-      const flatLevel = hdbResaleDetail.flatLevel
-      const floorSqm = hdbResaleDetail.floorSqm
-      const description = hdbResaleDetail.description
-      const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
-      const isViewable = hdbResaleDetail.isViewable
-      const usePrediction = hdbResaleDetail.usePrediction
-      const postalCode = hdbResaleDetail.postalCode
+
+      const { address , blockNo, town, flatType,
+        flatModel, flatLevel, floorSqm, description,
+        leaseCommenceDate, isViewable, usePrediction, postalCode} = hdbResaleDetail
 
       // Calculate percentage differences and
       // round off to 2 decimal places
