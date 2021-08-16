@@ -90,7 +90,9 @@ const HDBResaleListingOne = {
   resaleDate: new Date('2021-07-08'),
   postalCode: '580123',
   isViewable: false,
-  usePrediction: true
+  usePrediction: true,
+  longitude : 0,
+  latitude: 0,
 }
 
 // HDB Listing Two Schema
@@ -110,7 +112,9 @@ const HDBResaleListingTwo = {
   resaleDate: new Date('2021-07-08'),
   postalCode: '580123',
   isViewable: true,
-  usePrediction: true
+  usePrediction: true,
+  longitude : 0,
+  latitude: 0,
 }
 
 // Create default HDB properties

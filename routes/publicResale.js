@@ -433,7 +433,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
 
 // Confirmation Page for HDB properties
 router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePublicListingId, (req, res) => {
-  const title = 'Confirm HDB Resale Listing'
+  const title = 'Preview HDB Resale'
 
   // Get UUID from URL
   const resalePublicID = req.params.id

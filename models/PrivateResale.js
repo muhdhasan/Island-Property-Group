@@ -18,7 +18,9 @@ const PrivateResale = db.define('privateResale', {
   resaleDate: { type: Sequelize.DATEONLY },
   postalCode: { type: Sequelize.STRING },
   isViewable: { type: Sequelize.BOOLEAN },
-  usePrediction: { type: Sequelize.BOOLEAN }
+  usePrediction: { type: Sequelize.BOOLEAN },
+  longitude : {type: Sequelize.FLOAT },
+  latitude: {type: Sequelize.FLOAT },
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },

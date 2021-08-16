@@ -114,7 +114,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         usePrediction
       }).then(() => {
         console.log('Created private resale listing')
-        res.redirect('/property/confirmPrivateResaleListing/' + id)
+        res.redirect('/privateResale/previewListing/' + id)
       }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
     }
     // If we want to display entered resale value instead of predicted value
@@ -360,7 +360,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
 
 // Preview Page for private properties
 router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
-  const title = 'Confirm Private Resale Listing'
+  const title = 'Preview Private Resale'
 
   // Probably need to modify this secondary title
   const secondaryTitle = '304 Blaster Up'
