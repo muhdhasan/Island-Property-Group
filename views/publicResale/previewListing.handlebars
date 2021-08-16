@@ -19,7 +19,7 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="/publicResale/previewList">HDB Preview Resale</a>
+                <a href="/publicResale/previewList">{{title}}</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
                 {{town}}
@@ -71,7 +71,7 @@
           data-bs-target="#deleteModal"
         >Delete</button>
         <a
-          href="/property/edit/{{id}}"
+          href="/publicResale/edit/{{id}}"
           class="btn btn-lg btn-outline-dark mx-2"
         >Edit</a>
         {{#if isViewable}}

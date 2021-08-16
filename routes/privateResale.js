@@ -52,8 +52,6 @@ async function predictPrivateResale (houseType, postalDistrict,
   })
 }
 
-//  CURRENTLY SHIFTING CODE RELATED TO PRIVATE RESALE TO THIS FILE
-
 // Display create resale listing page
 router.get('/create', checkAgentAuthenticated, (req, res) => {
   const title = 'Create Private Resale Listing'
@@ -150,7 +148,6 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
 // View individual private Resale Page
 router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Private Resale Listing'
-  const secondaryTitle = '304 Blaster Up'
   // Get UUID from URL
   const id = req.params.id
 
@@ -159,6 +156,7 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
   }).then((result) => {
     // Display result from database
     const address = result.address
+    const propertyName = result.propertyName
     const description = result.description
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
@@ -181,8 +179,8 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
     res.render('privateResale/viewListing', {
       id,
       title,
-      secondaryTitle,
       address,
+      propertyName,
       resalePrice,
       predictedValue,
       percentagePriceDifference,
@@ -362,18 +360,15 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
 router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Preview Private Resale'
 
-  // Probably need to modify this secondary title
-  const secondaryTitle = '304 Blaster Up'
-
   // Get UUID from URL
-  const privateResaleId = req.params.id
+  const id = req.params.id
 
   privateResale.findOne({
-    where: { id: privateResaleId }
+    where: { id }
   }).then((result) => {
     // Display result from database
-    const id = result.id
     const address = result.address
+    const propertyName = result.propertyName
     const description = result.description
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
@@ -397,8 +392,8 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
     res.render('privateResale/previewListing', {
       id,
       title,
-      secondaryTitle,
       address,
+      propertyName,
       resalePrice,
       predictedValue,
       percentagePriceDifference,
@@ -420,36 +415,36 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
 // Make private resale listing public
 router.get('/showListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL
-  const privateResaleId = req.params.id
+  const id = req.params.id
 
   privateResale.update({
     // Make this property visible to users from agent
     isViewable: true
   }, {
     where: {
-      id: privateResaleId
+      id
     }
   })
     .then(() => {
-      res.redirect('/privateResale/previewListing/' + privateResaleId)
+      res.redirect('/privateResale/previewListing/' + id)
     }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
 })
 
 // Make private resale listing private
 router.get('/hideListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   // Get UUID from URL
-  const privateResaleId = req.params.id
-  console.log(privateResaleId)
+  const id = req.params.id
+
   privateResale.update({
     // Make this property visible to users from agent
     isViewable: false
   }, {
     where: {
-      id: privateResaleId
+      id
     }
   })
     .then(() => {
-      res.redirect('/privateResale/previewListing/' + privateResaleId)
+      res.redirect('/privateResale/previewListing/' + id)
     }).catch((err) => { console.log('Error in making Private Resale Listing Public: ', err) })
 })
 
