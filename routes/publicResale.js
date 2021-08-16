@@ -204,7 +204,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
 router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req, res) => {
   const title = 'HDB Resale Listing'
 
-  const callGraph = true
+  const displayPublicResaleGraph = true
 
   // Refer to mysql workbench for all property id
   const id = req.params.id
@@ -251,7 +251,7 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req
         leaseCommenceDate,
         usePrediction,
         postalCode,
-        callGraph
+        displayPublicResaleGraph
       })
     })
     .catch((err) => {
@@ -443,24 +443,27 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
   const title = 'Preview HDB Resale'
 
   // Get UUID from URL
-  const resalePublicID = req.params.id
+  const id = req.params.id
+
+  const displayPublicResaleGraph = true
 
   // Find based on uuid V4
   hdbResale
     .findOne({
       where: {
-        id: resalePublicID
+        id
       }
     })
     // Will display more information regarding this property later
     .then((hdbResaleDetail) => {
-      const id = hdbResaleDetail.id
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const predictedValue = Math.round(hdbResaleDetail.predictedValue)
       const address = hdbResaleDetail.address
       const blockNo = hdbResaleDetail.blockNo
       const town = hdbResaleDetail.town
       const flatType = hdbResaleDetail.flatType
+      const flatModel = hdbResaleDetail.flatModel
+      const flatLevel = hdbResaleDetail.flatLevel
       const floorSqm = hdbResaleDetail.floorSqm
       const description = hdbResaleDetail.description
       const leaseCommenceDate = hdbResaleDetail.leaseCommenceDate
@@ -482,12 +485,15 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
         percentagePriceDifference,
         town,
         flatType,
+        flatModel,
+        flatLevel,
         floorSqm,
         description,
         leaseCommenceDate,
         isViewable,
         usePrediction,
-        postalCode
+        postalCode,
+        displayPublicResaleGraph
       })
     })
     .catch((err) => {

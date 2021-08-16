@@ -48,8 +48,9 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
-  {{#if callGraph}}
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  {{#if displayPublicResaleGraph}}
+  <!-- Display graph for public resale listings -->
   <script>
     
     // Function that automatically assign floor range
@@ -188,6 +189,151 @@
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
         chart.draw(data, options);
+
+    }
+  </script>
+  {{/if}}
+
+  {{#if displayPrivateResaleGraph}}
+  <!-- Display graph for private resale listings -->
+  <script>
+  // Function that automatically assign floor range
+    function floorRangeSelector(floorLevel) {
+      if (floorLevel === null || floorLevel === undefined) {
+        return 'Error'
+      } else if (floorLevel >= 1 && floorLevel <= 5) {
+        return '01 TO 05'
+      } else if (floorLevel >= 6 && floorLevel<= 10) {
+        return '06 TO 10'
+      } else if (floorLevel >= 11 && floorLevel <= 15) {
+        return '11 TO 15'
+      } else if (floorLevel >= 16 && floorLevel<= 20) {
+        return '16 TO 20'
+      } else if (floorLevel >= 21 && floorLevel <= 25) {
+        return '21 TO 25'
+      } else if (floorLevel >= 26 && floorLevel<= 30) {
+        return '26 TO 30'
+      } else if (floorLevel >= 31 && floorLevel<= 35) {
+        return '31 TO 35'
+      } else if (floorLevel >= 36 && floorLevel<= 40) {
+        return '36 TO 40'
+      } else if (floorLevel >= 41 && floorLevel<= 45) {
+        return '41 TO 45'
+      } else {
+        return '46 TO 51'
+      }
+    }
+
+      var baseAPIUrl = "http://localhost:8000/api/"
+      function callPredictAPI(yearList){
+
+        var resultList = []
+        for (i in yearList){
+          var resaleDate = yearList[i]
+          var body = {
+          type: 'private',
+          resale_date: resaleDate,
+          town: "{{town}}",
+          flat_type: "{{flatType}}",
+          storey_range: floorRangeSelector({{flatLevel}}),
+          floor_area_sqm: "{{floorSqm}}",
+          flat_model: "{{flatModel}}",
+          lease_commence_date: new Date({{leaseCommenceDate}})
+          }
+
+          // Remmeber to run docker
+          fetch(baseAPIUrl + 'predictResale', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            }, 
+            body: JSON.stringify(body)
+          })
+            .then(response => response.json())
+            .then(data => {
+              resultList.push(Math.round(data))
+              console.log('Success:', data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            })
+          }
+          return resultList
+      }
+
+      var yearList = [new Date(1990, 0, 1), new Date(1991, 0, 1), 
+                      new Date(1992, 0, 1), new Date(1993, 0, 1),
+                      new Date(1994, 0, 1), new Date(1995, 0, 1),
+                      new Date(1996, 0, 1), new Date(1997, 0, 1),
+                      new Date(1998, 0, 1), new Date(1999, 0, 1),
+
+                      new Date(2000, 0, 1), new Date(2001, 0, 1), 
+                      new Date(2002, 0, 1), new Date(2003, 0, 1),
+                      new Date(2004, 0, 1), new Date(2005, 0, 1),
+                      new Date(2006, 0, 1), new Date(2007, 0, 1),
+                      new Date(2008, 0, 1), new Date(2009, 0, 1),
+
+                      new Date(2010, 0, 1), new Date(2011, 0, 1),
+                      new Date(2012, 0, 1), new Date(2013, 0, 1),
+                      new Date(2014, 0, 1), new Date(2015, 0, 1),
+                      new Date(2016, 0, 1), new Date(2017, 0, 1),
+                      new Date(2018, 0, 1), new Date(2019, 0, 1),
+
+                      new Date(2020, 0, 1), new Date(2021, 0, 1),
+                      new Date(2022, 0, 1), new Date(2023, 0, 1),]
+
+      const responseList = callPredictAPI(yearList)
+
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawBasic);
+      function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Year');
+        data.addColumn('number', 'Predicted Resale Value');
+
+        /*data.addRows([
+          [new Date (2014, 0, 1), responseList[0]],   [new Date (2015, 0, 1), responseList[1]],
+        ]);*/
+
+        data.addRows([
+        [new Date (1990, 0, 1), responseList[0]], [new Date (1991, 0, 1), responseList[1]],
+        [new Date (1992, 0, 1), responseList[2]], [new Date (1993, 0, 1), responseList[3]],
+        [new Date (1994, 0, 1), responseList[4]], [new Date (1995, 0, 1), responseList[5]],
+        [new Date (1996, 0, 1), responseList[6]], [new Date (1997, 0, 1), responseList[7]],
+        [new Date (1998, 0, 1), responseList[8]], [new Date (1999, 0, 1), responseList[9]],
+
+        [new Date (2000, 0, 1), responseList[10]], [new Date (2001, 0, 1), responseList[11]],
+        [new Date (2002, 0, 1), responseList[12]], [new Date (2003, 0, 1), responseList[13]],
+        [new Date (2004, 0, 1), responseList[14]], [new Date (2005, 0, 1), responseList[15]],
+        [new Date (2006, 0, 1), responseList[16]], [new Date (2007, 0, 1), responseList[17]],
+        [new Date (2008, 0, 1), responseList[18]], [new Date (2009, 0, 1), responseList[19]],
+
+        [new Date (2010, 0, 1), responseList[20]], [new Date (2011, 0, 1), responseList[21]],
+        [new Date (2012, 0, 1), responseList[22]], [new Date (2013, 0, 1), responseList[23]],
+        [new Date (2014, 0, 1), responseList[24]], [new Date (2015, 0, 1), responseList[25]],
+        [new Date (2016, 0, 1), responseList[26]], [new Date (2017, 0, 1), responseList[27]],
+        [new Date (2018, 0, 1), responseList[28]], [new Date (2019, 0, 1), responseList[29]],
+
+        [new Date (2020, 0, 1), responseList[30]], [new Date (2021, 0, 1), responseList[31]],
+        [new Date (2022, 0, 1), responseList[32]], [new Date (2023, 0, 1), responseList[33]],
+        ]);
+
+        var options = {
+          title: 'Predicted Resale Value',
+          hAxis: {
+            title: 'Year'
+          },
+          vAxis: {
+            title: 'Resale Value'
+          },
+          curveType: 'function',
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
     }
   </script>
   {{/if}}

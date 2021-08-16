@@ -148,6 +148,9 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
 // View individual private Resale Page
 router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Private Resale Listing'
+
+  const displayPrivateResaleGraph = true
+  
   // Get UUID from URL
   const id = req.params.id
 
@@ -188,7 +191,8 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePrivateListingId, (re
       description,
       leaseCommenceDate,
       usePrediction,
-      postalCode
+      postalCode,
+      displayPrivateResaleGraph
     })
   }).catch((err) => console.log('Error in displaying private resale listing page: ', err))
 })
@@ -354,6 +358,8 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
 router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePrivateListingId, (req, res) => {
   const title = 'Preview Private Resale'
 
+  const displayPrivateResaleGraph = true
+
   // Get UUID from URL
   const id = req.params.id
 
@@ -401,7 +407,8 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
       leaseCommenceDate,
       isViewable,
       usePrediction,
-      postalCode
+      postalCode,
+      displayPrivateResaleGraph
     })
   }).catch((err) => console.log('Error in displaying preview private resale listing page: ', err))
 })
