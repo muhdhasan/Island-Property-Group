@@ -44,6 +44,24 @@ async function predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate
   // })
   })
 }
+
+//get long and lat 
+async function getlocation (location) {
+  var locationformat = location.split(" ").join("+")
+  return new Promise((result, err) => {
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + locationformat + "&key=" + process.env.googleAPIkey, 
+    { method: 'post'})
+      .then(res => res.json()
+      )
+      .then((json) => {
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
+
 // HDB Properties that are currently viewable to customers can be found here
 router.get('/base', (req, res) => {
   const title = 'Rental Properties'
@@ -148,6 +166,12 @@ router.post('/createRental', (req, res) => {
   // if (yearDiff < 5) {
   //   return console.log('Ensure that resale date is at least 5 years from lease date')
   // }
+  //get long and lat
+  getlocation(address).then((geo)=>{
+    geometry = geo.results
+    console.log(geometry)
+    lat = geometry[0].geometry.location.lat
+    long = geometry[0].geometry.location.long
 
   // // Call predicting api for public housing
   const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
@@ -170,7 +194,9 @@ router.post('/createRental', (req, res) => {
         postalDistrict: postal_district,
         floorSqm:floorSqF,
         leaseCommenceDate:leaseDate,
-        isViewable: true
+        isViewable: true,
+        longitude: long,
+        latitude:lat
       })
       .then((result) => {
         console.log('Testing')
@@ -180,6 +206,7 @@ router.post('/createRental', (req, res) => {
       })
       .catch((err) => console.log('Error: ' + err))
   })
+})
 })
 
 module.exports = router
