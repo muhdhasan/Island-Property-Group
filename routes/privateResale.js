@@ -111,7 +111,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         usePrediction
       }).then(() => {
         console.log('Created private resale listing')
-        res.redirect('/privateResale/previewListing/' + id)
+        res.redirect('/privateResale/edit/' + id)
       }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
     }
     // If we want to display entered resale value instead of predicted value
@@ -138,7 +138,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
         usePrediction
       }).then(() => {
         console.log('Created private resale listing')
-        res.redirect('/privateResale/previewListing/' + id)
+        res.redirect('/privateResale/edit/' + id)
       }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
     }
   })
