@@ -28,6 +28,7 @@
     "express-mysql-session": "^2.1.6",
     "express-paginate": "^1.0.2",
     "jsonwebtoken": "^8.5.1",
+    "line-graph": "^2.0.2",
     "method-override": "^3.0.0",
     "mime-types": "^2.1.32",
     "moment": "^2.29.1",

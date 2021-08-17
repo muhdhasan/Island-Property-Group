@@ -57,9 +57,6 @@
             />
             <div id="addressOneErrorMsg" class="form-text"></div>
           </div>
-          
-        </div>
-        <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="postal_district" class="form-label">Postal_District</label>
             <select
@@ -91,6 +88,18 @@
               <option value="27">Woodlands</option>
               <option value="27">Yishun</option>
             </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="amenities" class="form-label">Amenities</label>
+            <input
+              type="text"
+              name="amenities"
+              value="{{amenities}}"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="No_Bedroom" class="form-label">Bedrooms</label>
@@ -148,9 +157,6 @@
               
             </select>
           </div>
-          
-        </div>
-        <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <label for="floorFt" class="form-label">Floor Area (Sqf)</label>
             <input
@@ -164,9 +170,18 @@
               required
             />
           </div>
-          
         </div>
         <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input
+              type="text"
+              name="description"
+              value="{{description}}"
+              class="form-control form-control-lg form-control-a"
+              required
+            />
+          </div>
           <div class="col-md-6 mb-3">
             <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
             <input

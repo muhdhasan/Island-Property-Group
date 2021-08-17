@@ -10,10 +10,7 @@
           </div>
         </div>
         <div class="col-md-12 col-lg-4">
-          <nav
-            aria-label="breadcrumb"
-            class="breadcrumb-box d-flex justify-content-lg-end"
-          >
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="/">Home</a>
@@ -39,32 +36,23 @@
           <div id="property-single-carousel" class="swiper-container">
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat1.jpg" alt="" height="800px" width="800px"/>
+                <img src="/img/hdbFlat1.jpg" alt="" height="800px" width="800px" />
               </div>
               <div class="carousel-item-b swiper-slide">
-                <img src="/img/hdbFlat2.jpg" alt="" height="800px" width="800px"/>
+                <img src="/img/hdbFlat2.jpg" alt="" height="800px" width="800px" />
               </div>
             </div>
           </div>
-          <div
-            class="property-single-carousel-pagination carousel-pagination"
-          ></div>
+          <div class="property-single-carousel-pagination carousel-pagination"></div>
         </div>
       </div>
-            {{#if (checkSpecialUserType user "Agent")}}
-            <div class="m-5 d-flex justify-content-center">
-              <button
-                type="button"
-                class="btn btn-lg btn-outline-danger mx-2"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteModal"
-              ><a href="/rental/deleteRentalListing/{{rentID}}">Delete Property</a></button>
-              <a
-                href="/rental/editRentalListing/{{rentID}}"
-                class="btn btn-lg btn-outline-dark mx-2"
-              >Edit Property</a>
-            </div>
-            {{/if}}
+      {{#if (checkSpecialUserType user "Agent")}}
+      <div class="m-5 d-flex justify-content-center">
+        <button type="button" class="btn btn-lg btn-outline-danger mx-2" data-bs-toggle="modal"
+          data-bs-target="#deleteModal"><a href="/rental/deleteRentalListing/{{rentID}}">Delete Property</a></button>
+        <a href="/rental/editRentalListing/{{rentID}}" class="btn btn-lg btn-outline-dark mx-2">Edit Property</a>
+      </div>
+      {{/if}}
       <div class="row mt-5">
         <div class="col-sm-12">
 
@@ -75,7 +63,7 @@
                   <h1 class="bi bi-cash" aria-setsize="100">${{rentalPrice}}</h1>
                 </div>
               </div>
-              
+
               <div class="property-summary">
                 <div class="row">
                   <div class="col-sm-12">
@@ -107,6 +95,10 @@
                       <span>{{leaseCommenceDate}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
+                      <strong>Postal District:</strong>
+                      <span>{{postalDistrict}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
                       <strong>Area (sqm):</strong>
                       <span>{{floorSqm}}m
                         <sup>2</sup>
@@ -116,8 +108,8 @@
                 </div>
               </div>
             </div>
-            
-            <div class="col-md-7 col-lg-7 section-md-t3">              
+
+            <div class="col-md-7 col-lg-7 section-md-t3">
               <div class="row">
                 <div class="col-sm-12">
                   <div class="title-box-d">
@@ -129,11 +121,8 @@
                 <p class="description color-text-a">
                   {{description}}
                 </p>
-                <p class="description color-text-a no-margin">
-                  {{description}}
-                </p>
               </div>
-              
+
               <div class="row section-t3">
                 <div class="col-sm-12">
                   <div class="title-box-d">
@@ -142,70 +131,37 @@
                 </div>
               </div>
               <div class="amenities-list color-text-a">
-                <ul class="list-a no-margin">
-                  <li>Balcony</li>
-                  <li>Outdoor Kitchen</li>
-                  <li>Cable Tv</li>
-                  <li>Deck</li>
-                  <li>Tennis Courts</li>
-                  <li>Internet</li>
-                  <li>Parking</li>
-                  <li>Sun Room</li>
-                  <li>Concrete Flooring</li>
-                </ul>
+                <p class="description color-text-a">
+                  {{amenities}}
+                </p>
               </div>
             </div>
-            
+
           </div>
         </div>
         <div class="col-md-10 offset-md-1">
-          <ul
-            class="nav nav-pills-a nav-pills mb-3 section-t3"
-            id="pills-tab"
-            role="tablist"
-          >
+          <ul class="nav nav-pills-a nav-pills mb-3 section-t3" id="pills-tab" role="tablist">
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                id="pills-map-tab"
-                data-bs-toggle="pill"
-                href="#pills-map"
-                role="tab"
-                aria-controls="pills-map"
-                aria-selected="false"
-              >Price Information</a>
+              <a class="nav-link active" id="pills-map-tab" data-bs-toggle="pill" href="#pills-map" role="tab"
+                aria-controls="pills-map" aria-selected="false">Price Information</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link"
-                id="pills-video-tab"
-                data-bs-toggle="pill"
-                href="#pills-video"
-                role="tab"
-                aria-controls="pills-video"
-                aria-selected="true"
-              >Video</a>
+              <a class="nav-link" id="pills-video-tab" data-bs-toggle="pill" href="#pills-video" role="tab"
+                aria-controls="pills-video" aria-selected="true">Video</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link"
-                id="pills-plans-tab"
-                data-bs-toggle="pill"
-                href="#pills-plans"
-                role="tab"
-                aria-controls="pills-plans"
-                aria-selected="false"
-              >Floor Plans</a>
+              <a class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" href="#pills-plans" role="tab"
+                aria-controls="pills-plans" aria-selected="false">Floor Plans</a>
             </li>
-            
+            <li class="nav-item">
+              <a class="nav-link" id="pills-insight-tab" data-bs-toggle="pill" href="#pills-insight" role="tab"
+                aria-controls="pills-insight" aria-selected="false">Price Insights</a>
+            </li>
+
+
           </ul>
           <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="pills-map"
-              role="tabpanel"
-              aria-labelledby="pills-map-tab"
-            >
+            <div class="tab-pane fade show active" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
               <h2 class="mb-3">Price Rental For 12 Months</h2>
               <hr />
               <h5 class="mb-3">Showing rental price for 12 months rental</h5>
@@ -214,7 +170,7 @@
                   <h4 class="mt-5">Monthly Rental</h4>
                   <h3>${{rentalPrice}}</h3>
                 </div>
-                
+
                 <div class="col-md-4">
                   <h4 class="mt-5">Annual Rental</h4>
                   <h3>${{annualprice}}</h3>
@@ -226,146 +182,159 @@
                 </div>
               </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="pills-video"
-              role="tabpanel"
-              aria-labelledby="pills-video-tab"
-            >
-              <iframe
-                src="https://player.vimeo.com/video/73221098"
-                width="100%"
-                height="460"
-                frameborder="0"
-                webkitallowfullscreen
-                mozallowfullscreen
-                allowfullscreen
-              ></iframe>
+            <div class="tab-pane fade" id="pills-video" role="tabpanel" aria-labelledby="pills-video-tab">
+              <iframe src="https://player.vimeo.com/video/73221098" width="100%" height="460" frameborder="0"
+                webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
-            <div
-              class="tab-pane fade"
-              id="pills-plans"
-              role="tabpanel"
-              aria-labelledby="pills-plans-tab"
-            >
+
+            <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
               <img src="/img/plan2.jpg" alt="" class="img-fluid" />
             </div>
-            
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="row section-t3">
-            <div class="col-sm-12">
-              <div class="title-box-d">
-                <h3 class="title-d">Contact Agent</h3>
+
+            <div class="tab-pane fade text-center" id="pills-insight" role="tabpanel"
+              aria-labelledby="pills-insight-tab" style="height: 400px; width: 700px;">
+              <div id="chartContainer" style="height: 300px; width: 100%;">
+                <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
               </div>
+
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 col-lg-4">
-              <img src="/img/agent-4.jpg" alt="" class="img-fluid" />
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="property-agent">
-                <h4 class="title-agent">Anabella Geller</h4>
-                <p class="color-text-a">
-                  Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit
-                  amet quam vehicula elementum sed sit amet dui. Quisque velit
-                  nisi, pretium ut lacinia in, elementum id enim.
-                </p>
-                <ul class="list-unstyled">
-                  <li class="d-flex justify-content-between">
-                    <strong>Phone:</strong>
-                    <span class="color-text-a">(222) 4568932</span>
-                  </li>
-                  <li class="d-flex justify-content-between">
-                    <strong>Mobile:</strong>
-                    <span class="color-text-a">777 287 378 737</span>
-                  </li>
-                  <li class="d-flex justify-content-between">
-                    <strong>Email:</strong>
-                    <span class="color-text-a">annabella@example.com</span>
-                  </li>
-                  <li class="d-flex justify-content-between">
-                    <strong>Skype:</strong>
-                    <span class="color-text-a">Annabela.ge</span>
-                  </li>
-                </ul>
-                <div class="socials-a">
-                  <ul class="list-inline">
-                    <li class="list-inline-item">
-                      <a href="#">
-                        <i class="bi bi-facebook" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="#">
-                        <i class="bi bi-twitter" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="#">
-                        <i class="bi bi-instagram" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="#">
-                        <i class="bi bi-linkedin" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                  </ul>
+          <div class="col-md-12">
+            <div class="row section-t3">
+              <div class="col-sm-12">
+                <div class="title-box-d">
+                  <h3 class="title-d">Contact Agent</h3>
                 </div>
               </div>
             </div>
-            <div class="col-md-12 col-lg-4">
-              <div class="property-contact">
-                <form class="form-a">
-                  <div class="row">
-                    <div class="col-md-12 mb-1">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control form-control-lg form-control-a"
-                          id="inputName"
-                          placeholder="Name *"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <div class="form-group">
-                        <input
-                          type="email"
-                          class="form-control form-control-lg form-control-a"
-                          id="inputEmail1"
-                          placeholder="Email *"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <div class="form-group">
-                        <textarea
-                          id="textMessage"
-                          class="form-control"
-                          placeholder="Comment *"
-                          name="message"
-                          cols="45"
-                          rows="8"
-                          required
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-12 mt-3">
-                      <button type="submit" class="btn btn-a">Send Message</button>
-                    </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-4">
+                <img src="/img/agent-4.jpg" alt="" class="img-fluid" />
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="property-agent">
+                  <h4 class="title-agent">Anabella Geller</h4>
+                  <p class="color-text-a">
+                    Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit
+                    amet quam vehicula elementum sed sit amet dui. Quisque velit
+                    nisi, pretium ut lacinia in, elementum id enim.
+                  </p>
+                  <ul class="list-unstyled">
+                    <li class="d-flex justify-content-between">
+                      <strong>Phone:</strong>
+                      <span class="color-text-a">(222) 4568932</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Mobile:</strong>
+                      <span class="color-text-a">777 287 378 737</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Email:</strong>
+                      <span class="color-text-a">annabella@example.com</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Skype:</strong>
+                      <span class="color-text-a">Annabela.ge</span>
+                    </li>
+                  </ul>
+                  <div class="socials-a">
+                    <ul class="list-inline">
+                      <li class="list-inline-item">
+                        <a href="#">
+                          <i class="bi bi-facebook" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a href="#">
+                          <i class="bi bi-twitter" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a href="#">
+                          <i class="bi bi-instagram" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a href="#">
+                          <i class="bi bi-linkedin" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                </form>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="property-contact">
+                  <form class="form-a">
+                    <div class="row">
+                      <div class="col-md-12 mb-1">
+                        <div class="form-group">
+                          <input type="text" class="form-control form-control-lg form-control-a" id="inputName"
+                            placeholder="Name *" required />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-1">
+                        <div class="form-group">
+                          <input type="email" class="form-control form-control-lg form-control-a" id="inputEmail1"
+                            placeholder="Email *" required />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-1">
+                        <div class="form-group">
+                          <textarea id="textMessage" class="form-control" placeholder="Comment *" name="message"
+                            cols="45" rows="8" required></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mt-3">
+                        <button type="submit" class="btn btn-a">Send Message</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section><!-- End Property Single-->
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+<script>
+  window.onload = function () {
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      theme: "light2",
+      title: {
+        text: "Price Insight"
+      },
+      axisX: {
+        title: "Date (Year)",
+        valueFormatString: "YYYY",
+
+      },
+      axisY: {
+        title: "Price per sqm",
+
+      },
+      data: [{
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: [
+          { x: new Date(2016, 1, 1), y: 14 },
+          { x: new Date(2017, 1, 1), y: 16 },
+          { x: new Date(2018, 1, 1), y: 22 },
+          { x: new Date(2019, 1, 1), y: 17 },
+          { x: new Date(2020, 1, 1), y: 23 },
+          { x: new Date(2021, 1, 1), y: {{priceperSqm}} },
+
+        ]
+      }]
+    });
+    chart.render();
+
+  }
+</script>

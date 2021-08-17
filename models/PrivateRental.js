@@ -5,6 +5,7 @@ const PrivateRental = db.define('privateRental', {
   id: { type: Sequelize.STRING, primaryKey: true },
   address: { type: Sequelize.STRING(500) },
   description: { type: Sequelize.STRING(2000) },
+  amenities: { type: Sequelize.STRING(2000) },
   monthlyRent: { type: Sequelize.DECIMAL(6, 2) },
   houseType: { type: Sequelize.STRING },
   numberOfBedroom: { type: Sequelize.INTEGER },

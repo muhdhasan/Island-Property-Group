@@ -18,15 +18,15 @@ const PrivateRental = require('../models/PrivateRental')
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 // Call predict rental API
-async function predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate) {
-  
+async function predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate) {
+
   const body = {
     Postal_District: postal_district,
-    Type:type,
+    Type: type,
     No_Bedroom: bedrooms,
-    Floor_Area:floorSqF,
-    Lease_Commencement_Date:leaseDate,
-    
+    Floor_Area: floorSqF,
+    Lease_Commencement_Date: leaseDate,
+
   }
   return new Promise((result, err) => {
     fetch(baseAPIUrl + 'predictRental', {
@@ -53,8 +53,9 @@ router.get('/base', (req, res) => {
       isViewable: true
     },
     raw: true
+
   }).then((privateRental) => {
-    res.render('rental/base', { title, privateRental: privateRental})
+    res.render('rental/base', { title, privateRental: privateRental })
   })
 })
 
@@ -70,49 +71,55 @@ router.get('/rentalListing/:id', (req, res) => {
   if (uuidRegex.test(rentID) === false) {
     res.redirect('/')
   } else {
-  PrivateRental
-    .findOne({
-      where: {
-        id: rentID,
-        isViewable: true
-      }
-    })
-    // Display information
-    .then((PrivateRental) => {
-      const rentalPrice = PrivateRental.monthlyRent
-      const address = PrivateRental.address
-      const houseType = PrivateRental.houseType
-      const numberOfBedroom = PrivateRental.numberOfBedroom
-      const floorSqm = PrivateRental.floorSqm
-      const leaseCommenceDate = PrivateRental.leaseCommenceDate
-      const description = PrivateRental.description
-
-      const annualprice = Math.round(rentalPrice*12).toFixed(2)
-      const downpayment = Math.round(rentalPrice*3).toFixed(2)
-      res.render('rental/rentalListing', {
-        address,
-        title,
-        secondaryTitle,
-        rentalPrice,
-        houseType,
-        numberOfBedroom,
-        leaseCommenceDate,
-        floorSqm,
-        description,
-        rentID,
-        annualprice,
-        downpayment
+    PrivateRental
+      .findOne({
+        where: {
+          id: rentID,
+          isViewable: true
+        }
       })
-    })
-    .catch((err) => {
-      console.log('Error', err)
-    })
+      // Display information
+      .then((PrivateRental) => {
+        const rentalPrice = PrivateRental.monthlyRent
+        const address = PrivateRental.address
+        const houseType = PrivateRental.houseType
+        const numberOfBedroom = PrivateRental.numberOfBedroom
+        const floorSqm = PrivateRental.floorSqm
+        const leaseCommenceDate = PrivateRental.leaseCommenceDate
+        const description = PrivateRental.description
+        const amenities = PrivateRental.amenities
+        const postalDistrict = PrivateRental.postalDistrict
+
+        const annualprice = Math.round(rentalPrice * 12).toFixed(2)
+        const downpayment = Math.round(rentalPrice * 3).toFixed(2)
+        const priceperSqm = rentalPrice/floorSqm
+        res.render('rental/rentalListing', {
+          address,
+          title,
+          secondaryTitle,
+          rentalPrice,
+          houseType,
+          numberOfBedroom,
+          leaseCommenceDate,
+          amenities,
+          floorSqm,
+          description,
+          postalDistrict,
+          rentID,
+          annualprice,
+          downpayment,
+          priceperSqm
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
   }
 })
 router.get('/createRental', (req, res) => {
-    const title = 'Rental Properties'
-    res.render('rental/createRental', { title: title })
-  })
+  const title = 'Rental Properties'
+  res.render('rental/createRental', { title: title })
+})
 
 router.post('/createRental', (req, res) => {
   const title = 'Rental Properties'
@@ -126,28 +133,31 @@ router.post('/createRental', (req, res) => {
   const bedrooms = req.body.No_Bedroom
   const floorSqF = req.body.floorFt
   const leaseDate = req.body.Lease_Commencement_Date
-  
+  const amenities = req.body.amenities
+
   // Call predicting api for rental
-  const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
+  const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
   rentValue.then((response) => {
-    console.log('postal_district: ', postal_district)
-    console.log('type: ', type)
-    console.log('bedrooms: ', bedrooms)
-    console.log('floorSqF: ', floorSqF)
-    console.log('leaseDate: ', leaseDate)
-    console.log('Resale Value', rentValue)
-    const description = 'Sample Description'
+    // console.log('postal_district: ', postal_district)
+    // console.log('type: ', type)
+    // console.log('bedrooms: ', bedrooms)
+    // console.log('floorSqF: ', floorSqF)
+    // console.log('leaseDate: ', leaseDate)
+    // console.log('Resale Value', rentValue)
+    // const description = 'Sample Description'
+
     PrivateRental
       .create({
         id: RentId,
         address: address,
         description: description,
+        amenities: amenities,
         monthlyRent: Math.round(response),
-        houseType:type,
+        houseType: type,
         numberOfBedroom: bedrooms,
         postalDistrict: postal_district,
-        floorSqm:floorSqF,
-        leaseCommenceDate:leaseDate,
+        floorSqm: floorSqF,
+        leaseCommenceDate: leaseDate,
         isViewable: true
       })
       .then((result) => {
@@ -165,7 +175,7 @@ router.get('/editRentalListing/:id', (req, res) => {
   // Find rental property by id
   PrivateRental.findOne({
     where: { id: rentID }
-  }).then((result) => {
+  }).then((PrivateRental) => {
     // Getting result from database
     const rentalPrice = PrivateRental.monthlyRent
     const address = PrivateRental.address
@@ -175,6 +185,7 @@ router.get('/editRentalListing/:id', (req, res) => {
     const leaseCommenceDate = PrivateRental.leaseCommenceDate
     const postalDistrict = PrivateRental.postal_district
     const description = PrivateRental.description
+    const amenities = PrivateRental.amenities
 
     res.render('rental/editRentalListing', {
       address,
@@ -186,12 +197,13 @@ router.get('/editRentalListing/:id', (req, res) => {
       postalDistrict,
       floorSqm,
       description,
+      amenities,
       rentID
     })
   }).catch((err) => console.log('Error: ', err))
 })
 // Update rental property information to database
-router.put('/editRentalListing/:id',(req, res) => {
+router.put('/editRentalListing/:id', (req, res) => {
 
   const rentID = req.params.id
 
@@ -205,37 +217,39 @@ router.put('/editRentalListing/:id',(req, res) => {
   const type = req.body.Type
   const floorSqF = req.body.floorFt
   const leaseDate = req.body.leaseCommenceDate
+  const amenities = req.body.amenities
 
   // Call predicting api for rental property
-  const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
+  const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
   rentValue.then((response) => {
-    console.log('postal_district: ', postal_district)
-    console.log('type: ', type)
-    console.log('bedrooms: ', bedrooms)
-    console.log('floorSqF: ', floorSqF)
-    console.log('leaseDate: ', leaseDate)
-    console.log('Resale Value', rentValue)
-    const description = 'Sample Description'
+    // console.log('postal_district: ', postal_district)
+    // console.log('type: ', type)
+    // console.log('bedrooms: ', bedrooms)
+    // console.log('floorSqF: ', floorSqF)
+    // console.log('leaseDate: ', leaseDate)
+    // console.log('Resale Value', rentValue)
+    // const description = 'Sample Description'
     // Update rental listing according to id
     PrivateRental.update({
       address: address,
       description: description,
+      amenities: amenities,
       monthlyRent: Math.round(response),
-      houseType:type,
+      houseType: type,
       numberOfBedroom: bedrooms,
       postalDistrict: postal_district,
-      floorSqm:floorSqF,
-      leaseCommenceDate:leaseDate,
+      floorSqm: floorSqF,
+      leaseCommenceDate: leaseDate,
     }, {
       where: { id: rentID }
     }).then(() => {
-    res.redirect('/rental/base')
+      res.redirect('/rental/base')
     }).catch((err) => { console.log('Error in updating Rental Listing: ', err) })
   })
 })
 
 // Delete rental listing
-router.get('/deleteRentalListing/:id',(req, res) => {
+router.get('/deleteRentalListing/:id', (req, res) => {
   const rentID = req.params.id
   PrivateRental.destroy({
     where: { id: rentID }
