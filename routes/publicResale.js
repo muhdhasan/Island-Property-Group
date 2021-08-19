@@ -75,7 +75,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   const id = uuid.v4()
   const address = req.body.address
   const blockNo = req.body.blockNo
-  const description = req.body.description
+  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
   const postalCode = req.body.postalCode
   const town = req.body.town
   const flatType = req.body.flatType
@@ -111,13 +111,10 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
-    // console.log('Resale Value', response)
 
-    // Replace fixed value of sample description
-    const description = 'Sample Description'
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
-    if (Boolean(usePrediction) === true) {
+    if (usePrediction === "true") {
       // Create public resale listing
       hdbResale
         .create({
@@ -306,7 +303,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
   // Inputs
   const address = req.body.address
   const blockNo = req.body.blockNo
-  const description = req.body.description
+  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
   const postalCode = req.body.postalCode
   // Will add input validation here later
   const town = req.body.town
@@ -344,7 +341,8 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
   resaleValue.then((response) => {
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
-    if (Boolean(usePrediction) === true) {
+
+    if (usePrediction === "true") {
       // Update hdb resale listing according to UUID
       hdbResale.update({
         address,

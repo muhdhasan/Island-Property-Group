@@ -65,7 +65,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // Inputs
   const address = req.body.address
   const propertyName = req.body.propertyName
-  const description = 'Sample Description'
+  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
   const postalCode = req.body.postalCode
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType
@@ -89,7 +89,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
     const predictedValue = Math.round(response)
 
     // If user wants to display prediction from AI
-    if (Boolean(usePrediction) === true) {
+    if (usePrediction === "true") {
       // Create private resale listing
       privateResale.create({
         id,
@@ -278,7 +278,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
   // Inputs
   const address = req.body.address
   const propertyName = req.body.propertyName
-  const description = 'Sample Description'
+  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
   const postalCode = req.body.postalCode
   const postalDistrict = req.body.postalDistrict
   const houseType = req.body.houseType
@@ -298,8 +298,9 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
 
   const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
   resaleValue.then((response) => {
+    
     const predictedValue = Math.round(response)
-    if (Boolean(usePrediction) === true) {
+    if (usePrediction === "true") {
       // Update private property listings
       privateResale.update({
         address,
