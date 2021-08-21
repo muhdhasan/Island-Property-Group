@@ -111,10 +111,9 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // Call predicting api for public resale housing
   const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
   resaleValue.then((response) => {
-
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
-    if (usePrediction === "true") {
+    if (usePrediction === 'true') {
       // Create public resale listing
       hdbResale
         .create({
@@ -193,9 +192,11 @@ router.get('/viewListing/:id', checkUUIDFormat, checkResalePublicListingId, (req
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const predictedValue = Math.round(hdbResaleDetail.predictedValue)
 
-      const { address , blockNo, town, flatType,
+      const {
+        address, blockNo, town, flatType,
         flatModel, flatLevel, floorSqm, description,
-        leaseCommenceDate, usePrediction, postalCode} = hdbResaleDetail
+        leaseCommenceDate, usePrediction, postalCode
+      } = hdbResaleDetail
 
       // Calculate percentage differences and
       // round off to 2 decimal places
@@ -266,10 +267,12 @@ router.get('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
   }).then((result) => {
     // Display result from database
 
-    const { resalePrice, predictedValue, address,
-            blockNo, description, town, flatType,
-            flatModel, floorSqm, leaseCommenceDate,
-            resaleDate, usePrediction, postalCode} = result
+    const {
+      resalePrice, predictedValue, address,
+      blockNo, description, town, flatType,
+      flatModel, floorSqm, leaseCommenceDate,
+      resaleDate, usePrediction, postalCode
+    } = result
 
     const floorLevel = parseInt(result.flatLevel)
 
@@ -342,7 +345,7 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
     const predictedValue = Math.round(response)
     // If user wants to display prediction from AI
 
-    if (usePrediction === "true") {
+    if (usePrediction === 'true') {
       // Update hdb resale listing according to UUID
       hdbResale.update({
         address,
@@ -415,9 +418,11 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
       const resalePrice = Math.round(hdbResaleDetail.resalePrice)
       const predictedValue = Math.round(hdbResaleDetail.predictedValue)
 
-      const { address , blockNo, town, flatType,
+      const {
+        address, blockNo, town, flatType,
         flatModel, flatLevel, floorSqm, description,
-        leaseCommenceDate, isViewable, usePrediction, postalCode} = hdbResaleDetail
+        leaseCommenceDate, isViewable, usePrediction, postalCode
+      } = hdbResaleDetail
 
       // Calculate percentage differences and
       // round off to 2 decimal places

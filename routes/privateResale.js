@@ -89,7 +89,7 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
     const predictedValue = Math.round(response)
 
     // If user wants to display prediction from AI
-    if (usePrediction === "true") {
+    if (usePrediction === 'true') {
       // Create private resale listing
       privateResale.create({
         id,
@@ -298,9 +298,8 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
 
   const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
   resaleValue.then((response) => {
-    
     const predictedValue = Math.round(response)
-    if (usePrediction === "true") {
+    if (usePrediction === 'true') {
       // Update private property listings
       privateResale.update({
         address,
@@ -372,11 +371,12 @@ router.get('/previewListing/:id', checkAgentAuthenticated, checkUUIDFormat, chec
       houseType, typeOfArea, marketSegment,
       postalDistrict, floorSqm, floorLevel,
       leaseCommenceDate, isViewable, usePrediction,
-      postalCode } = result
+      postalCode
+    } = result
 
     const resalePrice = Math.round(result.resalePrice)
     const predictedValue = Math.round(result.predictedValue)
-    
+
     // const resaleDate = result.resaleDate
     // Calculate percentage differences and
     // round off to 2 decimal places
