@@ -6,15 +6,15 @@ const privateRental = require('../models/PrivateRental')
 
 // Required node modules
 const uuid = require('uuid')
-const moment = require('moment')
 const fetch = require('node-fetch')
 
 const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const PrivateRental = require('../models/PrivateRental')
 
-// Consolidate check regex for uuid
-const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+// Middlewares
+const { checkUUIDFormat } = require('../helpers/checkURL')
+const { checkAgentAuthenticated } = require('../helpers/auth')
 
 // Call predict rental API
 async function predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate) {
@@ -59,17 +59,13 @@ router.get('/base', (req, res) => {
 })
 
 // View each Rental Properties Page
-router.get('/rentalListing/:id', (req, res) => {
+router.get('/rentalListing/:id', checkUUIDFormat, (req, res) => {
   const title = 'Rental Properties'
   const secondaryTitle = '304 Blaster Up'
 
   // Store ID in sql database
   const rentID = req.params.id
 
-  // Redirect to homepage 
-  if (uuidRegex.test(rentID) === false) {
-    res.redirect('/')
-  } else {
     PrivateRental
       .findOne({
         where: {
@@ -113,14 +109,13 @@ router.get('/rentalListing/:id', (req, res) => {
       .catch((err) => {
         console.log('Error', err)
       })
-  }
 })
-router.get('/createRental', (req, res) => {
+router.get('/createRental', checkAgentAuthenticated, (req, res) => {
   const title = 'Rental Properties'
   res.render('rental/createRental', { title: title })
 })
 
-router.post('/createRental', (req, res) => {
+router.post('/createRental', checkAgentAuthenticated, (req, res) => {
   const title = 'Rental Properties'
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
@@ -159,7 +154,7 @@ router.post('/createRental', (req, res) => {
         leaseCommenceDate: leaseDate,
         isViewable: true
       })
-      .then((result) => {
+      .then(() => {
         console.log('Returning to homepage')
         res.redirect('/rental/base')
       })
@@ -167,7 +162,7 @@ router.post('/createRental', (req, res) => {
   })
 })
 // Edit Function for rental listings
-router.get('/editRentalListing/:id', (req, res) => {
+router.get('/editRentalListing/:id', checkAgentAuthenticated, checkUUIDFormat, (req, res) => {
   const title = 'Edit Rental Listing'
 
   const rentID = req.params.id
@@ -202,7 +197,7 @@ router.get('/editRentalListing/:id', (req, res) => {
   }).catch((err) => console.log('Error: ', err))
 })
 // Update rental property information to database
-router.put('/editRentalListing/:id', (req, res) => {
+router.put('/editRentalListing/:id', checkAgentAuthenticated, checkUUIDFormat, (req, res) => {
 
   const rentID = req.params.id
 
@@ -248,7 +243,7 @@ router.put('/editRentalListing/:id', (req, res) => {
 })
 
 // Delete rental listing
-router.get('/deleteRentalListing/:id', (req, res) => {
+router.get('/deleteRentalListing/:id', checkAgentAuthenticated, (req, res) => {
   const rentID = req.params.id
   PrivateRental.destroy({
     where: { id: rentID }
