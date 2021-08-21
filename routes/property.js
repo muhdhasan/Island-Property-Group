@@ -393,7 +393,7 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     geometry = geo.results
     console.log(geometry)
     lat = geometry[0].geometry.location.lat
-    long = geometry[0].geometry.location.long
+    long = geometry[0].geometry.location.lng
 
     // Call predicting api for public resale housing
     const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
@@ -538,7 +538,7 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
     geometry = geo.results
     console.log(geometry)
     lat = geometry[0].geometry.location.lat
-    long = geometry[0].geometry.location.long
+    long = geometry[0].geometry.location.lng
 
     // Call predicting api for private resale housing
     const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)

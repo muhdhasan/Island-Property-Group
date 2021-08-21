@@ -80,6 +80,28 @@ function createPrivateResaleMsg (intent, listingid, botmsgid, botorder, userid) 
       msg = 'This is not a rental listing '
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
+    case 'viewing':
+      if (listing.viewing) {
+        msg = 'Listing is available for viewing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      }
+    case 'resale_price':
+        msg = 'The resale price is ' + listing.resalePrice.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'resale_date':
+        msg = 'The resale date is ' + listing.resaleDate.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'address':
+        msg = 'The address is ' + listing.address.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'rent_cost':
+        msg = 'This is not a rental listing '
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
       case 'viewing':
         if (listing.viewing) {
           msg = 'Listing is available for viewing'
@@ -135,6 +157,28 @@ function createPrivateRentalMsg (intent, listingid, botmsgid, botorder, userid) 
       msg = 'The monthly cost is ' + listing.monthlyRent.toString()
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
+    case 'viewing':
+      if (listing.viewing) {
+        msg = 'Listing is available for viewing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      }
+      case 'resale_price':
+        msg = 'This is not a sale listing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'resale_date':
+        msg = 'This is not a sale listing'
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'address':
+        msg = 'The address is ' + listing.address.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
+      case 'rent_cost':
+        msg = 'The monthly cost is ' + listing.monthlyRent.toString()
+        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+        break
       case 'viewing':
         if (listing.viewing) {
           msg = 'Listing is available for viewing'
@@ -409,14 +453,10 @@ router.post('/chat/:listing', (req, res) => {
       console.log('CREATED USER MESSAGE')
       // Create user message
       Chat.create({ messageid: msgid, message: message, chatorder: order, userid: userid, listingid: listingid, isBot: false })
-      // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
-      const botmsgid = uuid.v1()
-      createreturnmsg(theIntent, listingid, botmsgid, botorder, userid)
-      res.redirect('chat')
-      // Create bot message
-      const botmsgid = uuid.v1()
+      // Create bot message     
       console.log(listingid)
       console.log(botorder)
+      const botmsgid = uuid.v1()
       createreturnmsg(theIntent, listingid, botmsgid, botorder, userid)
       res.redirect('back')
     })
