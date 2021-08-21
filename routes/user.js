@@ -35,7 +35,7 @@ function createreturnmsg (intent, listingid, botmsgid, botorder, userid) {
   hdbResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 3')
-      createhdbResaleMsg(intent, listingid, botmsgid, botmsgid, userid)
+      createhdbResaleMsg(intent, listing, botmsgid, botmsgid, userid)
     }
   })
 }
@@ -157,7 +157,7 @@ function createhdbResaleMsg (intent, listing, botmsgid, botorder, userid) {
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
     case 'greeting':
-      msg = 'helllo there'
+      msg = 'hello there'
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
     case 'lease_commencement':
