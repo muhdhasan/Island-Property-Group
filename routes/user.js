@@ -27,8 +27,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, // true for 465, false for other ports
   auth: {
-    user: 'superlegitemail100percent@gmail.com', // generated ethereal user
-    pass: 'Passw0rdyes' // generated ethereal password
+    user: process.env.email, // generated ethereal user
+    pass: process.env.emailpassword // generated ethereal password
   }
 })
 

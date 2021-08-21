@@ -110,7 +110,7 @@ router.post('/getlistings',(req,res) =>{
     geometry = geo.results
     console.log(geometry)
     locationlat = geometry[0].geometry.location.lat
-    locationlong = geometry[0].geometry.location.long
+    locationlong = geometry[0].geometry.location.lng
   
   if (type == "HDB Resale"){
     const title = 'HDB Resale'

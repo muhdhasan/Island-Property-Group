@@ -171,7 +171,7 @@ router.post('/createRental', (req, res) => {
     geometry = geo.results
     console.log(geometry)
     lat = geometry[0].geometry.location.lat
-    long = geometry[0].geometry.location.long
+    long = geometry[0].geometry.location.lng
 
   // // Call predicting api for public housing
   const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
