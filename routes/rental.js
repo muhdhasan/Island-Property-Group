@@ -6,7 +6,6 @@ const privateRental = require('../models/PrivateRental')
 
 // Required node modules
 const uuid = require('uuid')
-const moment = require('moment')
 const fetch = require('node-fetch')
 
 const baseAPIUrl = 'http://localhost:8000/api/'

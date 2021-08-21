@@ -107,12 +107,12 @@ router.post('/getlistings', (req, res) => {
   const displaylistings = []
   console.log(location)
   getlocation(location).then((geo) => {
-    geometry = geo.results
+    const geometry = geo.results
     console.log(geometry)
-    locationlat = geometry[0].geometry.location.lat
-    locationlong = geometry[0].geometry.location.long
+    const locationlat = geometry[0].geometry.location.lat
+    const locationlong = geometry[0].geometry.location.long
 
-    if (type == 'HDB Resale') {
+    if (type === 'HDB Resale') {
       const title = 'HDB Resale'
       const isViewable = true
       const isPublic = true
@@ -124,9 +124,9 @@ router.post('/getlistings', (req, res) => {
         raw: true
       }).then((listings) => {
         for (listing in listings) {
-          listinglong = listing.long
-          listinglat = listing.lat
-          distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
+          const listinglong = listing.long
+          const listinglat = listing.lat
+          const distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
           if (distance >= distancefromlisting) {
             Console.log(distance)
             displaylistings.push(listing)
@@ -135,12 +135,12 @@ router.post('/getlistings', (req, res) => {
       })
       res.render('resale/viewPublicResaleList', { title, hdbResale: displaylistings, isViewable, isPublic })
     }
-    if (type == 'Private Resale') {
+    if (type === 'Private Resale') {
       PrivateResale.findAll().then((listings) => {
         for (listing in listings) {
-          listinglong = listing.long
-          listinglat = listing.lat
-          distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
+          const listinglong = listing.long
+          const listinglat = listing.lat
+          const distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
           if (distance >= distancefromlisting) {
             displaylistings.push(listing)
           }
@@ -148,7 +148,7 @@ router.post('/getlistings', (req, res) => {
       })
       res.render('resale/viewPrivateResaleList', { title, privateResale: privateResale })
     }
-    if (type == 'Private Rental') {
+    if (type === 'Private Rental') {
       PrivateRental.findAll({
       // Only users can see viewable properties
         where: {
@@ -157,9 +157,9 @@ router.post('/getlistings', (req, res) => {
         raw: true
       }).then((listings) => {
         for (listing in listings) {
-          listinglong = listing.long
-          listinglat = listing.lat
-          distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
+          const listinglong = listing.long
+          const listinglat = listing.lat
+          const distancefromlisting = haversine_distance(listinglat, listinglong, locationlat, locationlong)
           if (distance >= distancefromlisting) {
             displaylistings.push(listing)
           }
