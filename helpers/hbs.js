@@ -15,6 +15,15 @@ module.exports = {
     return inputData === dropDown ? 'selected' : ''
   },
 
+  // Automatically checks radio button should radio value and input value are similar
+  autoCheckRadioBtn: (inputData, radioValue) => {
+    if (inputData === radioValue) {
+      return 'checked'
+    } else {
+      return ''
+    }
+  },
+
   // Basically converts 1000 to 1k so its more eligible for users
   roundOffToThousand: (inputPrice) => {
     return Math.round(inputPrice / 1000)
@@ -45,5 +54,23 @@ module.exports = {
     } else {
       return false
     }
+  },
+
+  // This function checks if the listing uses resaleValue or predictedValue
+  // If we want to display predictedValue, usePrediction has to be true
+  // Otherwise, false
+  displayPredictedValue: (resaleValue, predictedValue, usePrediction) => {
+    if (usePrediction === true || usePrediction === 1) {
+      return predictedValue
+    } else {
+      return resaleValue
+    }
   }
+
+  // // Display percentage difference in property listings pages
+  // displayPercentageTab: (inputData, typeDisplay) => {
+  //   if(inputData === typeDisplay && typeDisplay === "positive"){
+  //     return true
+  //   }
+  // }
 }

@@ -105,7 +105,10 @@ router.get('/rentalListing/:id', (req, res) => {
         const description = PrivateRental.description
 
         res.render('rental/rentalListing', {
+<<<<<<< HEAD
           rentID,
+=======
+>>>>>>> main
           address,
           title,
           secondaryTitle,
@@ -173,6 +176,7 @@ router.post('/createRental', (req, res) => {
     lat = geometry[0].geometry.location.lat
     long = geometry[0].geometry.location.long
 
+<<<<<<< HEAD
     // // Call predicting api for public housing
     const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
     rentValue.then((response) => {
@@ -206,6 +210,38 @@ router.post('/createRental', (req, res) => {
         })
         .catch((err) => console.log('Error: ' + err))
     })
+=======
+  // // Call predicting api for public housing
+  const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
+  rentValue.then((response) => {
+    console.log('postal_district: ', postal_district)
+    console.log('type: ', type)
+    console.log('bedrooms: ', bedrooms)
+    console.log('floorSqF: ', floorSqF)
+    console.log('leaseDate: ', leaseDate)
+    console.log('Resale Value', rentValue)
+    const description = 'Sample Description'
+    PrivateRental
+      .create({
+        id: RentId,
+        address: address,
+        description: description,
+        monthlyRent: Math.round(response),
+        houseType: type,
+        numberOfBedroom: bedrooms,
+        postalDistrict: postal_district,
+        floorSqm: floorSqF,
+        leaseCommenceDate: leaseDate,
+        isViewable: true
+      })
+      .then((result) => {
+        console.log('Testing')
+        // Redirect to confirming property page
+        // res.redirect('/rental/createListing' + RentId)
+        res.redirect('/rental/base')
+      })
+      .catch((err) => console.log('Error: ' + err))
+>>>>>>> main
   })
 })
 

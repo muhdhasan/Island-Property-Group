@@ -31,7 +31,7 @@
   <section class="contact mt-5">
     <div class="container">
       <form
-        action="/property/editPublicResaleListing{{id}}?_method=PUT"
+        action="/privateResale/edit/{{id}}?_method=PUT"
         class="form"
         method="POST"
         role="form"
@@ -39,23 +39,25 @@
       <input type="hidden" name="_method" value="PUT">
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
-            <label for="address1" class="form-label">Address Line 1</label>
+            <label for="address" class="form-label">Address Line</label>
             <input
               type="text"
-              name="address1"
+              name="address"
               class="form-control form-control-lg form-control-a"
               value="{{address}}"
-              placeholder="Address 1"
+              placeholder="Singapore Avenue 1"
               required
             />
             <div id="addressOneErrorMsg" class="form-text"></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="address2" class="form-label">Address Line 2</label>
+            <label for="propertyName" class="form-label">Property Name</label>
             <input
               type="text"
-              name="address2"
+              name="propertyName"
               class="form-control form-control-lg form-control-a"
+              value="{{propertyName}}"
+              placeholder="Singapore Towers"
               required
             />
             <div id="addressTwoErrorMsg" class="form-text"></div>
@@ -170,38 +172,52 @@
               required
             />
           </div>
+        </div> 
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="isFreehold" class="form-label">Freehold</label>
+            <div class="form-check form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isFreehold"
+                id="isFreeholdYes"
+                value="1"
+                onclick="javascript:isFreeholdCheck();"
+                required
+              />
+              <label class="form-check-label" for="isFreeholdYes">Yes</label>
+            </div>
+            <div class="form-check form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isFreehold"
+                id="isFreeholdNo"
+                value="0"
+                onclick="javascript:isFreeholdCheck();"
+                required
+              />
+              <label class="form-check-label" for="isFreeholdNo">No</label>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input
+              id="postalCode"
+              type="text"
+              name="postalCode"
+              class="form-control form-control-lg form-control-a"
+              placeholder="500123"
+              value="{{postalCode}}"
+              required
+            />
+          </div>
+        </div>
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
-              <label for="isFreehold" class="form-label">Freehold</label>
-              <div class="form-check form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFreehold"
-                  id="isFreeholdYes"
-                  value="1"
-                  onclick="javascript:isFreeholdCheck();"
-                  required
-                />
-                <label class="form-check-label" for="isFreeholdYes">Yes</label>
-              </div>
-              <div class="form-check form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFreehold"
-                  id="isFreeholdNo"
-                  value="0"
-                  onclick="javascript:isFreeholdCheck();"
-                  required
-                />
-                <label class="form-check-label" for="isFreeholdNo">No</label>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
               <div class="leaseCommenceDateDiv">
-                <label for="leaseCommenceDate" class="form-label">Lease Start
-                  Date</label>
+                <label for="leaseCommenceDate" class="form-label">Lease Start Date</label>
                 <input
                   id="leaseCommenceDate"
                   type="date"
@@ -213,8 +229,6 @@
                 />
               </div>
             </div>
-          </div>
-          <div class="row mb-3">
             <div class="col-md-6 mb-3">
               <label for="dateOfSale" class="form-label">Resale Date</label>
               <input
@@ -228,8 +242,61 @@
               />
               <div id="resaleDateErrorMsg" class="form-text"></div>
             </div>
-            <div class="col-md-6 mb-3">
-            </div>
+          </div>
+        <h3 class="mb-3">Pricing</h3>
+        <div class="mb-3">
+          <p>Use AI Model Prediction?</p>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="yesRadio"
+              value="true"
+              onclick="useAImodel();"
+              {{autoCheckRadioBtn usePrediction true}}
+              required
+            />
+            <label class="form-check-label" for="yesRadio">
+              Yes
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="usePrediction"
+              id="noRadio"
+              value="false"
+              onclick="useAImodel();"
+              {{autoCheckRadioBtn usePrediction false}}
+            />
+            <label class="form-check-label" for="noRadio">
+              No
+            </label>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="currentResaleValue" class="form-label">Current Resale Price</label>
+            <input
+              id="currentResaleValue"
+              type="text"
+              name="currentResaleValue"
+              class="form-control form-control-lg form-control-a"
+              value="{{resalePrice}}"
+              disabled
+            />
+          </div>
+          <div id="resaleDiv" class="col-md-6 mb-3">
+            <label for="resaleValue" class="form-label">New Resale Price</label>
+            <input
+              id="resaleValue"
+              type="text"
+              name="resaleValue"
+              class="form-control form-control-lg form-control-a"
+              value="{{resalePrice}}"
+            />
           </div>
         </div>
         <div class="d-flex justify-content-end">
