@@ -257,4 +257,5 @@ router.get('/deleteRentalListing/:id', (req, res) => {
     res.redirect('/rental/base')
   }).catch((err) => { console.log('Error: ', err) })
 })
+
 module.exports = router

@@ -11,10 +11,7 @@
           </div>
         </div>
         <div class="col-md-12 col-lg-4">
-          <nav
-            aria-label="breadcrumb"
-            class="breadcrumb-box d-flex justify-content-lg-end"
-          >
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="#">Home</a>
@@ -50,24 +47,20 @@
         <div class="col-md-4">
           <div class="card-box-a card-shadow">
             <div class="img-box-a">
-              <img
-                src="/img/property-1.jpg"
-                alt=""
-                class="img-a img-fluid"
-              />
+              <img src="/img/Rental/rental-2.jpg" alt="" class="img-a img-fluid" />
             </div>
             <div class="card-overlay">
               <div class="card-overlay-a-content">
                 <div class="card-header-a">
                   <h2 class="card-title-a">
-                    <a href="#">204 Mount
+                    <a href="#">
                       <br />
-                      Olive Road Two</a>
+                      {{address}}</a>
                   </h2>
                 </div>
                 <div class="card-body-a">
                   <div class="price-box d-flex">
-                    <span class="price-a">Resale | $ {{roundOffToThousand monthlyRent}}k</span>
+                    <span class="price-a">Rental | $ {{roundOffToThousand monthlyRent}}k</span>
                   </div>
                   <a href="/rental/rentalListing/{{id}}" class="link-a">Click here to
                     view
@@ -131,3 +124,4 @@
     </div>
   </section><!-- End Property Grid Single-->
 </main><!-- End #main -->
+
