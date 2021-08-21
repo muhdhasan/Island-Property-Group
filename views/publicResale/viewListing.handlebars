@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-md-12 col-lg-8">
           <div class="title-single-box">
-            <h1 class="title-single">{{secondaryTitle}}</h1>
-            <span class="color-text-a">{{address}}</span>
+            <h1 class="title-single">{{blockNo}}, {{address}}</h1>
+            <span class="color-text-a">{{town}}, {{postalCode}}</span>
           </div>
         </div>
         <div class="col-md-12 col-lg-4">
@@ -19,10 +19,12 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="#">Private Resale Listings</a>
+                <a href="/publicResale/viewList">HDB Resale</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                {{secondaryTitle}}
+                {{town}}
+                -
+                {{postalCode}}
               </li>
             </ol>
           </nav>
@@ -40,17 +42,17 @@
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
                 <img
-                  src="/img/hdbFlat1.jpg"
-                  alt=""
-                  height="800px"
+                  src="/img/hdbBuilding.jpg"
+                  alt="Slide One"
+                  height="750px"
                   width="800px"
                 />
               </div>
               <div class="carousel-item-b swiper-slide">
                 <img
-                  src="/img/hdbFlat2.jpg"
-                  alt=""
-                  height="800px"
+                  src="/img/hdbInterior.jpg"
+                  alt="Slide Two"
+                  height="750px"
                   width="800px"
                 />
               </div>
@@ -60,6 +62,10 @@
             class="property-single-carousel-pagination carousel-pagination"
           ></div>
         </div>
+         <!-- Chatbot -->
+      <div class="m-5 d-flex justify-content-center">
+        <a class="btn btn-lg btn-outline-info" href="/user/chat/{{id}}">Chatbot</a>
+      </div>
       </div>
       <div class="row mt-5">
         <div class="col-sm-12">
@@ -71,7 +77,11 @@
                     <span class="bi bi-cash">$</span>
                   </div>
                   <div class="card-title-c align-self-center">
-                    <h5 class="title-c">{{roundOffToThousand resalePrice}}k</h5>
+                    <h5 class="title-c">{{roundOffToThousand
+                        (displayPredictedValue
+                          resalePrice predictedValue usePrediction
+                        )
+                      }}k</h5>
                   </div>
                 </div>
               </div>
@@ -86,28 +96,20 @@
                 <div class="summary-list">
                   <ul class="list">
                     <li class="d-flex justify-content-between">
-                      <strong>Property ID:</strong>
-                      <span>1134</span>
+                      <strong>ID:</strong>
+                      <span>{{id}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Address:</strong>
-                      <span>{{address}}</span>
+                      <span>{{address}}, {{blockNo}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>House Type:</strong>
-                      <span>{{houseType}}</span>
+                      <strong>Town:</strong>
+                      <span>{{town}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <strong>Area Type:</strong>
-                      <span>{{typeOfArea}}</span>
-                    </li>
-                    <li class="d-flex justify-content-between">
-                      <strong>Market Segment:</strong>
-                      <span>{{marketSegment}}</span>
-                    </li>
-                    <li class="d-flex justify-content-between">
-                      <strong>Postal District:</strong>
-                      <span>{{postalDistrict}}</span>
+                      <strong>Flat Type:</strong>
+                      <span>{{flatType}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Status:</strong>
@@ -119,20 +121,14 @@
                         <sup>2</sup>
                       </span>
                     </li>
-                    {{#if leaseCommenceDate}}
-                      <li class="d-flex justify-content-between">
-                        <strong>Lease Commence Date:</strong>
-                        <span>{{formatDate
-                            leaseCommenceDate
-                            "DD/MM/YYYY"
-                          }}</span>
-                      </li>
-                    {{else}}
-                      <li class="d-flex justify-content-between">
-                        <strong>Lease Commence Date:</strong>
-                        <span>-</span>
-                      </li>
-                    {{/if}}
+                    <li class="d-flex justify-content-between">
+                      <strong>Postal Code:</strong>
+                      <span>{{postalCode}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Lease Commence Date:</strong>
+                      <span>{{formatDate leaseCommenceDate "DD/MM/YYYY"}}</span>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -176,6 +172,10 @@
             </div>
           </div>
         </div>
+        <div class="text-center mt-5">
+          <h1>Predicted Price Trend</h1>
+            <div id="chart_div" style="width: 1000px; height: 500px"></div>
+        </div>
         <div class="col-md-10 offset-md-1">
           <ul
             class="nav nav-pills-a nav-pills mb-3 section-t3"
@@ -215,6 +215,28 @@
                 aria-selected="false"
               >Ubication</a>
             </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                id="pills-comparePredict-tab"
+                data-bs-toggle="pill"
+                href="#pills-comparePredict"
+                role="tab"
+                aria-controls="pills-comparePredict"
+                aria-selected="false"
+              >AI Price Comparison</a>
+            </li>
+            {{!-- <li class="nav-item">
+              <a
+                class="nav-link"
+                id="pills-graph-tab"
+                data-bs-toggle="pill"
+                href="#pills-graph"
+                role="tab"
+                aria-controls="pills-graph"
+                aria-selected="false"
+              >Graph</a>
+            </li> --}}
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -256,6 +278,59 @@
                 allowfullscreen
               ></iframe>
             </div>
+            <div
+              class="tab-pane fade text-center"
+              id="pills-comparePredict"
+              role="tabpanel"
+              aria-labelledby="pills-comparePredict-tab"
+            >
+              <h2 class="mb-3">AI Price Comparison</h2>
+              <hr />
+              <h5 class="mb-3">Comparing resale value with our AI prediction</h5>
+              <div class="row my-5">
+                <div class="col-md-4">
+                  <h4 class="mt-5">Resale Price</h4>
+                  <h3>{{roundOffToThousand resalePrice}}k</h3>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Percentage Difference</h4>
+                  <div class="d-flex justify-content-center">
+                    <h3
+                      title="We calculated this price difference by subtracting predicted value from resale value divided by resale value multiplied by 100."
+                    >{{percentagePriceDifference}}%</h3>
+                    {{! <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      fill="currentColor"
+                      class="bi bi-chevron-down"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      ></path>
+                    </svg> }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Predicted Price</h4>
+                  <h3>{{roundOffToThousand predictedValue}}k</h3>
+                </div>
+              </div>
+              <br />
+            </div>
+            {{!-- <div
+              class="tab-pane fade"
+              id="pills-graph"
+              role="tabpanel"
+              aria-labelledby="pills-graph-tab"
+            >
+              <div class="d-flex justify-content-center">
+                <div id="curve_chart" style="width: 900px; height: 500px"></div>
+                <h1>testing</h1>
+              </div>
+            </div> --}}
           </div>
         </div>
         <div class="col-md-12">
@@ -323,7 +398,7 @@
               </div>
             </div>
             <div class="col-md-12 col-lg-4">
-              {{! <div class="property-contact">
+              <div class="property-contact">
                 <form class="form-a">
                   <div class="row">
                     <div class="col-md-12 mb-1">
@@ -366,7 +441,7 @@
                     </div>
                   </div>
                 </form>
-              </div> }}
+              </div>
             </div>
           </div>
         </div>

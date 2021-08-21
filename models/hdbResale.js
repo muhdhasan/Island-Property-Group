@@ -7,6 +7,7 @@ const HDBResale = db.define('hdb_resale', {
   blockNo: { type: Sequelize.STRING },
   description: { type: Sequelize.STRING(2000) },
   resalePrice: { type: Sequelize.DECIMAL(12, 2) },
+  predictedValue: { type: Sequelize.DECIMAL(12, 2) },
   town: { type: Sequelize.STRING },
   flatType: { type: Sequelize.STRING },
   flatModel: { type: Sequelize.STRING },
@@ -15,7 +16,10 @@ const HDBResale = db.define('hdb_resale', {
   leaseCommenceDate: { type: Sequelize.DATEONLY },
   resaleDate: { type: Sequelize.DATEONLY },
   postalCode: { type: Sequelize.STRING },
-  isViewable: { type: Sequelize.BOOLEAN }
+  isViewable: { type: Sequelize.BOOLEAN },
+  usePrediction: { type: Sequelize.BOOLEAN },
+  longitude: { type: Sequelize.FLOAT },
+  latitude: { type: Sequelize.FLOAT }
   // houseImageOne: { type: Sequelize.BLOB },
   // houseImageTwo: { type: Sequelize.BLOB },
   // houseImageThree: { type: Sequelize.BLOB },

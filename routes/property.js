@@ -9,14 +9,26 @@ const privateResale = require('../models/PrivateResale')
 const uuid = require('uuid')
 const moment = require('moment')
 const fetch = require('node-fetch')
+const NodeGeocoder = require('node-geocoder')
 
 // Base URL String
-const baseAPIUrl =  process.env.baseAPIUrl || 'http://localhost:8000/api/'
+const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
 
 // Helpers
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const { checkUUIDFormat, checkResalePublicListingId, checkResalePrivateListingId } = require('../helpers/checkURL')
 const { ensureUserAuthenticated, checkAgentAuthenticated } = require('../helpers/auth')
+
+// geocoder options
+const options = {
+  provider: 'google',
+
+  // Optional depending on the providers
+  apiKey: process.env.googleAPIkey, // for Mapquest, OpenCage, Google Premier
+  formatter: null // 'gpx', 'string', ...
+}
+
+const geocoder = NodeGeocoder(options)
 
 // Call predict resale API for HDB properties
 async function predictPublicResale (dateOfSale, town, flatType,
@@ -85,6 +97,23 @@ async function predictPrivateResale (houseType, postalDistrict,
   })
 }
 
+// Get longitude and latitude from geocoder api
+async function getlocation (location) {
+  const locationformat = location.split(' ').join('+')
+  return new Promise((result, err) => {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + locationformat + '&key=' + process.env.googleAPIkey,
+      { method: 'post' })
+      .then(res => res.json()
+      )
+      .then((json) => {
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
+
 // Router is placed according to CRUD order where you'll see create function then followed by retrieve and etc
 
 // Reference
@@ -136,12 +165,6 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24
@@ -150,45 +173,55 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  // Call predicting api for public resale housing
-  const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
-  resaleValue.then((response) => {
-    console.log('Resale Value', response)
-    const description = 'Sample Description'
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
 
-    // // If user wants to use prediction from AI
-    // if(useAIOption === "yesPredict"){
-    //   const resaleValue = response
-    //   return resaleValue
-    // }
-    // else{
-    //   const resaleValue = req.body.resaleValue
-    // }
+    // Call predicting api for public resale housing
+    const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+    resaleValue.then((response) => {
+      console.log('Resale Value', response)
+      const description = 'Sample Description'
 
-    // Create public resale listing
-    hdbResale
-      .create({
-        id: hdbResaleId,
-        address,
-        blockNo,
-        description,
-        resalePrice: Math.round(response),
-        town,
-        flatType,
-        flatModel,
-        flatLevel,
-        floorSqm,
-        leaseCommenceDate: leaseStartDate,
-        resaleDate: dateOfSale,
-        postalCode,
-        isViewable: false
-      })
-      .then(() => {
-        console.log('Created HDB Resale Listing')
-        // Redirect to confirming property page
-        res.redirect('confirmPublicResaleListing/' + hdbResaleId)
-      })
-      .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
+      // // If user wants to use prediction from AI
+      // if(useAIOption === "yesPredict"){
+      //   const resaleValue = response
+      //   return resaleValue
+      // }
+      // else{
+      //   const resaleValue = req.body.resaleValue
+      // }
+
+      // Create public resale listing
+      hdbResale
+        .create({
+          id: hdbResaleId,
+          address,
+          blockNo,
+          description,
+          resalePrice: Math.round(response),
+          town,
+          flatType,
+          flatModel,
+          flatLevel,
+          floorSqm,
+          leaseCommenceDate: leaseStartDate,
+          resaleDate: dateOfSale,
+          postalCode,
+          isViewable: false,
+          longitude: long,
+          latitude: lat
+        })
+        .then(() => {
+          console.log('Created HDB Resale Listing')
+          // Redirect to confirming property page
+          res.redirect('confirmPublicResaleListing/' + hdbResaleId)
+        })
+        .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
+    })
   })
 })
 
@@ -355,29 +388,39 @@ router.put('/editPublicResaleListing/:id', checkAgentAuthenticated, checkUUIDFor
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  // Call predicting api for public resale housing
-  const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
-  resaleValue.then((response) => {
-  // Update hdb resale listing according to UUID
-    hdbResale.update({
-      address,
-      blockNo,
-      description,
-      resalePrice: Math.round(response),
-      town,
-      flatType,
-      flatModel,
-      flatLevel,
-      floorSqm,
-      leaseCommenceDate: leaseStartDate,
-      resaleDate: dateOfSale,
-      postalCode
-    }, {
-      where: { id: resalePublicID }
-    }).then(() => {
-    // Redirect to confirmation page
-      res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
-    }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.lng
+
+    // Call predicting api for public resale housing
+    const resaleValue = predictPublicResale(dateOfSale, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+    resaleValue.then((response) => {
+      // Update hdb resale listing according to UUID
+      hdbResale.update({
+        address,
+        blockNo,
+        description,
+        resalePrice: Math.round(response),
+        town,
+        flatType,
+        flatModel,
+        flatLevel,
+        floorSqm,
+        leaseCommenceDate: leaseStartDate,
+        resaleDate: dateOfSale,
+        postalCode,
+        latitude: lat,
+        longitude: long
+      }, {
+        where: { id: resalePublicID }
+      }).then(() => {
+        // Redirect to confirmation page
+        res.redirect('/property/confirmPublicResaleListing/' + resalePublicID)
+      }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
+    })
   })
 })
 
@@ -490,28 +533,38 @@ router.post('/createPrivateResaleListing', checkAgentAuthenticated, (req, res) =
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
-  // Call predicting api for private resale housing
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
-  resaleValue.then((response) => {
-  // Create private resale listing
-    privateResale.create({
-      id: privateResaleId,
-      address,
-      description,
-      resalePrice: response,
-      houseType,
-      typeOfArea,
-      marketSegment,
-      postalDistrict,
-      floorSqm,
-      floorLevel,
-      leaseCommenceDate: leaseStartDate,
-      resaleDate: dateOfSale,
-      isViewable: false
-    }).then(() => {
-      console.log('Created private resale listing')
-      res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
-    }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.lng
+
+    // Call predicting api for private resale housing
+    const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, dateOfSale, floorSqm, 1, 0, leaseStartDate)
+    resaleValue.then((response) => {
+      // Create private resale listing
+      privateResale.create({
+        id: privateResaleId,
+        address,
+        description,
+        resalePrice: response,
+        houseType,
+        typeOfArea,
+        marketSegment,
+        postalDistrict,
+        floorSqm,
+        floorLevel,
+        leaseCommenceDate: leaseStartDate,
+        resaleDate: dateOfSale,
+        isViewable: false,
+        longitude: long,
+        latitude: lat
+      }).then(() => {
+        console.log('Created private resale listing')
+        res.redirect('/property/confirmPrivateResaleListing/' + privateResaleId)
+      }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
+    })
   })
 })
 
@@ -646,23 +699,32 @@ router.put('/editPrivateResaleListings/:id', checkAgentAuthenticated, checkUUIDF
   const leaseStartYear = leaseStartDate.getFullYear()
   const dateOfSale = new Date(req.body.dateOfSale)
 
-  // Update private property listings
-  privateResale.update({
-    address,
-    description,
-    postalDistrict,
-    houseType,
-    typeOfArea,
-    marketSegment,
-    floorSqm,
-    floorLevel,
-    leaseCommenceDate: leaseStartDate,
-    resaleDate: dateOfSale
-  }, {
-    where: { id: resalePrivateID }
-  }).then(() => {
-    console.log('Successfully edited private resale listing')
-    res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
+    // Update private property listings
+    privateResale.update({
+      address,
+      description,
+      postalDistrict,
+      houseType,
+      typeOfArea,
+      marketSegment,
+      floorSqm,
+      floorLevel,
+      leaseCommenceDate: leaseStartDate,
+      resaleDate: dateOfSale,
+      longitude: long,
+      latitude: lat
+    }, {
+      where: { id: resalePrivateID }
+    }).then(() => {
+      console.log('Successfully edited private resale listing')
+      res.redirect('/property/confirmPrivateResaleListing/' + resalePrivateID)
+    })
   })
 })
 

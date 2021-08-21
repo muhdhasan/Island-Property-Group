@@ -10,7 +10,6 @@ const moment = require('moment')
 const fetch = require('node-fetch')
 
 const baseAPIUrl = process.env.baseAPIUrl || 'http://localhost:8000/api/'
-//const baseAPIUrl = 'http://localhost:8000/api/'
 const floorRangeSelector = require('../helpers/floorRangeSelector')
 const PrivateRental = require('../models/PrivateRental')
 
@@ -258,4 +257,5 @@ router.get('/deleteRentalListing/:id', (req, res) => {
     res.redirect('/rental/base')
   }).catch((err) => { console.log('Error: ', err) })
 })
+
 module.exports = router
