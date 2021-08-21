@@ -17,15 +17,15 @@ const PrivateRental = require('../models/PrivateRental')
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 // Call predict resale API
-async function predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate) {
+async function predictHouseRent (postal_district, type, bedrooms, floorSqF, leaseDate) {
   // router.get('/getResalePrediction', (req, res) => {
   const body = {
     Postal_District: postal_district,
-    Type:type,
+    Type: type,
     No_Bedroom: bedrooms,
-    Floor_Area:floorSqF,
-    Lease_Commencement_Date:leaseDate,
-    
+    Floor_Area: floorSqF,
+    Lease_Commencement_Date: leaseDate
+
   }
   return new Promise((result, err) => {
     fetch(baseAPIUrl + 'predictRental', {
@@ -69,44 +69,44 @@ router.get('/rentalListing/:id', (req, res) => {
   if (uuidRegex.test(rentID) === false) {
     res.redirect('/')
   } else {
-  PrivateRental
-    .findOne({
-      where: {
-        id: rentID,
-        isViewable: true
-      }
-    })
-    // Will display more information regarding this property later
-    .then((PrivateRental) => {
-      const rentalPrice = PrivateRental.monthlyRent
-      const address = PrivateRental.address
-      const houseType = PrivateRental.houseType
-      const numberOfBedroom = PrivateRental.numberOfBedroom
-      const floorSqm = PrivateRental.floorSqm
-      const leaseCommenceDate = PrivateRental.leaseCommenceDate
-      const description = PrivateRental.description
-
-      res.render('rental/rentalListing', {
-        address,
-        title,
-        secondaryTitle,
-        rentalPrice,
-        houseType,
-        numberOfBedroom,
-        leaseCommenceDate,
-        floorSqm,
-        description
+    PrivateRental
+      .findOne({
+        where: {
+          id: rentID,
+          isViewable: true
+        }
       })
-    })
-    .catch((err) => {
-      console.log('Error', err)
-    })
+    // Will display more information regarding this property later
+      .then((PrivateRental) => {
+        const rentalPrice = PrivateRental.monthlyRent
+        const address = PrivateRental.address
+        const houseType = PrivateRental.houseType
+        const numberOfBedroom = PrivateRental.numberOfBedroom
+        const floorSqm = PrivateRental.floorSqm
+        const leaseCommenceDate = PrivateRental.leaseCommenceDate
+        const description = PrivateRental.description
+
+        res.render('rental/rentalListing', {
+          address,
+          title,
+          secondaryTitle,
+          rentalPrice,
+          houseType,
+          numberOfBedroom,
+          leaseCommenceDate,
+          floorSqm,
+          description
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
   }
 })
 router.get('/createRental', (req, res) => {
-    const title = 'Rental Properties'
-    res.render('rental/createRental', { title: title })
-  })
+  const title = 'Rental Properties'
+  res.render('rental/createRental', { title: title })
+})
 // Fixed data for testing
 router.post('/createRental', (req, res) => {
   const title = 'Rental Properties'
@@ -120,13 +120,13 @@ router.post('/createRental', (req, res) => {
   // console.log(postal_district)
   const type = req.body.Type
   const bedrooms = req.body.No_Bedroom
-  
+
   // Call floor range selector to select floor range from floor level accordingly
   const floorSqF = req.body.floorFt
 
   // Date related inputs
   const leaseDate = req.body.Lease_Commencement_Date
-  
+
   // Input Validation
   // if (filterSpecialRegex.test(address) === false) {
   //   return console.log('Address contains special characters')
@@ -149,7 +149,7 @@ router.post('/createRental', (req, res) => {
   // }
 
   // // Call predicting api for public housing
-  const rentValue = predictHouseRent(postal_district,type,bedrooms,floorSqF,leaseDate)
+  const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
   rentValue.then((response) => {
     console.log('postal_district: ', postal_district)
     console.log('type: ', type)
@@ -164,11 +164,11 @@ router.post('/createRental', (req, res) => {
         address: address,
         description: description,
         monthlyRent: Math.round(response),
-        houseType:type,
+        houseType: type,
         numberOfBedroom: bedrooms,
         postalDistrict: postal_district,
-        floorSqm:floorSqF,
-        leaseCommenceDate:leaseDate,
+        floorSqm: floorSqF,
+        leaseCommenceDate: leaseDate,
         isViewable: true
       })
       .then((result) => {
