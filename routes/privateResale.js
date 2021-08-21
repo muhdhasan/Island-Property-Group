@@ -103,9 +103,8 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   // get long and lat
   getlocation(address).then((geo) => {
     const geometry = geo.results
-    console.log(geometry)
     const lat = geometry[0].geometry.location.lat
-    const long = geometry[0].geometry.location.long
+    const long = geometry[0].geometry.location.lng
 
     // Call predicting api for private resale housing
     const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
@@ -328,9 +327,8 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
   // get long and lat
   getlocation(address).then((geo) => {
     const geometry = geo.results
-    console.log(geometry)
     const lat = geometry[0].geometry.location.lat
-    const long = geometry[0].geometry.location.long
+    const long = geometry[0].geometry.location.lng
 
     const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
     resaleValue.then((response) => {
