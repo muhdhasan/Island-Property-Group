@@ -51,6 +51,23 @@ async function predictPrivateResale (houseType, postalDistrict,
   })
 }
 
+// Get longitude and latitude from geocoder api
+async function getlocation (location) {
+  const locationformat = location.split(' ').join('+')
+  return new Promise((result, err) => {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + locationformat + '&key=' + process.env.googleAPIkey,
+      { method: 'post' })
+      .then(res => res.json()
+      )
+      .then((json) => {
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
+
 // Display create resale listing page
 router.get('/create', checkAgentAuthenticated, (req, res) => {
   const title = 'Create Private Resale Listing'
@@ -83,64 +100,76 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
   const leaseStartYear = leaseCommenceDate.getFullYear()
   const resaleDate = new Date(req.body.dateOfSale)
 
-  // Call predicting api for private resale housing
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
-  resaleValue.then((response) => {
-    const predictedValue = Math.round(response)
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
 
-    // If user wants to display prediction from AI
-    if (usePrediction === 'true') {
+    // Call predicting api for private resale housing
+    const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
+    resaleValue.then((response) => {
+      const predictedValue = Math.round(response)
+
+      // If user wants to display prediction from AI
+      if (usePrediction === 'true') {
       // Create private resale listing
-      privateResale.create({
-        id,
-        address,
-        propertyName,
-        description,
-        resalePrice: predictedValue,
-        predictedValue,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        postalDistrict,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        isViewable: false,
-        usePrediction
-      }).then(() => {
-        console.log('Created private resale listing')
-        res.redirect('/privateResale/edit/' + id)
-      }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
-    }
-    // If we want to display entered resale value instead of predicted value
-    // Save resale value input and display it
-    else {
+        privateResale.create({
+          id,
+          address,
+          propertyName,
+          description,
+          resalePrice: predictedValue,
+          predictedValue,
+          houseType,
+          typeOfArea,
+          marketSegment,
+          postalDistrict,
+          floorSqm,
+          floorLevel,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          isViewable: false,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }).then(() => {
+          console.log('Created private resale listing')
+          res.redirect('/privateResale/edit/' + id)
+        }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
+      }
+      // If we want to display entered resale value instead of predicted value
+      // Save resale value input and display it
+      else {
       // Create private resale listing
-      const resalePrice = Math.round(req.body.resaleValue)
-      privateResale.create({
-        id,
-        address,
-        description,
-        resalePrice,
-        predictedValue,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        postalDistrict,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        isViewable: false,
-        usePrediction
-      }).then(() => {
-        console.log('Created private resale listing')
-        res.redirect('/privateResale/edit/' + id)
-      }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
-    }
+        const resalePrice = Math.round(req.body.resaleValue)
+        privateResale.create({
+          id,
+          address,
+          description,
+          resalePrice,
+          predictedValue,
+          houseType,
+          typeOfArea,
+          marketSegment,
+          postalDistrict,
+          floorSqm,
+          floorLevel,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          isViewable: false,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }).then(() => {
+          console.log('Created private resale listing')
+          res.redirect('/privateResale/edit/' + id)
+        }).catch((err) => { console.log('Error in creating private resale listing: ', err) })
+      }
+    })
   })
 })
 
@@ -296,59 +325,71 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePri
   const leaseStartYear = leaseCommenceDate.getFullYear()
   const resaleDate = new Date(req.body.dateOfSale)
 
-  const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
-  resaleValue.then((response) => {
-    const predictedValue = Math.round(response)
-    if (usePrediction === 'true') {
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
+
+    const resaleValue = predictPrivateResale(houseType, postalDistrict, marketSegment, typeOfArea, floorRange, resaleDate, floorSqm, 1, 0, leaseCommenceDate)
+    resaleValue.then((response) => {
+      const predictedValue = Math.round(response)
+      if (usePrediction === 'true') {
       // Update private property listings
-      privateResale.update({
-        address,
-        propertyName,
-        description,
-        resalePrice: predictedValue,
-        predictedValue,
-        postalDistrict,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        usePrediction
-      }, {
-        where: { id: resalePrivateID }
-      }).then(() => {
-        console.log('Successfully edited private resale listing')
-        res.redirect('/privateResale/previewListing/' + resalePrivateID)
-      })
-    } else {
-      const resalePrice = Math.round(req.body.resaleValue)
-      // Update private property listings
-      privateResale.update({
-        address,
-        propertyName,
-        description,
-        resalePrice,
-        predictedValue,
-        postalDistrict,
-        houseType,
-        typeOfArea,
-        marketSegment,
-        floorSqm,
-        floorLevel,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        usePrediction
-      }, {
-        where: { id: resalePrivateID }
-      }).then(() => {
-        console.log('Successfully edited private resale listing')
-        res.redirect('/privateResale/previewListing/' + resalePrivateID)
-      })
-    }
+        privateResale.update({
+          address,
+          propertyName,
+          description,
+          resalePrice: predictedValue,
+          predictedValue,
+          postalDistrict,
+          houseType,
+          typeOfArea,
+          marketSegment,
+          floorSqm,
+          floorLevel,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }, {
+          where: { id: resalePrivateID }
+        }).then(() => {
+          console.log('Successfully edited private resale listing')
+          res.redirect('/privateResale/previewListing/' + resalePrivateID)
+        })
+      } else {
+        const resalePrice = Math.round(req.body.resaleValue)
+        // Update private property listings
+        privateResale.update({
+          address,
+          propertyName,
+          description,
+          resalePrice,
+          predictedValue,
+          postalDistrict,
+          houseType,
+          typeOfArea,
+          marketSegment,
+          floorSqm,
+          floorLevel,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }, {
+          where: { id: resalePrivateID }
+        }).then(() => {
+          console.log('Successfully edited private resale listing')
+          res.redirect('/privateResale/previewListing/' + resalePrivateID)
+        })
+      }
+    })
   })
 })
 

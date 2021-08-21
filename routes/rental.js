@@ -17,7 +17,6 @@ const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-
 
 // Call predict resale API
 async function predictHouseRent (postal_district, type, bedrooms, floorSqF, leaseDate) {
-  // router.get('/getResalePrediction', (req, res) => {
   const body = {
     Postal_District: postal_district,
     Type: type,
@@ -40,9 +39,9 @@ async function predictHouseRent (postal_district, type, bedrooms, floorSqF, leas
       .catch((err) => {
         console.log('Error:', err)
       })
-  // })
   })
 }
+
 // HDB Properties that are currently viewable to customers can be found here
 router.get('/base', (req, res) => {
   const title = 'Rental Properties'
@@ -134,12 +133,6 @@ router.post('/createRental', (req, res) => {
   // // if (filterSpecialRegex.test(description) === false) {
   // //   return console.log('Description contains special characters')
   // // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
 
   // // Check if resale date is at least 5 years from lease commence date
   // const totalMilisecondsPerDay = 1000 * 60 * 60 * 24

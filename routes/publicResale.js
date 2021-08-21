@@ -49,6 +49,23 @@ async function predictPublicResale (dateOfSale, town, flatType,
   })
 }
 
+// Get longitude and latitude from geocoder api
+async function getlocation (location) {
+  const locationformat = location.split(' ').join('+')
+  return new Promise((result, err) => {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + locationformat + '&key=' + process.env.googleAPIkey,
+      { method: 'post' })
+      .then(res => res.json()
+      )
+      .then((json) => {
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
+
 // Router is placed according to CRUD order where you'll see create function then followed by retrieve and etc
 
 // Reference
@@ -108,68 +125,80 @@ router.post('/create', checkAgentAuthenticated, (req, res) => {
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  // Call predicting api for public resale housing
-  const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
-  resaleValue.then((response) => {
-    const predictedValue = Math.round(response)
-    // If user wants to display prediction from AI
-    if (usePrediction === 'true') {
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
+
+    // Call predicting api for public resale housing
+    const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+    resaleValue.then((response) => {
+      const predictedValue = Math.round(response)
+      // If user wants to display prediction from AI
+      if (usePrediction === 'true') {
       // Create public resale listing
-      hdbResale
-        .create({
-          id,
-          address,
-          blockNo,
-          description,
-          resalePrice: predictedValue,
-          predictedValue,
-          town,
-          flatType,
-          flatModel,
-          flatLevel,
-          floorSqm,
-          leaseCommenceDate,
-          resaleDate,
-          postalCode,
-          isViewable: false,
-          usePrediction
-        })
-        .then(() => {
-          console.log('Created HDB Resale Listing')
-          // Redirect to confirming property page
-          res.redirect('edit/' + id)
-        })
-        .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
-    } else {
+        hdbResale
+          .create({
+            id,
+            address,
+            blockNo,
+            description,
+            resalePrice: predictedValue,
+            predictedValue,
+            town,
+            flatType,
+            flatModel,
+            flatLevel,
+            floorSqm,
+            leaseCommenceDate,
+            resaleDate,
+            postalCode,
+            isViewable: false,
+            usePrediction,
+            longitude: long,
+            latitude: lat
+          })
+          .then(() => {
+            console.log('Created HDB Resale Listing')
+            // Redirect to confirming property page
+            res.redirect('edit/' + id)
+          })
+          .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
+      } else {
       // If we want to display entered resale value instead of predicted value
       // Save resale value input and display it
-      const resalePrice = Math.round(req.body.resaleValue)
-      hdbResale
-        .create({
-          id,
-          address,
-          blockNo,
-          description,
-          resalePrice,
-          predictedValue,
-          town,
-          flatType,
-          flatModel,
-          flatLevel,
-          floorSqm,
-          leaseCommenceDate,
-          resaleDate,
-          postalCode,
-          isViewable: false,
-          usePrediction
-        })
-        .then(() => {
-          console.log('Created HDB Resale Listing')
-          // Redirect to confirming property page
-          res.redirect('edit/' + id)
-        })
-        .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
-    }
+        const resalePrice = Math.round(req.body.resaleValue)
+        hdbResale
+          .create({
+            id,
+            address,
+            blockNo,
+            description,
+            resalePrice,
+            predictedValue,
+            town,
+            flatType,
+            flatModel,
+            flatLevel,
+            floorSqm,
+            leaseCommenceDate,
+            resaleDate,
+            postalCode,
+            isViewable: false,
+            usePrediction,
+            longitude: long,
+            latitude: lat
+          })
+          .then(() => {
+            console.log('Created HDB Resale Listing')
+            // Redirect to confirming property page
+            res.redirect('edit/' + id)
+          })
+          .catch((err) => console.log('Error in creating HDB Resale Listing: ' + err))
+      }
+    })
   })
 })
 
@@ -339,61 +368,73 @@ router.put('/edit/:id', checkAgentAuthenticated, checkUUIDFormat, checkResalePub
     return console.log('Ensure that resale date is at least 5 years from lease date')
   }
 
-  // Call predicting api for public resale housing
-  const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
-  resaleValue.then((response) => {
-    const predictedValue = Math.round(response)
-    // If user wants to display prediction from AI
+  // get long and lat
+  getlocation(address).then((geo) => {
+    const geometry = geo.results
+    console.log(geometry)
+    const lat = geometry[0].geometry.location.lat
+    const long = geometry[0].geometry.location.long
 
-    if (usePrediction === 'true') {
+    // Call predicting api for public resale housing
+    const resaleValue = predictPublicResale(resaleDate, town, flatType, floorRange, floorSqm, flatModel, leaseStartYear)
+    resaleValue.then((response) => {
+      const predictedValue = Math.round(response)
+      // If user wants to display prediction from AI
+
+      if (usePrediction === 'true') {
       // Update hdb resale listing according to UUID
-      hdbResale.update({
-        address,
-        blockNo,
-        description,
-        resalePrice: predictedValue,
-        predictedValue,
-        town,
-        flatType,
-        flatModel,
-        flatLevel,
-        floorSqm,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        usePrediction
-      }, {
-        where: { id: resalePublicID }
-      }).then(() => {
+        hdbResale.update({
+          address,
+          blockNo,
+          description,
+          resalePrice: predictedValue,
+          predictedValue,
+          town,
+          flatType,
+          flatModel,
+          flatLevel,
+          floorSqm,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }, {
+          where: { id: resalePublicID }
+        }).then(() => {
         // Redirect to confirmation page
-        res.redirect('/publicResale/previewListing/' + resalePublicID)
-      }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
-    } else {
+          res.redirect('/publicResale/previewListing/' + resalePublicID)
+        }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
+      } else {
       // If we want to display entered resale value instead of predicted value
-      const resalePrice = Math.round(req.body.resaleValue)
-      // Update hdb resale listing according to UUID
-      hdbResale.update({
-        address,
-        blockNo,
-        description,
-        resalePrice,
-        predictedValue,
-        town,
-        flatType,
-        flatModel,
-        flatLevel,
-        floorSqm,
-        leaseCommenceDate,
-        resaleDate,
-        postalCode,
-        usePrediction
-      }, {
-        where: { id: resalePublicID }
-      }).then(() => {
+        const resalePrice = Math.round(req.body.resaleValue)
+        // Update hdb resale listing according to UUID
+        hdbResale.update({
+          address,
+          blockNo,
+          description,
+          resalePrice,
+          predictedValue,
+          town,
+          flatType,
+          flatModel,
+          flatLevel,
+          floorSqm,
+          leaseCommenceDate,
+          resaleDate,
+          postalCode,
+          usePrediction,
+          longitude: long,
+          latitude: lat
+        }, {
+          where: { id: resalePublicID }
+        }).then(() => {
         // Redirect to confirmation page
-        res.redirect('/publicResale/previewListing/' + resalePublicID)
-      }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
-    }
+          res.redirect('/publicResale/previewListing/' + resalePublicID)
+        }).catch((err) => { console.log('Error in updating HDB Resale Listing: ', err) })
+      }
+    })
   })
 })
 

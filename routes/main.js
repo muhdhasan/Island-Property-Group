@@ -7,7 +7,6 @@ const NodeGeocoder = require('node-geocoder')
 const HDBResale = require('../models/hdbResale')
 const PrivateResale = require('../models/PrivateResale')
 const PrivateRental = require('../models/PrivateRental')
-const { Console } = require('console')
 
 // geocoder options
 const options = {
@@ -64,40 +63,6 @@ router.get('/contact', (req, res) => {
   const title = 'Contact Us'
   const activeNavContact = 'active'
   res.render('contact', { title, activeNavContact })
-})
-
-// Call predict resale API
-async function test (msg) {
-  // router.get('/getResalePrediction', (req, res) => {
-  const body = {
-    userInput: 'hello'
-  }
-  return new Promise((result, err) => {
-    fetch(baseAPIUrl + 'chatbot', {
-      method: 'post',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(res => res.json())
-      .then((json) => {
-        // console.log(json)
-        result(json)
-      })
-      .catch((err) => {
-        console.log('Error:', err)
-      })
-  // })
-  })
-}
-
-// Test api call here
-router.get('/testRoute', (req, res) => {
-  const predictedValue = test('hello')
-  predictedValue.then((result) => {
-    // var test = JSON.parse(result)
-    console.log(result.result)
-    res.send('hello')
-  })
 })
 
 router.post('/getlistings', (req, res) => {
