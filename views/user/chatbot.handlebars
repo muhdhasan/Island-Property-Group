@@ -184,6 +184,14 @@ function userMessage(msgText) {
 function botMessage(msgText) {
   appendMessage("left",msgText)
 }
+function ScrollDiv(){
+
+   if(document.getElementsByClassName('msger-chat').scrollTop<(document.getElementsByClassName('msger-chat').scrollHeight-document.getElementsByClassName('msger-chat').offsetHeight)){-1
+         document.getElementsByClassName('msger-chat').scrollTop=document.getElementsByClassName('msger-chat').scrollTop+1
+         }
+   else {document.getElementsByClassName('msger-chat').scrollTop=0;}
+}
+window.onload = ScrollDiv()
 </script>
 <main id="main">
 
@@ -224,7 +232,7 @@ function botMessage(msgText) {
           <span><i class="fas fa-cog"></i></span>
         </header>
 
-          <main class="msger-chat">
+          <main class="msger-chat" >
             {{#each messages}}
             {{#if isBot}}
               <div class="msg left-msg">

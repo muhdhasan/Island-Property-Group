@@ -34,7 +34,7 @@ isCudaAvailable = torch.cuda.is_available()
 tokenizer = AlbertTokenizerFast.from_pretrained('albert-base-v2',do_lower_case=True) 
 def infer_intent(text, isCudaAvailable):
     if isCudaAvailable == True:
-        intent_model = torch.load("./flask/intentclassification.model")
+        intent_model = torch.load("intentclassification.model")
         input = tokenizer(text, truncation=True, padding=True, return_tensors="pt").to("cuda")
         output = intent_model(**input, return_dict=True)
         output = output.logits[0].to("cpu").detach().numpy()
@@ -44,7 +44,7 @@ def infer_intent(text, isCudaAvailable):
         torch.cuda.empty_cache()
         return label_index
     else:
-        intent_model = torch.load("./flask/intentclassification.model",map_location ='cpu')
+        intent_model = torch.load("intentclassification.model",map_location ='cpu')
         input = tokenizer(text, truncation=True, padding=True, return_tensors="pt")
         output = intent_model(**input, return_dict=True)
         output = output.logits[0].to("cpu").detach().numpy()
@@ -130,7 +130,7 @@ def predictHouseResale():
         categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
 
         # Load encoder
-        with open('flask/publicResaleEncoder.pickle', 'rb') as f:
+        with open('publicResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
 
         # Read JSON response
@@ -160,7 +160,7 @@ def predictHouseResale():
         df_ohe_new = df_ohe_new.values
 
         # Load model
-        resalePublicModel = pickle.load(open('flask/xgb_public_resale.pickle', 'rb'))
+        resalePublicModel = pickle.load(open('xgb_public_resale.pickle', 'rb'))
 
         # Predict Model
         predictionResult = resalePublicModel.predict(df_ohe_new)
@@ -171,7 +171,7 @@ def predictHouseResale():
         categorical_cols = ['Type', 'Postal District', 'Market Segment', 'Type of Area', 'Floor Level']
 
         # Load encoder
-        with open('flask/privateResaleEncoder.pickle', 'rb') as f:
+        with open('privateResaleEncoder.pickle', 'rb') as f:
             ohe = pickle.load(f)
         
         # Read JSON response
@@ -206,7 +206,7 @@ def predictHouseResale():
         df_ohe_new = df_ohe_new.values
 
         # Load Model
-        resalePrivateModel = pickle.load(open('flask/xgb_private_resale.pickle', 'rb'))
+        resalePrivateModel = pickle.load(open('xgb_private_resale.pickle', 'rb'))
 
         # Predict Model
         predictionResult = resalePrivateModel.predict(df_ohe_new)
@@ -226,7 +226,7 @@ def predictHouseRent():
     categorical_cols = ['Postal_District','Type']
 
     # Load encoder
-    with open('flask/RentalEncoder.pickle', 'rb') as f:
+    with open('RentalEncoder.pickle', 'rb') as f:
         ohe = pickle.load(f)
 
     # Read JSON response
@@ -250,7 +250,7 @@ def predictHouseRent():
     df_ohe_new = pd.concat([df, ohe_df_new],join='inner', axis=1).drop(columns = categorical_cols, axis=1)
     #print(df_ohe_new.info())
 
-    RentalModel = pickle.load(open('flask/rental.pickle', 'rb'))
+    RentalModel = pickle.load(open('rental.pickle', 'rb'))
     
     predictionResult = RentalModel.predict(df_ohe_new)
 

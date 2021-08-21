@@ -44,6 +44,24 @@ async function predictHouseRent (postal_district, type, bedrooms, floorSqF, leas
   // })
   })
 }
+
+// get long and lat
+async function getlocation (location) {
+  const locationformat = location.split(' ').join('+')
+  return new Promise((result, err) => {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + locationformat + '&key=' + process.env.googleAPIkey,
+      { method: 'post' })
+      .then(res => res.json()
+      )
+      .then((json) => {
+        result(json)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
+  })
+}
+
 // HDB Properties that are currently viewable to customers can be found here
 router.get('/base', (req, res) => {
   const title = 'Rental Properties'
@@ -87,6 +105,13 @@ router.get('/rentalListing/:id', (req, res) => {
         const description = PrivateRental.description
 
         res.render('rental/rentalListing', {
+<<<<<<< HEAD
+<<<<<<< HEAD
+          rentID,
+=======
+>>>>>>> main
+=======
+>>>>>>> main
           address,
           title,
           secondaryTitle,
@@ -147,7 +172,48 @@ router.post('/createRental', (req, res) => {
   // if (yearDiff < 5) {
   //   return console.log('Ensure that resale date is at least 5 years from lease date')
   // }
+  // get long and lat
+  getlocation(address).then((geo) => {
+    geometry = geo.results
+    console.log(geometry)
+    lat = geometry[0].geometry.location.lat
+    long = geometry[0].geometry.location.long
 
+<<<<<<< HEAD
+    // // Call predicting api for public housing
+    const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
+    rentValue.then((response) => {
+      console.log('postal_district: ', postal_district)
+      console.log('type: ', type)
+      console.log('bedrooms: ', bedrooms)
+      console.log('floorSqF: ', floorSqF)
+      console.log('leaseDate: ', leaseDate)
+      console.log('Resale Value', rentValue)
+      const description = 'Sample Description'
+      PrivateRental
+        .create({
+          id: RentId,
+          address: address,
+          description: description,
+          monthlyRent: Math.round(response),
+          houseType: type,
+          numberOfBedroom: bedrooms,
+          postalDistrict: postal_district,
+          floorSqm: floorSqF,
+          leaseCommenceDate: leaseDate,
+          isViewable: true,
+          longitude: long,
+          latitude: lat
+        })
+        .then((result) => {
+          console.log('Testing')
+          // Redirect to confirming property page
+          // res.redirect('/rental/createListing' + RentId)
+          res.redirect('/rental/base')
+        })
+        .catch((err) => console.log('Error: ' + err))
+    })
+=======
   // // Call predicting api for public housing
   const rentValue = predictHouseRent(postal_district, type, bedrooms, floorSqF, leaseDate)
   rentValue.then((response) => {
@@ -178,6 +244,7 @@ router.post('/createRental', (req, res) => {
         res.redirect('/rental/base')
       })
       .catch((err) => console.log('Error: ' + err))
+>>>>>>> main
   })
 })
 
