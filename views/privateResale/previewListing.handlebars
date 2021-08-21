@@ -94,6 +94,33 @@
           >Make Public</button>
         {{/if}}
       </div>
+      <div class="m-5 d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-lg btn-outline-danger mx-2"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+        >Delete</button>
+        <a
+          href="/privateResale/edit/{{id}}"
+          class="btn btn-lg btn-outline-dark mx-2"
+        >Edit</a>
+        {{#if isViewable}}
+          <button
+            type="button"
+            class="btn btn-lg btn-outline-success mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#makePrivateModal"
+          >Make Private</button>
+        {{else}}
+          <button
+            type="button"
+            class="btn btn-lg btn-outline-success mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#makePublicModal"
+          >Make Public</button>
+        {{/if}}
+      </div>
       <div class="row mt-5">
         <div class="col-sm-12">
           <div class="row justify-content-between">

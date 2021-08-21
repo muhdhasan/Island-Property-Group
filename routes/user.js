@@ -80,27 +80,6 @@ function createPrivateResaleMsg (intent, listingid, botmsgid, botorder, userid) 
       msg = 'This is not a rental listing '
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
-    case 'viewing':
-      if (listing.viewing) {
-        msg = 'Listing is available for viewing'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'resale_price':
-        msg = 'The resale price is ' + listing.resalePrice.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'resale_date':
-        msg = 'The resale date is ' + listing.resaleDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'address':
-        msg = 'The address is ' + listing.address.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'rent_cost':
-        msg = 'This is not a rental listing '
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
       case 'viewing':
         if (listing.viewing) {
           msg = 'Listing is available for viewing'
@@ -156,27 +135,6 @@ function createPrivateRentalMsg (intent, listingid, botmsgid, botorder, userid) 
       msg = 'The monthly cost is ' + listing.monthlyRent.toString()
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
-    case 'viewing':
-      if (listing.viewing) {
-        msg = 'Listing is available for viewing'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'resale_price':
-        msg = 'This is not a sale listing'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'resale_date':
-        msg = 'This is not a sale listing'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'address':
-        msg = 'The address is ' + listing.address.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
-      case 'rent_cost':
-        msg = 'The monthly cost is ' + listing.monthlyRent.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break
       case 'viewing':
         if (listing.viewing) {
           msg = 'Listing is available for viewing'

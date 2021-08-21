@@ -106,7 +106,10 @@ router.get('/rentalListing/:id', (req, res) => {
 
         res.render('rental/rentalListing', {
 <<<<<<< HEAD
+<<<<<<< HEAD
           rentID,
+=======
+>>>>>>> main
 =======
 >>>>>>> main
           address,
