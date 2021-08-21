@@ -116,7 +116,6 @@ router.get('/createRental', checkAgentAuthenticated, (req, res) => {
 })
 
 router.post('/createRental', checkAgentAuthenticated, (req, res) => {
-  const title = 'Rental Properties'
   const filterSpecialRegex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/
   // Inputs
   const RentId = uuid.v4()
