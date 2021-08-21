@@ -165,12 +165,6 @@ router.post('/createPublicResaleListing', checkAgentAuthenticated, (req, res) =>
   // if (filterSpecialRegex.test(description) === false) {
   //   return console.log('Description contains special characters')
   // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
-  // if (filterSpecialRegex.test(address) === false) {
-  //   return console.log('Address contains special characters')
-  // }
 
   // Check if resale date is at least 5 years from lease commence date
   const totalMilisecondsPerDay = 1000 * 60 * 60 * 24

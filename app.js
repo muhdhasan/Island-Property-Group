@@ -37,7 +37,7 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars')
 
 // Body parser middleware to parse HTTP body to read post data
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 // Creates static folder for publicly accessible HTML, CSS and Javascript files
