@@ -17,11 +17,15 @@ require('dotenv').config()
 
 const mainRoute = require('./routes/main')
 const userRoute = require('./routes/user')
-const propertyRoute = require('./routes/property')
+const propertyRoute = require('./routes/publicResale')
+const privateResaleRoute = require('./routes/privateResale')
 const rentalRoute = require('./routes/rental')
 
 // Bring in Handlebars helpers
-const { formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion, checkSpecialUserType } = require('./helpers/hbs')
+const {
+  formatDate, autoSelectDropDown, roundOffToThousand, roundOffToMillion,
+  checkSpecialUserType, displayPredictedValue, autoCheckRadioBtn
+} = require('./helpers/hbs')
 
 // Handlebar mMiddleware
 app.engine('handlebars', exphbs({
@@ -31,13 +35,15 @@ app.engine('handlebars', exphbs({
     autoSelectDropDown: autoSelectDropDown,
     roundOffToThousand: roundOffToThousand,
     roundOffToMillion: roundOffToMillion,
-    checkSpecialUserType: checkSpecialUserType
+    checkSpecialUserType: checkSpecialUserType,
+    displayPredictedValue: displayPredictedValue,
+    autoCheckRadioBtn: autoCheckRadioBtn
   }
 }))
 app.set('view engine', 'handlebars')
 
 // Body parser middleware to parse HTTP body to read post data
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 // Creates static folder for publicly accessible HTML, CSS and Javascript files
@@ -109,7 +115,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', mainRoute)
 app.use('/user', userRoute)
-app.use('/property', propertyRoute)
+app.use('/publicResale', propertyRoute)
+app.use('/privateResale', privateResaleRoute)
 app.use('/rental', rentalRoute)
 
 // Catch all URL that is not valid and return 404 error
@@ -160,7 +167,7 @@ const options = {
 // should we intend to reset the database whenever we want
 const checkDefaultData = require('./config/defaultDataInfo')
 checkDefaultData.check().catch((err) => {
-  // log error
+  // log error here
   console.log(err)
 })
 

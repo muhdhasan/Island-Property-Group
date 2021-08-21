@@ -12,6 +12,7 @@ import numpy as np
 from transformers import AlbertTokenizerFast
 import pandas as pd
 from datetime import datetime
+from eli5 import explain_prediction_xgboost, explain_weights_xgboost
 
 from transformers.utils.dummy_pt_objects import default_data_collator
 
@@ -274,6 +275,32 @@ def chatbot():
     result = sentence_labels[infer_intent(userResponse, isCudaAvailable)]
     return jsonify({"result":result})
     
+# ELI5 route
+@app.route("/api/explain", methods=["POST"])
+def explainXGBResale():
+    categorical_cols = ['town', 'flat_type', 'storey_range', 'flat_model']
+
+    # Load encoder
+    with open('flask/publicResaleEncoder.pickle', 'rb') as f:
+        ohe = pickle.load(f)
+
+    # Load model
+    resalePublicModel = pickle.load(open('flask/xgb_public_resale.pickle', 'rb'))
+
+    newDf = pd.DataFrame(columns=['month','town','flat_type',
+        'storey_range','floor_area_sqm','flat_model','lease_commence_date'])
+
+    cat_ohe_new = ohe.transform(newDf[categorical_cols])
+    print(cat_ohe_new)
+
+    # result = explain_prediction_xgboost(resalePublicModel, docs=)
+    # result = explain_weights_xgboost(resalePublicModel, feature_names=['month','town','flat_type',
+    #     'storey_range','floor_area_sqm','flat_model','lease_commence_date'])
+    # print(type(result))
+    # print(result)
+    return "hello"#jsonify({"result": result})
+
+
 # Start at localhost:8000
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=False)

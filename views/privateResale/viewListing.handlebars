@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-md-12 col-lg-8">
           <div class="title-single-box">
-            <h1 class="title-single">{{secondaryTitle}}</h1>
+            <h1 class="title-single">{{postalCode}}, {{propertyName}}</h1>
             <span class="color-text-a">{{address}}</span>
           </div>
         </div>
@@ -19,10 +19,12 @@
                 <a href="/">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="#">Private Resale Listings</a>
+                <a href="/privateResale/viewList">Private Resale</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                {{secondaryTitle}}
+                {{postalCode}}
+                -
+                {{propertyName}}
               </li>
             </ol>
           </nav>
@@ -40,17 +42,17 @@
             <div class="swiper-wrapper">
               <div class="carousel-item-b swiper-slide">
                 <img
-                  src="/img/hdbFlat1.jpg"
-                  alt=""
-                  height="800px"
+                  src="/img/marinaOneBuilding.jpg"
+                  alt="Slide One"
+                  height="700px"
                   width="800px"
                 />
               </div>
               <div class="carousel-item-b swiper-slide">
                 <img
-                  src="/img/hdbFlat2.jpg"
-                  alt=""
-                  height="800px"
+                  src="/img/marinaOneApartment.jpg"
+                  alt="Slide Two"
+                  height="700px"
                   width="800px"
                 />
               </div>
@@ -60,34 +62,6 @@
             class="property-single-carousel-pagination carousel-pagination"
           ></div>
         </div>
-      </div>
-      <div class="m-5 d-flex justify-content-center">
-        <button
-          type="button"
-          class="btn btn-lg btn-outline-danger mx-2"
-          data-bs-toggle="modal"
-          data-bs-target="#deleteModal"
-        >Delete</button>
-        <a
-          href="/property/editPrivateResaleListing/{{id}}"
-          class="btn btn-lg btn-outline-dark mx-2"
-        >Edit</a>
-        {{#if isViewable}}
-          <button
-            type="button"
-            class="btn btn-lg btn-outline-success mx-2"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmModal"
-            disabled
-          >Confirm Listing</button>
-        {{else}}
-          <button
-            type="button"
-            class="btn btn-lg btn-outline-success mx-2"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmModal"
-          >Confirm Listing</button>
-        {{/if}}
       </div>
       <div class="row mt-5">
         <div class="col-sm-12">
@@ -99,7 +73,11 @@
                     <span class="bi bi-cash">$</span>
                   </div>
                   <div class="card-title-c align-self-center">
-                    <h5 class="title-c">{{roundOffToThousand resalePrice}}k</h5>
+                    <h5 class="title-c">{{roundOffToThousand
+                        (displayPredictedValue
+                          resalePrice predictedValue usePrediction
+                        )
+                      }}k</h5>
                   </div>
                 </div>
               </div>
@@ -114,8 +92,12 @@
                 <div class="summary-list">
                   <ul class="list">
                     <li class="d-flex justify-content-between">
-                      <strong>Property ID:</strong>
-                      <span>1134</span>
+                      <strong>ID:</strong>
+                      <span>{{id}}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Property Name:</strong>
+                      <span>{{propertyName}}</span>
                     </li>
                     <li class="d-flex justify-content-between">
                       <strong>Address:</strong>
@@ -146,6 +128,10 @@
                       <span>{{floorSqm}}m
                         <sup>2</sup>
                       </span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong>Postal Code:</strong>
+                      <span>{{postalCode}}</span>
                     </li>
                     {{#if leaseCommenceDate}}
                       <li class="d-flex justify-content-between">
@@ -204,6 +190,10 @@
             </div>
           </div>
         </div>
+        <div class="text-center mt-5">
+          <h1>Predicted Price Trend</h1>
+          <div id="chart_div" style="width: 1000px; height: 500px"></div>
+        </div>
         <div class="col-md-10 offset-md-1">
           <ul
             class="nav nav-pills-a nav-pills mb-3 section-t3"
@@ -242,6 +232,17 @@
                 aria-controls="pills-map"
                 aria-selected="false"
               >Ubication</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                id="pills-comparePredict-tab"
+                data-bs-toggle="pill"
+                href="#pills-comparePredict"
+                role="tab"
+                aria-controls="pills-comparePredict"
+                aria-selected="false"
+              >AI Price Comparison</a>
             </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
@@ -283,6 +284,48 @@
                 style="border:0"
                 allowfullscreen
               ></iframe>
+            </div>
+            <div
+              class="tab-pane fade text-center"
+              id="pills-comparePredict"
+              role="tabpanel"
+              aria-labelledby="pills-comparePredict-tab"
+            >
+              <h2 class="mb-3">AI Price Comparison</h2>
+              <hr />
+              <h5 class="mb-3">Comparing resale value with our AI prediction</h5>
+              <div class="row my-5">
+                <div class="col-md-4">
+                  <h4 class="mt-5">Resale Price</h4>
+                  <h3>{{roundOffToThousand resalePrice}}k</h3>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Percentage Difference</h4>
+                  <div class="d-flex justify-content-center">
+                    <h3
+                      title="We calculated this price difference by subtracting predicted value from resale value divided by resale value multiplied by 100."
+                    >{{percentagePriceDifference}}%</h3>
+                    {{! <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      fill="currentColor"
+                      class="bi bi-chevron-down"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      ></path>
+                    </svg> }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h4 class="mt-5">Predicted Price</h4>
+                  <h3>{{roundOffToThousand predictedValue}}k</h3>
+                </div>
+              </div>
+              <br />
             </div>
           </div>
         </div>
@@ -402,75 +445,3 @@
     </div>
   </section><!-- End Property Single-->
 </main>
-<!-- Delete Modal -->
-<div
-  class="modal fade"
-  id="deleteModal"
-  tabindex="-1"
-  aria-labelledby="deleteModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete Property</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        Confirm Deletion?
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >Close</button>
-        <a
-          href="/property/deletePublicResaleListing/{{id}}"
-          class="btn btn-outline-danger"
-        >Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Confirm Modal -->
-<div
-  class="modal fade"
-  id="confirmModal"
-  tabindex="-1"
-  aria-labelledby="confirmModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmModalLabel">Make Property Viewable</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        Confirm listing of this property?
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >Close</button>
-        <a
-          href="/property/confirmPrivateResaleListing/{{id}}"
-          class="btn btn-outline-success"
-        >Confirm</a>
-      </div>
-    </div>
-  </div>
-</div>
