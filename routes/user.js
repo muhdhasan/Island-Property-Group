@@ -5,7 +5,6 @@ const router = express.Router()
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
-const jwt = require('jsonwebtoken')
 const fetch = require('node-fetch')
 
 // Models
@@ -23,26 +22,28 @@ function createreturnmsg (intent, listingid, botmsgid, botorder, userid) {
   PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 1')
-      createPrivateResaleMsg(intent, listingid, botmsgid, botmsgid, userid)
+      createPrivateResaleMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
   PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 2')
-      createPrivateRentalMsg(intent, listingid, botmsgid, botmsgid, userid)
+      createPrivateRentalMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
   hdbResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 3')
-      createhdbResaleMsg(intent, listingid, botmsgid, botmsgid, userid)
+      createhdbResaleMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
 }
-function createPrivateResaleMsg (intent, listingid, botmsgid, botorder, userid) {
+function createPrivateResaleMsg (intent, listing, botmsgid, botorder, userid) {
+
+  const listingid = listing.id
+
   console.log('resale test')
   let msg = 'blank'
-  PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     switch (intent) {
       case 'goodbye':
         msg = 'thank you and good bye'
@@ -65,6 +66,7 @@ function createPrivateResaleMsg (intent, listingid, botmsgid, botorder, userid) 
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break
       case 'resale_price':
+        console.log("testing not working")
         msg = 'The resale price is ' + listing.resalePrice.toString()
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
         break
@@ -91,10 +93,8 @@ function createPrivateResaleMsg (intent, listingid, botmsgid, botorder, userid) 
           break
         }
     }
-  })
 }
 function createPrivateRentalMsg (intent, listingid, botmsgid, botorder, userid) {
-  PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
     let msg = 'blank'
     switch (intent) {
       case 'goodbye':
@@ -145,8 +145,8 @@ function createPrivateRentalMsg (intent, listingid, botmsgid, botorder, userid) 
           break
         }
     }
-  })
 }
+
 function createhdbResaleMsg (intent, listing, botmsgid, botorder, userid) {
   console.log('hdb test')
   const listingid = listing.id
@@ -157,7 +157,7 @@ function createhdbResaleMsg (intent, listing, botmsgid, botorder, userid) {
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
     case 'greeting':
-      msg = 'helllo there'
+      msg = 'hello there'
       Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
       break
     case 'lease_commencement':
