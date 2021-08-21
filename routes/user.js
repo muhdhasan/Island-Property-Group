@@ -32,195 +32,192 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-function createreturnmsg (intent, listingid,botmsgid,botorder,userid) {
+function createreturnmsg (intent, listingid, botmsgid, botorder, userid) {
   console.log('test check ')
   PrivateResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 1')
-      createPrivateResaleMsg(intent,listing,botmsgid,botorder,userid)
-      return 
+      createPrivateResaleMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
   PrivateRental.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 2')
-      createPrivateRentalMsg(intent,listing,botmsgid,botorder,userid)
-      return 
+      createPrivateRentalMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
   hdbResale.findOne({ where: { id: listingid } }).then((listing) => {
     if (listing) {
       console.log('test 3')
-      createhdbResaleMsg(intent,listing,botmsgid,botorder,userid)
-      return 
+      createhdbResaleMsg(intent, listing, botmsgid, botorder, userid)
     }
   })
 }
-function createPrivateResaleMsg (intent, listing,botmsgid,botorder,userid) {
+function createPrivateResaleMsg (intent, listing, botmsgid, botorder, userid) {
   console.log('resale test')
-  var listingid = listing.id
-  var msg = "blank"
-    switch (intent) {
-      case 'goodbye':
-        msg=  'thank you and good bye'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'greeting':
-        msg = 'hello there'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'lease_commencement':
-        msg =  'the lease commencement date is ' + listing.leaseCommenceDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'house_info':
-        msg = 'Description: ' +
-            listing.description.toString() + 
-            'House Type: ' + listing.houseType.toString() + 
-            'Postal District: ' + listing.postalDistrict.toString() + 
+  const listingid = listing.id
+  let msg = 'blank'
+  switch (intent) {
+    case 'goodbye':
+      msg = 'thank you and good bye'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'greeting':
+      msg = 'hello there'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'lease_commencement':
+      msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'house_info':
+      msg = 'Description: ' +
+            listing.description.toString() +
+            'House Type: ' + listing.houseType.toString() +
+            'Postal District: ' + listing.postalDistrict.toString() +
             'Floor Square Meters: ' + listing.floorSqm.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_price':
+      msg = 'The resale price is ' + listing.resalePrice.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_date':
+      msg = 'The resale date is ' + listing.resaleDate.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'address':
+      msg = 'The address is ' + listing.address.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'rent_cost':
+      msg = 'This is not a rental listing '
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'viewing':
+      if (listing.viewing) {
+        msg = 'Listing is available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_price':
-        msg = 'The resale price is ' + listing.resalePrice.toString()
+        break
+      } else {
+        msg = 'Listing is not available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_date':
-        msg=  'The resale date is ' + listing.resaleDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'address':
-        msg =  'The address is ' + listing.address.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'rent_cost':
-        msg = 'This is not a rental listing '
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'viewing':
-        if (listing.viewing) {
-          msg = 'Listing is available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        } else {
-          msg =  'Listing is not available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        }
-    }
+        break
+      }
+  }
 }
-function createPrivateRentalMsg (intent, listing,botmsgid,botorder,userid) {
+function createPrivateRentalMsg (intent, listing, botmsgid, botorder, userid) {
   console.log('rent test')
-  var listingid = listing.id
-    var msg = 'blank'
-    switch (intent) {
-      case 'goodbye':
-        msg = 'thank you and good bye'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'greeting':
-        msg = 'hello there'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'lease_commencement':
-        msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'house_info':
-        msg = 'Description:' +
-            listing.description.toString() + 
-            'House Type: ' + listing.houseType.toString() + 
-            'Number of Bedrooms: ' + listing.numberOfBedroom.toString() + 
-            'Postal District: ' + listing.postalDistrict.toString() + 
+  const listingid = listing.id
+  let msg = 'blank'
+  switch (intent) {
+    case 'goodbye':
+      msg = 'thank you and good bye'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'greeting':
+      msg = 'hello there'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'lease_commencement':
+      msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'house_info':
+      msg = 'Description:' +
+            listing.description.toString() +
+            'House Type: ' + listing.houseType.toString() +
+            'Number of Bedrooms: ' + listing.numberOfBedroom.toString() +
+            'Postal District: ' + listing.postalDistrict.toString() +
             'Floor Square Meters: ' + listing.floorSqm.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_price':
+      msg = 'This is not a sale listing'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_date':
+      msg = 'This is not a sale listing'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'address':
+      msg = 'The address is ' + listing.address.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'rent_cost':
+      msg = 'The monthly cost is ' + listing.monthlyRent.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'viewing':
+      if (listing.viewing) {
+        msg = 'Listing is available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_price':
-        msg =  'This is not a sale listing'
+        break
+      } else {
+        msg = 'Listing is not available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_date':
-        msg= 'This is not a sale listing'
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'address':
-        msg = 'The address is ' + listing.address.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'rent_cost':
-        msg = 'The monthly cost is ' + listing.monthlyRent.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'viewing':
-        if (listing.viewing) {
-          msg = 'Listing is available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        } else {
-          msg =  'Listing is not available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        }
-    }
+        break
+      }
+  }
 }
-function createhdbResaleMsg (intent,listing,botmsgid,botorder,userid) {
+function createhdbResaleMsg (intent, listing, botmsgid, botorder, userid) {
   console.log('hdb test')
-  var listingid = listing.id
-    var msg = 'blank'
-    console.log('-----------------------------------------------------------------')
-    switch (intent) {
-      case 'goodbye':
-        msg = 'thank you and good bye'
+  const listingid = listing.id
+  let msg = 'blank'
+  console.log('-----------------------------------------------------------------')
+  switch (intent) {
+    case 'goodbye':
+      msg = 'thank you and good bye'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'greeting':
+      msg = 'helllo there'
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'lease_commencement':
+      msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'house_info':
+      msg = 'Description:' +
+        listing.description.toString() +
+        'Town: ' + listing.town.toString() +
+        'Flat Type: ' + listing.flatType.toString() +
+        'Flat Model: ' + listing.flatModel.toString() +
+        'Flat Level: ' + listing.flatLevel.toString() +
+        'Postal District: ' + listing.postalCode.toString() +
+        'Floor Square Meters: ' + listing.floorSqm.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_price':
+      msg = 'The resale price is ' + listing.resalePrice.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'resale_date':
+      msg = 'The resale date is ' + listing.resaleDate.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'address':
+      msg = 'The address is ' + listing.address.toString()
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'rent_cost':
+      msg = 'This is not a rental listing '
+      Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
+      break
+    case 'viewing':
+      if (listing.viewing) {
+        msg = 'Listing is available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'greeting':
-        msg ="helllo there"
+        break
+      } else {
+        msg = 'Listing is not available for viewing'
         Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'lease_commencement':
-        msg = 'the lease commencement date is ' + listing.leaseCommenceDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'house_info':
-        msg = 'Description:'
-        +listing.description.toString()
-        +'Town: '+listing.town.toString()
-        +'Flat Type: '+listing.flatType.toString() 
-        +'Flat Model: '+listing.flatModel.toString()
-        +'Flat Level: '+listing.flatLevel.toString()
-        +'Postal District: '+listing.postalCode.toString()
-        +'Floor Square Meters: '+listing.floorSqm.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_price':
-        msg = 'The resale price is ' + listing.resalePrice.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'resale_date':
-        msg =  'The resale date is ' + listing.resaleDate.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'address':
-        msg =  'The address is ' + listing.address.toString()
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'rent_cost':
-        msg =  'This is not a rental listing '
-        Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-        break;
-      case 'viewing':
-        if (listing.viewing) {
-          msg = 'Listing is available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        } else {
-          msg =  'Listing is not available for viewing'
-          Chat.create({ messageid: botmsgid, message: msg, chatorder: botorder, userid: userid, listingid: listingid, isBot: true })
-          break;
-        }
-        default:
-          return "TESTING"
-    }
+        break
+      }
+    default:
+      return 'TESTING'
+  }
 }
 async function getIntent (usermsg) {
   const body = {
@@ -372,10 +369,10 @@ router.get('/userProfile', ensureUserAuthenticated, (req, res) => {
   res.render('user/userProfile', { title, userEmail, userName, userPhoneNo, activeNavProfile })
 })
 
-router.get('/chat/:listing',ensureUserAuthenticated, (req, res) => {
+router.get('/chat/:listing', ensureUserAuthenticated, (req, res) => {
   const title = 'Chat'
-  var user = req.user.id;
-  var listingid = req.params.listing
+  const user = req.user.id
+  const listingid = req.params.listing
   Chat.findAll({
     where: {
       userid: user,
@@ -398,7 +395,7 @@ router.post('/chat', (req, res) => {
   if (message == '') {
     return
   }
-  var userid = req.user.id
+  const userid = req.user.id
   Chat.findOne({
     where: {
       userid: userid,
@@ -422,14 +419,14 @@ router.post('/chat', (req, res) => {
       console.log(result)
       const theIntent = result.result.toString()
       console.log(theIntent)
-      console.log("CREATED USER MESSAGE")
+      console.log('CREATED USER MESSAGE')
       // Create user message
       Chat.create({ messageid: msgid, message: message, chatorder: order, userid: userid, listingid: listingid, isBot: false })
       // Create bot message
       const botmsgid = uuid.v1()
       console.log(listingid)
       console.log(botorder)
-      createreturnmsg(theIntent,listingid,botmsgid,botorder,userid)
+      createreturnmsg(theIntent, listingid, botmsgid, botorder, userid)
       res.redirect('back')
     })
   }).catch(err => console.log(err))
