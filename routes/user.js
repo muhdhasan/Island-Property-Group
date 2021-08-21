@@ -453,14 +453,10 @@ router.post('/chat/:listing', (req, res) => {
       console.log('CREATED USER MESSAGE')
       // Create user message
       Chat.create({ messageid: msgid, message: message, chatorder: order, userid: userid, listingid: listingid, isBot: false })
-      // Create bot message (NEED TO ADD FUNCTION TO REMOVE ACTUAL RESPONSE)
-      const botmsgid = uuid.v1()
-      createreturnmsg(theIntent, listingid, botmsgid, botorder, userid)
-      res.redirect('chat')
-      // Create bot message
-      const botmsgid = uuid.v1()
+      // Create bot message     
       console.log(listingid)
       console.log(botorder)
+      const botmsgid = uuid.v1()
       createreturnmsg(theIntent, listingid, botmsgid, botorder, userid)
       res.redirect('back')
     })
